@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>DiptARM Store Crew Gaji</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blue:#0b2a6f; --blue2:#1d4ed8; --gold:#d4af37; --gold2:#f5d26a;
+    --ice:#f6f8ff; --ink:#0b2a6f; --shadow:rgba(11,42,111,.16);
+    --green:#0d9488; --red:#e0473f; --gray:rgba(11,42,111,.62);
+    --purple:#7c5cbf; --coral:#e2793d;
+    --radius:18px;
+  }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html{ font-size:14px; }
+  body{
+    margin:0; padding:20px 14px 90px; font-family:'Poppins',sans-serif; color:var(--blue);
+    background:
+      radial-gradient(circle at 12% 15%, rgba(212,175,55,.16), transparent 45%),
+      radial-gradient(circle at 88% 20%, rgba(29,78,216,.12), transparent 44%),
+      radial-gradient(circle at 50% 110%, rgba(212,175,55,.10), transparent 48%),
+      linear-gradient(135deg,#ffffff 0%, #f0f4ff 55%, #ffffff 100%);
+    background-attachment:fixed; min-height:100vh; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{ max-width:800px; margin:0 auto; }
+  svg.ic{ width:16px; height:16px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0; vertical-align:-3px; }
+
+  header{
+    text-align:center; margin-bottom:16px; background:linear-gradient(180deg,#fff,var(--ice));
+    border-radius:20px; border:2.5px solid var(--ink); box-shadow:6px 6px 0px var(--shadow);
+    padding:20px 14px; position:relative; overflow:hidden;
+  }
+  header::before{
+    content:""; position:absolute; top:0; left:0; right:0; height:7px;
+    background:linear-gradient(90deg, var(--gold) 0 22%, transparent 22% 78%, var(--gold) 78% 100%), linear-gradient(90deg,var(--blue) 0 100%);
+    opacity:.95;
+  }
+  header h1{
+    font-family:'Outfit',sans-serif; font-weight:900; font-size:1.48rem; margin:0 0 6px;
+    text-shadow:0 2px 0 rgba(255,255,255,.9); letter-spacing:.2px;
+  }
+  header .badge{
+    display:inline-block; font-weight:800; font-size:.7rem; color:var(--blue); letter-spacing:.3px;
+    background:rgba(212,175,55,.18); border:1.5px solid var(--ink); border-radius:999px;
+    padding:5px 14px;
+  }
+
+  .tabs{ display:flex; gap:6px; margin-bottom:16px; }
+  .tab-btn{
+    flex:1; border:2px solid var(--ink); background:rgba(255,255,255,.85); padding:12px 10px;
+    font-weight:800; font-family:'Outfit',sans-serif; font-size:.76rem; color:var(--blue);
+    border-radius:12px; cursor:pointer; transition:.2s ease; white-space:nowrap;
+    box-shadow:3px 3px 0px var(--shadow); display:flex; align-items:center; justify-content:center; gap:6px;
+  }
+  .tab-btn:active{ transform:translateY(2px); box-shadow:none; }
+  .tab-btn.active{ background:var(--blue); color:#fff; border-color:var(--blue); }
+  .tab-content.hidden{ display:none !important; }
+
+  .card{
+    background:linear-gradient(180deg,#fff,var(--ice)); border-radius:var(--radius); padding:20px;
+    box-shadow:6px 6px 0px var(--shadow); border:2.5px solid var(--ink); margin-bottom:20px;
+    position:relative; overflow:hidden;
+  }
+  .card h2{ font-family:'Outfit',sans-serif; font-weight:800; font-size:1.11rem; margin:0 0 14px; display:flex; align-items:center; gap:7px; }
+  .card h2 small{ display:block; color:var(--gray); font-weight:500; font-size:.73rem; margin-top:3px; }
+
+  .field{ margin-bottom:12px; }
+  .field textarea{
+    width:100%; border:2px solid rgba(11,42,111,.2); background:#fff; border-radius:12px; padding:12px;
+    font-family:'Poppins',sans-serif; font-size:.80rem; color:var(--blue); outline:none; transition:.2s;
+    resize:vertical; min-height:220px; line-height:1.6; white-space: pre-wrap;
+  }
+  .field textarea:focus{ border-color:var(--blue2); box-shadow:0 0 0 3px rgba(29,78,216,.12); }
+
+  .btn{
+    border:2.5px solid var(--gold); border-radius:13px; padding:12px 18px; font-weight:700;
+    font-family:'Outfit',sans-serif; cursor:pointer; transition:.2s cubic-bezier(.175,.885,.32,1.275);
+    width:100%; font-size:.89rem; text-transform:uppercase; letter-spacing:.3px;
+    box-shadow:4px 4px 0px rgba(11,42,111,.18); position:relative; display:flex; align-items:center; justify-content:center; gap:8px;
+  }
+  .btn:hover{ transform:translateY(-2px); box-shadow:6px 6px 0px rgba(11,42,111,.22); }
+  .btn:active{ transform:translateY(2px); box-shadow:0 2px 0 var(--gold); }
+  .btn-primary{ background:var(--blue); color:#fff; border-color:var(--blue); }
+  .btn-gold{ background:linear-gradient(135deg,var(--gold),var(--gold2)); color:var(--blue); border-color:var(--blue); }
+  .btn-teal{ background:linear-gradient(135deg,var(--green),#14b8a6); color:#fff; border-color:var(--blue); }
+  .btn-row{ display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; }
+  .btn-row .btn{ flex:1; min-width:160px; }
+
+  /* Table Styles */
+  .table-responsive {
+    overflow-x: auto;
+    border-radius: 12px;
+    border: 2px solid var(--ink);
+    background: #fff;
+    margin-bottom: 20px;
+    max-height: 500px;
+  }
+  table { width: 100%; border-collapse: collapse; font-size: .84rem; }
+  th, td {
+    padding: 12px; text-align: left;
+    border-bottom: 1.5px solid rgba(11,42,111,.15);
+    border-right: 1.5px solid rgba(11,42,111,.15);
+  }
+  th:last-child, td:last-child { border-right: none; }
+  tr:last-child td { border-bottom: none; }
+  th {
+    background: rgba(29,78,216,.08); font-family: 'Outfit', sans-serif; font-weight: 800;
+    color: var(--blue); white-space: nowrap; position: sticky; top: 0; z-index: 2;
+  }
+  th.col-no, td.col-no { width: 40px; text-align: center; }
+  td { vertical-align: middle; line-height: 1.4; }
+  .td-bold { font-weight: 700; color: var(--blue); }
+  .td-highlight { font-family: 'Outfit', sans-serif; font-weight: 900; color: var(--blue2); font-size: 1rem; white-space: nowrap; }
+  .calc-detail { font-size: .73rem; color: var(--gray); font-weight: 600; white-space: nowrap; }
+
+  .tags-wrapper { display: flex; flex-wrap: wrap; gap: 4px; }
+  .tag {
+    font-size: .63rem; font-weight: 800; padding: 3px 6px; border-radius: 6px;
+    border: 1.5px solid; white-space: nowrap;
+  }
+  .tag-fee { color: var(--purple); background: rgba(124,92,191,.1); border-color: rgba(124,92,191,.3); }
+  .tag-gabungan { color: var(--coral); background: rgba(226,121,61,.1); border-color: rgba(226,121,61,.4); }
+  .tag-lj { color: var(--green); background: rgba(13,148,136,.1); border-color: rgba(13,148,136,.4); }
+
+  .stats-grid{ display:grid; grid-template-columns:repeat(2, 1fr); gap:10px; margin-bottom:16px; }
+  .stat-card{
+    background:linear-gradient(135deg,var(--gold),var(--gold2)); border-radius:16px; padding:14px;
+    border:2px solid var(--blue); box-shadow:4px 4px 0px var(--shadow);
+    display:flex; flex-direction:column; align-items:center; text-align:center;
+  }
+  .stat-card.light{ background: #fff; }
+  .stat-card .s-lbl{ font-size:.68rem; font-weight:800; color:var(--blue); opacity:.9; text-transform:uppercase; margin-bottom:4px; }
+  .stat-card .s-val{ font-family:'Outfit',sans-serif; font-weight:900; font-size:1.64rem; color:var(--blue); line-height:1; }
+
+  /* --- Kalkulator Gaji (Crew) --- */
+  .toggle-group{ display:flex; background:var(--ice); border-radius:16px; padding:5px; margin-bottom:18px; border:2px solid rgba(11,42,111,.15); }
+  .toggle-btn{
+    flex:1; border:none; background:transparent; padding:11px; font-weight:800; font-family:'Outfit',sans-serif;
+    color:var(--gray); border-radius:12px; cursor:pointer; transition:.2s;
+  }
+  .toggle-btn.active{ background:var(--blue); color:#fff; box-shadow:3px 3px 0 var(--shadow); }
+
+  .input-group{
+    margin-bottom:10px; display:flex; align-items:center; background:#fff;
+    border:2px solid rgba(11,42,111,.15); border-radius:14px; padding:8px 14px; transition:.2s;
+  }
+  .input-group:focus-within{ border-color:var(--blue2); background:#fdfdff; }
+  .input-group label{ flex:1; font-weight:700; font-size:.79rem; display:flex; flex-direction:column; color:var(--blue); }
+  .input-group label small{ color:var(--gray); font-weight:400; }
+  .input-group input{
+    width:110px; font-size:1rem; border:none; background:var(--ice); padding:8px;
+    border-radius:10px; text-align:center; font-family:'Outfit',sans-serif; font-weight:800;
+    color:var(--blue2); outline:none;
+  }
+  .autofill-note{
+    display:flex; align-items:center; gap:8px; background:rgba(13,148,136,.1); border:1.5px dashed var(--green);
+    border-radius:12px; padding:10px 12px; margin-bottom:14px; font-size:.73rem; font-weight:700; color:var(--green);
+  }
+
+  .total-box{
+    background:linear-gradient(135deg,var(--blue),#153c98); border-radius:16px; padding:18px;
+    color:#fff; border:2.5px solid var(--gold); margin-top:14px; position:relative; overflow:hidden;
+  }
+  .result-row{ display:flex; justify-content:space-between; font-size:.84rem; opacity:.92; margin-bottom:6px; }
+  .grand-total{
+    font-size:1.38rem; font-weight:900; margin-top:10px; padding-top:10px;
+    border-top:1.5px dashed rgba(255,255,255,.3); color:var(--gold2); font-family:'Outfit',sans-serif; opacity:1;
+  }
+
+  .hidden{ display:none !important; }
+
+  #toast{
+    position:fixed; top:-100px; left:50%; transform:translateX(-50%); background:var(--blue); color:#fff;
+    padding:12px 20px; border-radius:14px; display:flex; align-items:center; gap:10px; font-weight:700;
+    font-size:.84rem; box-shadow:0 10px 30px rgba(0,0,0,.25); z-index:9999; transition:.5s cubic-bezier(.175,.885,.32,1.275);
+    border:2px solid var(--gold); min-width:220px; justify-content:center; text-align:center;
+  }
+  #toast.show{ top:16px; }
+  .toast-icon{ background:var(--gold); color:var(--blue); width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .toast-icon svg{ width:12px; height:12px; }
+
+  @keyframes fadeIn{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;} }
+  #resultContainer:not(.hidden){ animation:fadeIn .4s ease; }
+  .tab-content:not(.hidden) .card{ animation:fadeIn .3s ease; }
+</style>
+</head>
+<body>
+
+<div id="toast"><div class="toast-icon"><svg viewBox="0 0 24 24" class="ic"><polyline points="20 6 9 17 4 12"></polyline></svg></div><span id="toastMsg">Berhasil</span></div>
+
+<div class="wrap">
+  <header>
+    <h1>Gaji Crew Jaseb</h1>
+    <span class="badge">DiptARM &middot; Kalkulator Otomatis</span>
+  </header>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="hitung">
+      <svg viewBox="0 0 24 24" class="ic"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      Hitung Orderan
+    </button>
+    <button class="tab-btn" data-tab="gaji">
+      <svg viewBox="0 0 24 24" class="ic"><path d="M12 1v22"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+      Kalkulator Gaji
+    </button>
+  </div>
+
+  <!-- ===================== TAB 1: HITUNG ORDERAN ===================== -->
+  <div id="tab-hitung" class="tab-content">
+    <div class="card">
+      <h2>Template Orderan<small>Langsung Copy Paste disini</small></h2>
+      <div class="field">
+        <textarea id="rawTextImport" placeholder="Contoh Format:&#10;1. DiptArm 1K LPM × 4d + Inrush + Luar Jam&#10;Bisa Juga &#10;- DiptArm 1K LPM 2x 3d Rush 18+&#10;Atau&#10;• DiptArm 1500 LPM 2s inrush inrush sesi&#10; &#10; Note: Cek ulang detail untuk memastikan tidak ada kesalahan perhitungan."></textarea>
+      </div>
+      <button class="btn btn-primary" id="btnParseText">
+        <svg viewBox="0 0 24 24" class="ic"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        Hitung Total
+      </button>
+    </div>
+
+    <div id="resultContainer" class="hidden">
+      <div class="card">
+        <h2>Detail Perhitungan</h2>
+
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th class="col-no">No.</th>
+                <th>Orderan Asli</th>
+                <th>Detail Hitung</th>
+                <th>Total Unit</th>
+                <th>Add-on</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+        </div>
+
+        <h2>Rekap Keseluruhan</h2>
+        <div class="stats-grid">
+          <div class="stat-card"><div class="s-lbl">Total LPM</div><div class="s-val" id="statLpm">0</div></div>
+          <div class="stat-card"><div class="s-lbl">Total LPFP</div><div class="s-val" id="statLpfp">0</div></div>
+          <div class="stat-card light"><div class="s-lbl">Total Foto</div><div class="s-val" id="statFoto">0</div></div>
+          <div class="stat-card light"><div class="s-lbl">Total 18+</div><div class="s-val" id="stat18">0</div></div>
+          <div class="stat-card light"><div class="s-lbl">Video + Inrush</div><div class="s-val" id="statVidInrush">0</div></div>
+          <div class="stat-card light"><div class="s-lbl">Luar Jam</div><div class="s-val" id="statLuarJam">0</div></div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-gold" id="btnSalinLaporan">
+            <svg viewBox="0 0 24 24" class="ic"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            Rekapan
+          </button>
+          <button class="btn btn-teal" id="btnHitungGaji">
+            <svg viewBox="0 0 24 24" class="ic"><path d="M12 1v22"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+            Hitung Gaji
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== TAB 2: KALKULATOR GAJI ===================== -->
+  <div id="tab-gaji" class="tab-content hidden">
+    <div class="card">
+      <h2>Kalkulator Gaji<small>Perhitungan Total Rekapan</small></h2>
+
+      <div id="autofillNote" class="autofill-note hidden">
+        <svg viewBox="0 0 24 24" class="ic" style="width:18px;height:18px;stroke:var(--green)"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        <span>Total di bawah diisi otomatis dari tab Hitung Orderan.</span>
+      </div>
+
+      <div class="toggle-group">
+        <button class="toggle-btn active" id="btnTeam">Team</button>
+        <button class="toggle-btn" id="btnAdmin">Admin</button>
+      </div>
+
+      <div class="input-group">
+        <label>LPM <small id="lpmNote">Jumlah Total LPM</small></label>
+        <input type="number" id="lpmInput" value="0">
+      </div>
+      <div class="input-group">
+        <label>LPFP <small id="lpfpNote">Jumlah Total LPFP</small></label>
+        <input type="number" id="lpfpInput" value="0">
+      </div>
+      <div class="input-group">
+        <label>Fee Foto <small id="fotoNote">Bonus Foto</small></label>
+        <input type="number" id="feeFotoInput" value="0">
+      </div>
+      <div class="input-group">
+        <label>Fee Rush + Video<small id="rushNote"> Inrush/ Video/ Inrush Sesi</small></label>
+        <input type="number" id="feeRushInput" value="0">
+      </div>
+      <div class="input-group">
+        <label>Fee 18+ <small id="fee18Note">Bonus 18+</small></label>
+        <input type="number" id="fee18Input" value="0">
+      </div>
+      <div class="input-group">
+        <label>Fee Luar Jam <small id="luarJamNote">Bonus Luar Jam</small></label>
+        <input type="number" id="feeLuarJamInput" value="0">
+      </div>
+      <div class="input-group">
+        <label>Total Jasduk <small id="dllNote">Bonus Jasa Dukungan Snap</small></label>
+        <input type="number" id="dllInput" value="0">
+      </div>
+
+      <div id="containerPotongan" class="input-group">
+        <label>Potongan <small>Diinput Admin (Rp)</small></label>
+        <input type="number" id="potonganInput" value="0">
+      </div>
+
+      <div id="containerGajiAdmin" class="input-group hidden">
+        <label>Penghasilan Store <small>Persenan Untuk Admin</small></label>
+        <input type="number" id="gajiAdminInp" value="0">
+      </div>
+
+      <div class="total-box">
+        <div class="result-row"><span>Subtotal</span><span id="subtotalLabel">Rp 0</span></div>
+        <div id="rowPotongan" class="result-row"><span>Potongan</span><span id="potonganLabel">Rp 0</span></div>
+        <div id="rowAdmin" class="result-row hidden"><span>Persenan Admin</span><span id="adminGajiLabel">Rp 0</span></div>
+        <div class="result-row grand-total"><span>Total Akhir</span><span id="finalTotalLabel">Rp 0</span></div>
+      </div>
+
+      <div class="btn-row" style="margin-top:15px;">
+        <button class="btn btn-gold" id="copyBtn">
+          <svg viewBox="0 0 24 24" class="ic"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          Gaji
+        </button>
+        <button class="btn btn-teal" id="copyLengkapBtn">
+          <svg viewBox="0 0 24 24" class="ic"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+          Salin Total
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* =============== UMUM (toast, tabs) =============== */
+function toast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').innerText = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2500);
+}
+
+function switchTab(tabName) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tabName));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+  document.getElementById('tab-' + tabName).classList.remove('hidden');
+}
+
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+});
+
+/* =============== TAB 1: HITUNG ORDERAN =============== */
+const formatNumber = n => Math.round(n||0).toLocaleString('id-ID');
+
+function parseQuantity(line) {
+  let matchK = line.match(/([\d\.,]+)\s*k\b/i);
+  if (matchK) {
+    let numStr = matchK[1].replace(',', '.');
+    return { val: parseFloat(numStr) * 1000, str: matchK[0] };
+  }
+
+  let matchNumFirst = line.match(/([\d\.,]+)\s*(?:lpm|lpfp)\b/i);
+  if (matchNumFirst) {
+    let numStr = matchNumFirst[1].replace(/\./g, '').replace(/,/g, '');
+    return { val: parseInt(numStr, 10), str: matchNumFirst[0] };
+  }
+
+  let matchWordFirst = line.match(/(?:lpm|lpfp)\s*[:=\-]?\s*([\d\.,]+)/i);
+  if (matchWordFirst) {
+    let numStr = matchWordFirst[1].replace(/\./g, '').replace(/,/g, '');
+    return { val: parseInt(numStr, 10), str: matchWordFirst[0] };
+  }
+
+  let matchAny = line.match(/([\d\.,]+)/);
+  if (matchAny) {
+    let numStr = matchAny[1].replace(/\./g, '').replace(/,/g, '');
+    return { val: parseInt(numStr, 10), str: matchAny[0] };
+  }
+
+  return { val: 0, str: '' };
+}
+
+let parsedResults = [];
+let lastSummary = null;
+
+function parseTextToOrders(text) {
+  const rawLines = text.split('\n').map(l => l.trim()).filter(Boolean);
+  let results = [];
+
+  rawLines.forEach(line => {
+    try {
+      let cleanLine = line.replace(/^[\-\*\•\d+[\.\)]\s*/, '').replace(/✅/g, '').trim();
+      if(!cleanLine) return;
+
+      let lower = cleanLine.toLowerCase();
+
+      // ATURAN BARU: Wajib mengandung kata "lpm" atau "lpfp", jika tidak, abaikan/lewati
+      if (!lower.includes('lpm') && !lower.includes('lpfp')) {
+        return;
+      }
+
+      let type = lower.includes('lpfp') ? 'LPFP' : 'LPM';
+
+      let baseParsed = parseQuantity(cleanLine);
+      if(baseParsed.val === 0) return;
+      let baseJumlah = baseParsed.val;
+
+      let tempLine = cleanLine.replace(baseParsed.str, '');
+
+      let sesi = 1;
+      let hari = 1;
+
+      let hariMatch = tempLine.match(/(?:[xX×\*]\s*)?(\d+)\s*[xX×\*]?\s*(?:d|day|hari)\b/i);
+      if (hariMatch) {
+        hari = parseInt(hariMatch[1], 10);
+        tempLine = tempLine.replace(hariMatch[0], '');
+      }
+
+      let sesiMatch = tempLine.match(/(?:[xX×\*]\s*)?(\d+)\s*[xX×\*]?\s*(?:s|sesi)\b/i);
+      if (sesiMatch) {
+        sesi = parseInt(sesiMatch[1], 10);
+        tempLine = tempLine.replace(sesiMatch[0], '');
+      }
+
+      let genericX = tempLine.match(/(?:^|\s)([xX×\*]\s*(\d+)|(\d+)\s*[xX×\*])(?:$|\s)/i);
+      if (genericX) {
+        sesi = parseInt(genericX[2] || genericX[3], 10);
+        tempLine = tempLine.replace(genericX[1], '');
+
+        let secondX = tempLine.match(/(?:^|\s)([xX×\*]\s*(\d+)|(\d+)\s*[xX×\*])(?:$|\s)/i);
+        if(secondX) {
+           hari = parseInt(secondX[2] || secondX[3], 10);
+           tempLine = tempLine.replace(secondX[1], '');
+        }
+      }
+
+      let totalUnits = baseJumlah * sesi * hari;
+
+      let hasFoto = lower.includes('pict') || lower.includes('foto');
+      let has18 = lower.includes('18+') || lower.includes('nsfw');
+      let hasVideo = /\b(video|vidio|vid)\b/i.test(lower);
+      
+      let hasRushSesi = false;
+      let tempLowerForRush = lower;
+      
+      if (tempLowerForRush.includes('inrush sesi')) {
+          hasRushSesi = true;
+          tempLowerForRush = tempLowerForRush.replace('inrush sesi', '');
+      } else if (tempLowerForRush.includes('rush sesi')) {
+          hasRushSesi = true;
+          tempLowerForRush = tempLowerForRush.replace('rush sesi', '');
+      }
+      
+      let countInrush = 0;
+      let rushMatch = tempLowerForRush.match(/(?:inrush|rush)\s*(\d+)\b(?!\+)/i);
+      
+      if (rushMatch) {
+          countInrush = parseInt(rushMatch[1], 10);
+      } else if (tempLowerForRush.includes('rush') || tempLowerForRush.includes('inrush')) {
+          countInrush = 1;
+      }
+
+      let hasLuarJam = lower.includes('luar jam') || lower.includes('luarjam') || lower.includes('lj');
+
+      let countFoto = hasFoto ? (1 * sesi * hari) : 0;
+      
+      // -- UPDATE: 18+ DIKALIKAN DENGAN HARI --
+      let count18 = has18 ? (1 * hari) : 0; 
+      
+      let countVideo = hasVideo ? (1 * sesi * hari) : 0;
+      
+      let countRushSesi = hasRushSesi ? (1 * hari) : 0;
+      let countVidInrush = countVideo + countInrush + countRushSesi;
+      
+      let countLuarJam = hasLuarJam ? (1 * hari) : 0;
+
+      results.push({
+        original: cleanLine,
+        type,
+        baseJumlah,
+        sesi,
+        hari,
+        totalUnits,
+        countFoto,
+        count18,
+        countVideo,
+        countInrush,
+        countRushSesi,
+        countVidInrush,
+        countLuarJam
+      });
+    } catch (err) {
+      console.warn("Lewati baris karena error deteksi:", line);
+    }
+  });
+
+  return results;
+}
+
+document.getElementById('btnParseText').addEventListener('click', () => {
+  const raw = document.getElementById('rawTextImport').value.trim();
+  if(!raw) { toast('Teks masih kosong!'); return; }
+
+  parsedResults = parseTextToOrders(raw);
+
+  if(!parsedResults.length) {
+    toast('Tidak ada baris yang mengandung LPM/LPFP!');
+    document.getElementById('resultContainer').classList.add('hidden');
+    return;
+  }
+
+  let grandLpm = 0, grandLpfp = 0, totalFoto = 0, total18 = 0, totalVidInrush = 0, totalLuarJam = 0;
+
+  const tableBody = document.getElementById('tableBody');
+  tableBody.innerHTML = parsedResults.map((item, index) => {
+
+    if(item.type === 'LPM') grandLpm += item.totalUnits;
+    if(item.type === 'LPFP') grandLpfp += item.totalUnits;
+    totalFoto += item.countFoto;
+    total18 += item.count18;
+    totalVidInrush += item.countVidInrush;
+    totalLuarJam += item.countLuarJam;
+
+    let detailArr = [formatNumber(item.baseJumlah)];
+    if(item.sesi > 1) detailArr.push(`${item.sesi} Sesi`);
+    if(item.hari > 1) detailArr.push(`${item.hari} Hari`);
+    let detailHitung = detailArr.join(' x ');
+
+    let addonHtml = '';
+    if(item.countFoto) addonHtml += `<span class="tag tag-fee">Foto: ${item.countFoto}</span>`;
+    if(item.count18) addonHtml += `<span class="tag tag-fee">18+: ${item.count18}</span>`;
+    
+    if(item.countVideo) addonHtml += `<span class="tag tag-gabungan">Video: ${item.countVideo}</span>`;
+    if(item.countInrush) addonHtml += `<span class="tag tag-gabungan">Inrush: ${item.countInrush}</span>`;
+    if(item.countRushSesi) addonHtml += `<span class="tag tag-gabungan">Rush Sesi: ${item.countRushSesi}</span>`;
+    
+    if(item.countLuarJam) addonHtml += `<span class="tag tag-lj">Luar Jam: ${item.countLuarJam}</span>`;
+    
+    if(!addonHtml) addonHtml = '<span class="calc-detail">-</span>';
+
+    return `
+      <tr>
+        <td class="col-no">${index + 1}</td>
+        <td class="td-bold">${item.original}</td>
+        <td><div class="calc-detail">${detailHitung}</div></td>
+        <td class="td-highlight">${formatNumber(item.totalUnits)} ${item.type}</td>
+        <td><div class="tags-wrapper">${addonHtml}</div></td>
+      </tr>
+    `;
+  }).join('');
+
+  document.getElementById('statLpm').innerText = formatNumber(grandLpm);
+  document.getElementById('statLpfp').innerText = formatNumber(grandLpfp);
+  document.getElementById('statFoto').innerText = totalFoto;
+  document.getElementById('stat18').innerText = total18;
+  document.getElementById('statVidInrush').innerText = totalVidInrush;
+  document.getElementById('statLuarJam').innerText = totalLuarJam;
+
+  lastSummary = { grandLpm, grandLpfp, totalFoto, total18, totalVidInrush, totalLuarJam };
+
+  document.getElementById('resultContainer').classList.remove('hidden');
+  toast('Berhasil Dihitung!');
+
+  document.getElementById('resultContainer').scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+function buildLaporanText() {
+  if(!parsedResults.length) return '';
+
+  let grandLpm = 0, grandLpfp = 0, totalFoto = 0, total18 = 0, totalVidInrush = 0, totalLuarJam = 0;
+
+  let textLines = [`*REKAP ORDERAN*`, ``];
+
+  parsedResults.forEach((item, index) => {
+    if(item.type === 'LPM') grandLpm += item.totalUnits;
+    if(item.type === 'LPFP') grandLpfp += item.totalUnits;
+    totalFoto += item.countFoto;
+    total18 += item.count18;
+    totalVidInrush += item.countVidInrush;
+    totalLuarJam += item.countLuarJam;
+
+    textLines.push(`${index + 1}. ${item.original} ✅`);
+  });
+
+  textLines.push(``);
+  textLines.push(`📊 *TOTAL KESELURUHAN:*`);
+  if(grandLpm > 0) textLines.push(`• Total LPM: ${formatNumber(grandLpm)} LPM`);
+  if(grandLpfp > 0) textLines.push(`• Total LPFP: ${formatNumber(grandLpfp)} LPFP`);
+  if(totalFoto > 0) textLines.push(`• Jumlah Foto: ${totalFoto}`);
+  if(total18 > 0) textLines.push(`• Jumlah 18+: ${total18}`);
+  if(totalVidInrush > 0) textLines.push(`• Jumlah Vid+Inrush: ${totalVidInrush}`);
+  if(totalLuarJam > 0) textLines.push(`• Jumlah Luar Jam: ${totalLuarJam}`);
+
+  return textLines.join('\n');
+}
+
+document.getElementById('btnSalinLaporan').addEventListener('click', () => {
+  const txt = buildLaporanText();
+  if(!txt) { toast('Belum ada data orderan!'); return; }
+  navigator.clipboard.writeText(txt);
+  toast('Laporan disalin ke Clipboard!');
+});
+
+/* =============== JEMBATAN: Hitung Orderan -> Kalkulator Gaji =============== */
+document.getElementById('btnHitungGaji').addEventListener('click', () => {
+  if(!lastSummary) { toast('Hitung orderan dulu ya!'); return; }
+
+  document.getElementById('lpmInput').value = lastSummary.grandLpm;
+  document.getElementById('lpfpInput').value = lastSummary.grandLpfp;
+  document.getElementById('feeFotoInput').value = lastSummary.totalFoto;
+  document.getElementById('feeRushInput').value = lastSummary.totalVidInrush;
+  document.getElementById('fee18Input').value = lastSummary.total18;
+  document.getElementById('feeLuarJamInput').value = lastSummary.totalLuarJam;
+
+  document.getElementById('autofillNote').classList.remove('hidden');
+
+  switchTab('gaji');
+  calculateCrew();
+  toast('Total otomatis masuk ke Kalkulator Gaji');
+});
+
+/* =============== TAB 2: KALKULATOR GAJI =============== */
+const lpmInput = document.getElementById('lpmInput');
+const lpfpInput = document.getElementById('lpfpInput');
+const feeFotoInput = document.getElementById('feeFotoInput');
+const feeRushInput = document.getElementById('feeRushInput');
+const fee18Input = document.getElementById('fee18Input');
+const feeLuarJamInput = document.getElementById('feeLuarJamInput');
+const dllInput = document.getElementById('dllInput');
+const potonganInput = document.getElementById('potonganInput');
+const gajiAdminInp = document.getElementById('gajiAdminInp');
+
+const subtotalLabel = document.getElementById('subtotalLabel');
+const adminGajiLabel = document.getElementById('adminGajiLabel');
+const potonganLabel = document.getElementById('potonganLabel');
+const finalTotalLabel = document.getElementById('finalTotalLabel');
+
+let crewMode = 'Team';
+
+function updateCrewUI() {
+  document.getElementById('containerPotongan').classList.toggle('hidden', crewMode !== 'Team');
+  document.getElementById('rowPotongan').classList.toggle('hidden', crewMode !== 'Team');
+  document.getElementById('containerGajiAdmin').classList.toggle('hidden', crewMode !== 'Admin');
+  document.getElementById('rowAdmin').classList.toggle('hidden', crewMode !== 'Admin');
+  calculateCrew();
+}
+
+document.getElementById('btnTeam').addEventListener('click', () => { crewMode = 'Team'; btnTeam.classList.add('active'); btnAdmin.classList.remove('active'); updateCrewUI(); });
+document.getElementById('btnAdmin').addEventListener('click', () => { crewMode = 'Admin'; btnAdmin.classList.add('active'); btnTeam.classList.remove('active'); updateCrewUI(); });
+
+function calculateCrew() {
+  const lpm = parseInt(lpmInput.value || 0), lpfp = parseInt(lpfpInput.value || 0), foto = parseInt(feeFotoInput.value || 0), rush = parseInt(feeRushInput.value || 0), fee18 = parseInt(fee18Input.value || 0), feeLuarJam = parseInt(feeLuarJamInput.value || 0), dll = parseInt(dllInput.value || 0), pot = parseInt(potonganInput.value || 0), gajiAdmRaw = parseInt(gajiAdminInp.value || 0);
+
+  let subtotal = 0, finalTotal = 0, hasilAdmin = 0;
+
+  if (crewMode === 'Team') {
+    subtotal = (lpm * 1.6) + (lpfp * 2.4) + (foto * 80) + (rush * 160) + (fee18 * 400) + (feeLuarJam * 40) + (dll * 120);
+    finalTotal = subtotal - pot;
+  } else {
+    subtotal = (lpm * 2) + (lpfp * 3) + (foto * 100) + (rush * 200) + (fee18 * 400) + (feeLuarJam * 40) + (dll * 150);
+    hasilAdmin = (gajiAdmRaw / 2) * 0.05;
+    finalTotal = subtotal + hasilAdmin;
+  }
+
+  subtotalLabel.innerText = "Rp " + Math.round(subtotal).toLocaleString('id-ID');
+  potonganLabel.innerText = "- Rp " + pot.toLocaleString('id-ID');
+  adminGajiLabel.innerText = "Rp " + Math.round(hasilAdmin).toLocaleString('id-ID');
+  finalTotalLabel.innerText = "Rp " + Math.round(finalTotal).toLocaleString('id-ID');
+}
+
+[lpmInput, lpfpInput, feeFotoInput, feeRushInput, fee18Input, feeLuarJamInput, dllInput, potonganInput, gajiAdminInp].forEach(inp => {
+  inp.addEventListener('input', calculateCrew);
+  inp.addEventListener('focus', function() { if(this.value === "0") this.value = ""; });
+  inp.addEventListener('blur', function() { if(this.value === "") this.value = "0"; });
+});
+
+function buildRincianText() {
+  const now = new Date();
+  const opsi = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+  const tanggalTxt = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + ", " + now.toLocaleDateString('id-ID', opsi);
+
+  const lpm = parseInt(lpmInput.value || 0), lpfp = parseInt(lpfpInput.value || 0), foto = parseInt(feeFotoInput.value || 0), rush = parseInt(feeRushInput.value || 0), fee18 = parseInt(fee18Input.value || 0), feeLuarJam = parseInt(feeLuarJamInput.value || 0), dll = parseInt(dllInput.value || 0), pot = parseInt(potonganInput.value || 0), gajiAdmRaw = parseInt(gajiAdminInp.value || 0);
+
+  const sLPM = (crewMode === 'Team' ? lpm * 1.6 : lpm * 2);
+  const sLPFP = (crewMode === 'Team' ? lpfp * 2.4 : lpfp * 3);
+  const sFoto = (crewMode === 'Team' ? foto * 80 : foto * 100);
+  const sRush = (crewMode === 'Team' ? rush * 160 : rush * 200);
+  const s18 = (crewMode === 'Team' ? fee18 * 400 : fee18 * 400);
+  const sLuarJam = (crewMode === 'Team' ? feeLuarJam * 40 : feeLuarJam * 40);
+  const sDll = (crewMode === 'Team' ? dll * 120 : dll * 150);
+  const hAdmin = (gajiAdmRaw / 2) * 0.05;
+
+  let rincian = `*﹙ᵎ﹚𝅄 " ${crewMode} " ──𝗗𝗜𝗣𝗧𝗔𝗥𝗠 𝗖𝗥𝗘𝗪*\n`;
+  rincian += `  _Waktu: ${tanggalTxt}_\n\n`;
+  rincian += `❲ 💰 ❳   ⓘ *\`ㅤ𝗥𝗜𝗡𝗖𝗜𝗔𝗡 𝗚𝗔𝗝𝗜ㅤ\`* *🜲\n`;
+
+  if(sLPM > 0) rincian += `> LPM: Rp ${Math.round(sLPM).toLocaleString('id-ID')}\n`;
+  if(sLPFP > 0) rincian += `> LPFP: Rp ${Math.round(sLPFP).toLocaleString('id-ID')}\n`;
+  if(sFoto > 0) rincian += `> Foto: Rp ${Math.round(sFoto).toLocaleString('id-ID')}\n`;
+  if(sRush > 0) rincian += `> Inrush/Video: Rp ${Math.round(sRush).toLocaleString('id-ID')}\n`;
+  if(s18 > 0) rincian += `> 18+: Rp ${Math.round(s18).toLocaleString('id-ID')}\n`;
+  if(sLuarJam > 0) rincian += `> Fee Luar Jam: Rp ${Math.round(sLuarJam).toLocaleString('id-ID')}\n`;
+  if(sDll > 0) rincian += `> Dll: Rp ${Math.round(sDll).toLocaleString('id-ID')}\n`;
+
+  if(crewMode === 'Team' && pot > 0) {
+    rincian += `> Potongan: Rp ${pot.toLocaleString('id-ID')}\n`;
+  } else if (crewMode === 'Admin' && hAdmin > 0) {
+    rincian += `> Gaji Admin: Rp ${Math.round(hAdmin).toLocaleString('id-ID')}\n`;
+  }
+
+  rincian += `\n*ⓘ  𝗧𝗢𝗧𝗔𝗟 𝗔𝗞𝗛𝗜𝗥: ${finalTotalLabel.innerText}*`;
+
+  return rincian;
+}
+
+document.getElementById('copyBtn').addEventListener('click', () => {
+  navigator.clipboard.writeText(buildRincianText()).then(() => {
+    toast('Rincian Gaji Berhasil Disalin!');
+  });
+});
+
+document.getElementById('copyLengkapBtn').addEventListener('click', () => {
+  const laporan = buildLaporanText();
+  const rincian = buildRincianText();
+  const gabungan = laporan ? `${laporan}\n\n----------------------------------------\n\n${rincian}` : rincian;
+
+  navigator.clipboard.writeText(gabungan).then(() => {
+    toast('Laporan + Gaji Lengkap Disalin!');
+  });
+});
+
+calculateCrew();
+</script>
+</body>
+</html>

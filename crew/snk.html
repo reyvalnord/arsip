@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>DiptARM Store Rules</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blue:#0b2a6f; --blue2:#1d4ed8; --gold:#d4af37; --gold2:#f5d26a;
+    --ice:#f6f8ff; --ink:#0b2a6f; --shadow:rgba(11,42,111,.16);
+    --green:#0d9488; --red:#e0473f; --gray:rgba(11,42,111,.62);
+    --purple:#7c5cbf; --coral:#e2793d;
+    --radius:18px;
+  }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html{ font-size:14px; scroll-behavior:smooth; }
+  body{
+    margin:0; padding:20px 14px 90px; font-family:'Poppins',sans-serif; color:var(--blue);
+    background:
+      radial-gradient(circle at 12% 15%, rgba(212,175,55,.16), transparent 45%),
+      radial-gradient(circle at 88% 20%, rgba(29,78,216,.12), transparent 44%),
+      radial-gradient(circle at 50% 110%, rgba(212,175,55,.10), transparent 48%),
+      linear-gradient(135deg,#ffffff 0%, #f0f4ff 55%, #ffffff 100%);
+    background-attachment:fixed; min-height:100vh; -webkit-font-smoothing:antialiased;
+    overflow-x: hidden;
+  }
+  .wrap{ max-width:800px; margin:0 auto; }
+  svg.ic{ width:16px; height:16px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0; vertical-align:-3px; }
+
+  header{
+    text-align:center; margin-bottom:16px; background:linear-gradient(180deg,#fff,var(--ice));
+    border-radius:20px; border:2.5px solid var(--ink); box-shadow:6px 6px 0px var(--shadow);
+    padding:22px 16px; position:relative; overflow:hidden;
+  }
+  header::before{
+    content:""; position:absolute; top:0; left:0; right:0; height:7px;
+    background:linear-gradient(90deg, var(--gold) 0 22%, transparent 22% 78%, var(--gold) 78% 100%), linear-gradient(90deg,var(--blue) 0 100%);
+    opacity:.95;
+  }
+  header h1{
+    font-family:'Outfit',sans-serif; font-weight:900; font-size:1.5rem; margin:0 0 6px;
+    text-shadow:0 2px 0 rgba(255,255,255,.9); letter-spacing:.2px;
+  }
+  header .badge{
+    display:inline-block; font-weight:800; font-size:.7rem; color:var(--blue); letter-spacing:.3px;
+    background:rgba(212,175,55,.18); border:1.5px solid var(--ink); border-radius:999px;
+    padding:5px 14px;
+  }
+
+  .tabs{ display:flex; gap:6px; margin-bottom:16px; }
+  .tab-btn{
+    flex:1; border:2px solid var(--ink); background:rgba(255,255,255,.85); padding:12px 10px;
+    font-weight:800; font-family:'Outfit',sans-serif; font-size:.76rem; color:var(--blue);
+    border-radius:12px; cursor:pointer; transition:.2s ease; white-space:nowrap;
+    box-shadow:3px 3px 0px var(--shadow); display:flex; align-items:center; justify-content:center; gap:6px;
+  }
+  .tab-btn:active{ transform:translateY(2px); box-shadow:none; }
+  .tab-btn.active{ background:var(--blue); color:#fff; border-color:var(--blue); }
+  .tab-content.hidden{ display:none !important; }
+
+  /* ===== QUICK NAV (custom dropdown) ===== */
+  .nav-card{
+    background:linear-gradient(135deg,var(--blue),#153c98); border-radius:var(--radius); padding:18px 18px 20px;
+    box-shadow:6px 6px 0px var(--shadow); border:2.5px solid var(--gold); margin-bottom:22px; color:#fff;
+    position:relative; overflow:visible;
+  }
+  .nav-card::after{
+    content:""; position:absolute; top:-40%; right:-20%; width:180px; height:180px; border-radius:50%;
+    background:radial-gradient(circle, rgba(245,210,106,.25), transparent 70%); pointer-events:none;
+  }
+  .nav-card .nav-title{
+    font-family:'Outfit',sans-serif; font-weight:900; font-size:.85rem; text-transform:uppercase;
+    letter-spacing:.4px; display:flex; align-items:center; gap:8px; margin-bottom:13px; color:var(--gold2);
+    position:relative; z-index:1;
+  }
+  .nav-title .nt-icon{
+    width:26px; height:26px; border-radius:8px; background:rgba(255,255,255,.12); border:1.5px solid rgba(245,210,106,.5);
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .nav-title .nt-icon svg{ width:14px; height:14px; stroke:var(--gold2); }
+
+  .custom-dropdown{ position:relative; z-index:5; }
+  .dd-toggle{
+    width:100%; display:flex; justify-content:space-between; align-items:center; gap:10px;
+    border:2px solid var(--gold); background:rgba(255,255,255,.09); color:#fff;
+    border-radius:12px; padding:13px 16px; font-family:'Outfit',sans-serif; font-weight:700; font-size:.85rem;
+    cursor:pointer; transition:.2s;
+  }
+  .dd-toggle:hover{ background:rgba(255,255,255,.16); }
+  .dd-toggle.open{ border-radius:12px 12px 0 0; background:rgba(255,255,255,.16); border-bottom-color:rgba(212,175,55,.4); }
+  .dd-label{ text-align:left; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .dd-chevron{ width:16px; height:16px; stroke:var(--gold2); stroke-width:3; transition:.25s; flex-shrink:0; }
+  .dd-toggle.open .dd-chevron{ transform:rotate(180deg); }
+
+  .dd-menu{
+    position:absolute; top:100%; left:0; right:0; background:#fff; border:2px solid var(--gold);
+    border-top:none; border-radius:0 0 14px 14px; box-shadow:6px 10px 24px rgba(0,0,0,.28);
+    max-height:0; overflow:hidden; opacity:0; transition:max-height .25s ease, opacity .2s ease;
+  }
+  .dd-menu.open{ max-height:320px; overflow-y:auto; opacity:1; }
+  .dd-menu::-webkit-scrollbar{ width:6px; }
+  .dd-menu::-webkit-scrollbar-track{ background:transparent; }
+  .dd-menu::-webkit-scrollbar-thumb{ background:var(--gold); border-radius:10px; }
+
+  .dd-option{
+    padding:12px 16px; font-size:.82rem; font-weight:600; color:var(--blue); cursor:pointer;
+    display:flex; align-items:center; justify-content:space-between; gap:8px;
+    border-bottom:1px solid rgba(11,42,111,.08); transition:.15s;
+  }
+  .dd-option:last-child{ border-bottom:none; }
+  .dd-option:hover{ background:rgba(212,175,55,.14); padding-left:20px; }
+  .dd-option.selected{ background:rgba(29,78,216,.08); color:var(--blue2); font-weight:800; }
+  .dd-option .dd-check{ width:15px; height:15px; stroke:var(--blue2); stroke-width:3; opacity:0; flex-shrink:0; }
+  .dd-option.selected .dd-check{ opacity:1; }
+  .dd-option .dd-num{
+    display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px; flex-shrink:0;
+    background:rgba(11,42,111,.08); color:var(--blue); border-radius:6px; font-family:'Outfit',sans-serif;
+    font-weight:800; font-size:.65rem; margin-right:8px;
+  }
+  .dd-option.selected .dd-num{ background:var(--blue2); color:#fff; }
+  .dd-opt-left{ display:flex; align-items:center; overflow:hidden; }
+  .dd-opt-left span:last-child{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+  .card{
+    background:linear-gradient(180deg,#fff,var(--ice)); border-radius:var(--radius); padding:20px 16px;
+    box-shadow:6px 6px 0px var(--shadow); border:2.5px solid var(--ink); margin-bottom:20px;
+    position:relative; overflow:hidden; scroll-margin-top:16px; transition:.2s;
+  }
+  .card h2{
+    font-family:'Outfit',sans-serif; font-weight:800; font-size:1.1rem; margin:0 0 14px;
+    display:flex; align-items:center; gap:10px; border-bottom:2px dashed rgba(11,42,111,.2); padding-bottom:12px;
+    text-transform:uppercase;
+  }
+  .h2-num{
+    display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; flex-shrink:0;
+    background:linear-gradient(135deg,var(--gold),var(--gold2)); color:var(--blue); border-radius:9px;
+    font-family:'Outfit',sans-serif; font-weight:900; font-size:.72rem; border:1.5px solid var(--blue);
+  }
+  .card h3{ font-family:'Outfit',sans-serif; color:var(--blue); font-size:.95rem; font-weight:800; margin:16px 0 8px; }
+  .card h3:first-of-type{ margin-top:0; }
+  .card ul, .card ol{ padding-left:20px; margin-bottom:14px; font-size:.85rem; line-height:1.5; }
+  .card li{ margin-bottom:8px; }
+  .card li:last-child{ margin-bottom:0; }
+  .card p{ font-size:.85rem; margin-bottom:14px; line-height:1.5; }
+  .card p:last-child{ margin-bottom:0; }
+
+  /* GAYA UNTUK GAMBAR FOTO */
+  .img-box{
+    width:100%; background:rgba(212,175,55,.1); border:2px dashed var(--gold); border-radius:12px;
+    padding:8px; margin-bottom:16px; text-align:center;
+  }
+  .img-box img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    display: block;
+    margin: 0 auto;
+  }
+
+  /* FITUR COPY TEMPLATE */
+  .format-container {
+    position: relative;
+    margin-bottom: 16px;
+  }
+  .format-box{
+    background:rgba(11,42,111,.04); border-left:4px solid var(--blue2); padding:16px 14px;
+    font-family:monospace; font-size:.78rem; white-space:pre-wrap; word-wrap: break-word;
+    border-radius:0 12px 12px 0; color:var(--blue); font-weight:600; line-height:1.5;
+    overflow-x: auto;
+  }
+  .btn-copy {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: var(--blue2);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 0.7rem;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s;
+    box-shadow: 2px 2px 0px rgba(11,42,111,.2);
+  }
+  .btn-copy:active {
+    transform: translate(2px, 2px);
+    box-shadow: none;
+  }
+  .btn-copy.copied {
+    background: var(--green);
+  }
+
+  .alert{
+    background:#ffe3e1; color:var(--red); padding:12px 16px; border-radius:10px; font-weight:800;
+    text-align:center; font-size:.78rem; border:1.5px solid var(--red); margin-top:4px;
+    text-transform:uppercase; letter-spacing:.2px; line-height:1.4;
+  }
+  .alert-warn{ background:#fff3cd; color:#8a6d00; border-color:#f0d778; }
+
+  .highlight{ font-weight:800; color:var(--blue); }
+
+  .card a{
+    color:var(--blue2); font-weight:700; text-decoration:none; word-break:break-all;
+    background:rgba(212,175,55,.2); padding:2px 6px; border-radius:4px;
+  }
+  .card a:hover{ background:var(--gold); color:#fff; }
+
+  .price-list{
+    background:#fff; border:1.5px solid rgba(11,42,111,.18); border-radius:12px;
+    overflow:hidden; margin-bottom:14px;
+  }
+  .price-row{
+    display:flex; justify-content:space-between; align-items:center; padding:10px 14px;
+    border-bottom:1px solid rgba(11,42,111,.1); font-size:.82rem; transition:.15s;
+  }
+  .price-row:last-child{ border-bottom:none; }
+  .price-row:nth-child(even){ background:rgba(29,78,216,.03); }
+  .price-row:hover{ background:rgba(212,175,55,.1); }
+  .price-row .p-name{ font-weight:700; color:var(--blue); flex: 1; }
+  .price-row .p-val{ font-family:'Outfit',sans-serif; font-weight:800; color:var(--blue2); text-align:right; font-size:.78rem; margin-left: 8px;}
+  .p-sub{ display:block; font-weight:500; font-size:.7rem; color:var(--gray); margin-top:2px; }
+
+  /* Judul sub-bagian harga (Inrush, Size, dll) */
+  .card h3.h3-warn{ color:var(--red); }
+  .card h3.h3-total{ display:flex; justify-content:space-between; align-items:center; gap:8px; }
+  .h3-total .tot{
+    font-size:.78rem; background:var(--blue); color:#fff; border-radius:8px; padding:3px 10px; white-space:nowrap;
+  }
+  .price-note{ font-size:.78rem; color:var(--gray); font-style:italic; margin:-6px 0 14px; }
+
+  /* Tombol kembali ke atas */
+  #toTopBtn{
+    position:fixed; bottom:84px; right:16px; width:46px; height:46px; border-radius:50%;
+    background:var(--blue); border:2px solid var(--gold); color:#fff; display:flex; align-items:center;
+    justify-content:center; box-shadow:3px 3px 0px var(--shadow); cursor:pointer; z-index:50; transition:.2s;
+  }
+  #toTopBtn:hover{ transform:translateY(-3px); }
+  #toTopBtn.hidden{ display:none !important; }
+
+  /* ===== TOMBOL PENGUMUMAN MENGAMBANG ===== */
+  #annBtn{
+    position:fixed; bottom:20px; right:16px; width:54px; height:54px; border-radius:50%;
+    background:var(--red); border:3px solid #fff; color:#fff; cursor:pointer; z-index:60;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Outfit',sans-serif; font-weight:900; font-size:1.9rem; line-height:1; padding:0;
+    box-shadow:0 6px 16px rgba(224,71,63,.55), 3px 3px 0 var(--shadow);
+    animation:annPulse 1.8s infinite;
+  }
+  #annBtn:active{ transform:scale(.92); }
+  @keyframes annPulse{
+    0%{ box-shadow:0 0 0 0 rgba(224,71,63,.6), 0 6px 16px rgba(224,71,63,.55); }
+    70%{ box-shadow:0 0 0 16px rgba(224,71,63,0), 0 6px 16px rgba(224,71,63,.55); }
+    100%{ box-shadow:0 0 0 0 rgba(224,71,63,0), 0 6px 16px rgba(224,71,63,.55); }
+  }
+
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(11,42,111,.55); z-index:100; display:none;
+    align-items:center; justify-content:center; padding:18px; backdrop-filter:blur(2px);
+  }
+  .modal-overlay.show{ display:flex; animation:fadeIn .2s ease; }
+  .modal-box{
+    background:linear-gradient(180deg,#fff,var(--ice)); border:2.5px solid var(--red); border-radius:var(--radius);
+    box-shadow:6px 6px 0 rgba(224,71,63,.25); width:100%; max-width:460px; max-height:86vh; overflow-y:auto;
+    position:relative;
+  }
+  .modal-head{
+    background:var(--red); color:#fff; padding:14px 48px 14px 16px; font-family:'Outfit',sans-serif;
+    font-weight:900; font-size:.95rem; text-transform:uppercase; letter-spacing:.3px;
+    display:flex; align-items:center; gap:10px; position:sticky; top:0;
+  }
+  .modal-head .m-ic{
+    width:26px; height:26px; border-radius:50%; background:#fff; color:var(--red); display:flex;
+    align-items:center; justify-content:center; font-weight:900; font-size:1rem; flex-shrink:0;
+  }
+  .modal-close{
+    position:absolute; top:10px; right:10px; width:30px; height:30px; border-radius:50%; border:none;
+    background:rgba(255,255,255,.22); color:#fff; font-size:1.1rem; font-weight:800; cursor:pointer; line-height:1;
+  }
+  .modal-body{ padding:18px 16px 20px; font-size:.85rem; line-height:1.6; }
+  .modal-body p{ margin:0 0 12px; }
+  .modal-body a{
+    color:var(--blue2); font-weight:700; text-decoration:none; word-break:break-all;
+    background:rgba(212,175,55,.2); padding:2px 6px; border-radius:4px;
+  }
+  .modal-body .alert{ text-align:left; text-transform:none; font-size:.8rem; margin-top:6px; }
+
+  .hidden{ display:none !important; }
+  @keyframes fadeIn{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;} }
+  .tab-content:not(.hidden) .card{ animation:fadeIn .3s ease; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <h1>Panduan & SOP</h1>
+    <span class="badge">DiptARM Store &middot; Pusat Panduan Crew</span>
+  </header>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="jaseb">
+      <svg viewBox="0 0 24 24" class="ic"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+      Jaseb
+    </button>
+    <button class="tab-btn" data-tab="custom">
+      <svg viewBox="0 0 24 24" class="ic"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><path d="M21 15l-5-5L5 21"></path></svg>
+      Custom
+    </button>
+  </div>
+
+  <!-- ===================== TAB JASEB ===================== -->
+  <div id="tab-jaseb" class="tab-content">
+
+    <div class="nav-card">
+      <div class="nav-title">
+        <div class="nt-icon"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg></div>
+        Menu Cepat &middot; Jaseb
+      </div>
+
+      <div class="custom-dropdown" id="ddJaseb">
+        <button type="button" class="dd-toggle" onclick="toggleDropdown('ddJaseb')">
+          <span class="dd-label">Pilih Bagian...</span>
+          <svg viewBox="0 0 24 24" class="dd-chevron"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="dd-menu">
+          <div class="dd-option" data-target="j-trial" onclick="selectOption('ddJaseb','j-trial','Batas Aturan Trial')"><span class="dd-opt-left"><span class="dd-num">01</span><span>Aturan Selama Trial</span></span><svg viewBox="0 0 24 24" class="dd-check"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+          <div class="dd-option" data-target="j-wajib" onclick="selectOption('ddJaseb','j-wajib','Hal Yang Wajib Diperhatikan')"><span class="dd-opt-left"><span class="dd-num">02</span><span>Hal Yang Wajib Diperhatikan</span></span><svg viewBox="0 0 24 24" class="dd-check"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+          <div class="dd-option" data-target="j-take" onclick="selectOption('ddJaseb','j-take','Tutor Take Orderan')"><span class="dd-opt-left"><span class="dd-num">03</span><span>Tutor Take Orderan</span></span><svg viewBox="0 0 24 24" class="dd-check"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+          <div class="dd-option" data-target="j-kirim" onclick="selectOption('ddJaseb','j-kirim','Tutor Kirim Orderan')"><span class="dd-opt-left"><span class="dd-num">04</span><span>Tutor Kirim Orderan</span></span><svg viewBox="0 0 24 24" class="dd-check"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+          <div class="dd-option" data-target="j-list" onclick="selectOption('ddJaseb','j-list','Tutor List Orderan')"><span class="dd-opt-left"><span class="dd-num">05</span><span>Tutor List Orderan (RC)</span></span><svg viewBox="0 0 24 24" class="dd-check"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+<div class="dd-option" data-target="j-gc" onclick="selectOption('ddJaseb','j-gc','Tutor Update via GC Only')"><span class="dd-opt-left"><span class="dd-num">06</span><span>Tutor List Orderan (GC)</span></span><svg viewBox="0 0 24 24" class="dd-check"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+          <div class="dd-option" data-target="j-gaji" onclick="selectOption('ddJaseb','j-gaji','Tutor Ambil Gaji')"><span class="dd-opt-left"><span class="dd-num">07</span><span>Tutor Ambil Gaji</span></span><svg viewBox="0 0 24 24" class="dd-check"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+          <div class="dd-option" data-target="j-telat" onclick="selectOption('ddJaseb','j-telat','Aturan Keterlambatan')"><span class="dd-opt-left"><span class="dd-num">08</span><span>Aturan Keterlambatan</span></span><svg viewBox="0 0 24 24" class="dd-check"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+          <div class="dd-option" data-target="j-hitung" onclick="selectOption('ddJaseb','j-hitung','Cara Perhitungan Total Jaseb')"><span class="dd-opt-left"><span class="dd-num">09</span><span>Cara Perhitungan Total Jaseb</span></span><svg viewBox="0 0 24 24" class="dd-check"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="j-trial">
+      <h2><span class="h2-num">01</span>Aturan Selama Trial</h2>
+      <ol>
+        <li>Selama masa trial diharapkan sering menghandle orderan sebagai bukti bahwa kamu aktif.</li>
+        <li>Jika kesulitan dalam mendapatkan orderan bisa minta ke admin secara langsung (rekomendasi).</li>
+        <li>Minimalisir kesalahan terutama jam deadline orderan, jangan sampai ada keterlambatan.</li>
+        <li>Durasi trial ditentukan langsung oleh owner. Jika dinyatakan telah diterima, maka berbahagialah.</li>
+        <li>Selama masa trial tidak ada absen.</li>
+        <li>Isi data crew jika diangkat menjadi team DiptARM.</li>
+      </ol>
+    </div>
+
+    <div class="card" id="j-wajib">
+      <h2><span class="h2-num">02</span>Hal Yang Wajib Diperhatikan</h2>
+      <ol>
+        <li>Deadline orderan.</li>
+        <li>Jam sesi (jika ada).</li>
+        <li>Jangan sampai terlambat apa pun yang terjadi.</li>
+        <li>Sebisa mungkin konfirmasi lalu cari pengganti baru jika berhalangan atau tidak bisa menyebar list.</li>
+      </ol>
+      <div class="alert alert-warn">Perhatikan kembali jam deadline dan nama list!</div>
+    </div>
+
+    <div class="card" id="j-take">
+      <h2><span class="h2-num">03</span>Tutor Take Orderan</h2>
+      <div class="img-box">
+        <img src="../foto/tutor.jpg" alt="Tutorial Take Orderan">
+      </div>
+      <ol>
+        <li>List + format muncul.</li>
+        <li>Langsung react list dengan emoji (emoji wajib langka, tidak boleh sama dengan team lain).</li>
+      </ol>
+      <div class="alert">Sistem rebutan, siapa cepat dia dapat.</div>
+    </div>
+
+    <div class="card" id="j-kirim">
+      <h2><span class="h2-num">04</span>Tutor Kirim Orderan</h2>
+      <div class="img-box">
+        <img src="../foto/orderan.jpg" alt="Tutorial Kirim Orderan">
+      </div>
+
+      <p><span class="highlight">Join GC Cust:</span>
+      <a href="https://chat.whatsapp.com/BWXPNhpPt5lITi17AYHxyn" target="_blank">Link GC Cust</a></p>
+
+      <p><em>Note: Nama list ada di bagian format pemesanan di bawah nomor cust. Samakan saja namanya, jika kosong maka gunakan nama GC-nya.</em></p>
+
+      <h3>Harian + Sesi</h3>
+      <div class="format-container">
+        <button class="btn-copy" onclick="copyFormat(this)">Salin</button>
+        <div class="format-box">*ⓘ  𝗗𝗜𝗣𝗧𝗔𝗥𝗠: 𝗝𝗔𝗦𝗘𝗕 “𝗛𝗔𝗥𝗜+𝗦𝗘𝗦𝗜”*
+━━━━━━━━━━━━━━━━━━━━━━━ 
+ㅤ‣ㅤ NAMA LIST  *( 00 LPM )*
+ㅤ‣ㅤ *DAY:* 00/00  -  *SESI:* 00/00
+ㅤ‣ㅤ @tag</div>
+      </div>
+
+      <h3>Only Sesi 1 Hari</h3>
+      <div class="format-container">
+        <button class="btn-copy" onclick="copyFormat(this)">Salin</button>
+        <div class="format-box">*ⓘ  𝗗𝗜𝗣𝗧𝗔𝗥𝗠:ㅤ𝗝𝗔𝗦𝗘𝗕 “𝗦𝗘𝗦𝗜”*
+━━━━━━━━━━━━━━━━━━━━
+ㅤ‣ㅤ NAMA LIST  *( 00 LPM )*
+ㅤ‣ㅤ *DAY:* 1  -  *SESI:* 00/00
+ㅤ‣ㅤ @tag</div>
+      </div>
+
+      <h3>Only Harian Sesi 1</h3>
+      <div class="format-container">
+        <button class="btn-copy" onclick="copyFormat(this)">Salin</button>
+        <div class="format-box">*ⓘ  𝗗𝗜𝗣𝗧𝗔𝗥𝗠: 𝗝𝗔𝗦𝗘𝗕 “𝗛𝗔𝗥𝗜𝗔𝗡”*
+━━━━━━━━━━━━━━━━━━━━━━
+ㅤ‣ㅤ NAMA LIST  *( 00 LPM )*
+ㅤ‣ㅤ *DAY:* 00/00  -  *SESI:* 1
+ㅤ‣ㅤ @tag</div>
+      </div>
+
+      <h3>Sekali Sebar</h3>
+      <div class="format-container">
+        <button class="btn-copy" onclick="copyFormat(this)">Salin</button>
+        <div class="format-box">*ⓘ  𝗗𝗜𝗣𝗧𝗔𝗥𝗠: 𝗝𝗔𝗦𝗘𝗕 “𝗦𝗔𝗧𝗨𝗔𝗡”*
+━━━━━━━━━━━━━━━━━━━━━
+ㅤ‣ㅤ NAMA LIST  *( 00 LPM )*
+ㅤ‣ㅤ @tag</div>
+      </div>
+    </div>
+
+    <div class="card" id="j-list">
+      <h2><span class="h2-num">06</span>Tutor List Orderan (Via RC)</h2>
+      <div class="img-box">
+        <img src="../foto/liso.jpg" alt="Tutorial Take Orderan">
+      </div>
+      <ol>
+        <li>Wajib merekap seluruh orderan di RC owner.<br><span class="highlight">+62 851-1132-1658</span></li>
+        <li>Update list setiap mendapatkan orderan WAJIB.</li>
+        <li>(Opsional) Coret orderan jika sudah selesai.</li>
+        <li>Gunakan nomor agar lebih mudah, atau pisahkan menurut tanggal.</li>
+      </ol>
+      <p><em>Fungsi: untuk memantau orderan.</em></p>
+            <div class="alert">Update list orderan bersifat WAJIB.</div>
+    </div>
+
+    <div class="card" id="j-gc">
+      <h2><span class="h2-num">05</span>Tutor List Orderan (Via GC)</h2>
+      <div class="img-box">
+        <img src="../foto/gc.jpg" alt="Update via GC">
+      </div>
+      <ol>
+        <li>Bawa format + list ke GC.</li>
+        <li>Bawa semua akun LPM yang dibutuhkan.</li>
+        <li>Sebisa mungkin lakukan penyebaran dari GC.</li>
+        <li>Update list setelah forward orderan.</li>
+      </ol>
+      <div class="alert">Update list orderan bersifat WAJIB.</div>
+    </div>
+
+    <div class="card" id="j-gaji">
+      <h2><span class="h2-num">07</span>Tutor Ambil Gaji</h2>
+     <div class="img-box">
+        <img src="../foto/gajian.jpg" alt="Tutorial Take Orderan">
+     </div>
+      <ol>
+        <li>Web: <a href="https://DiptARM.netlify.app/crew/gaji" target="_blank">DiptARM.netlify.app/crew/gaji</a></li>
+        <li>Isi dengan cara copy semua orderanmu lalu paste
+          <li>Lalu <b>Hitung Total</b></li>
+<li>Pastikan semua hitungan sudah benar</li>
+<li>Klik <b>Hitung Gaji</b></li>
+<li>Lalu klik <b>Kalkulator Gaji</b> di Pojok kanan atas</li>
+<li>Kemudian klik <b>Salin Total</b></li>
+<li>Lalu isi Format</li>
+      </ol>
+
+      <h3>Template Penghitung Gaji</h3>
+      <div class="format-container">
+        <button class="btn-copy" onclick="copyFormat(this)">Salin</button>
+        <div class="format-box">NICKNAME :
+Sisa absen yang belum dibayar:
+No e wallet/bank :
+Platform : dana/ gopay/ Qriss ( Pilih 1 )
+          
+<i>Paste detail rekapan dari web disini</i></div>
+      </div>
+
+      <p><span class="highlight">Kirim ke:</span>
+      <a href="https://chat.whatsapp.com/BRkAydZiZO20VM4aTEp2uc?s=cl&p=a&mlu=3&amv=2" target="_blank">GC Ambil Gaji</a></p>
+
+      <div class="alert">Potongan tetap berlaku jika terdeteksi keterlambatan.<br><br>Gaji hanya bisa diambil di hari Sabtu/Minggu.</div>
+    </div>
+
+    <div class="card" id="j-telat">
+      <h2><span class="h2-num">08</span>Aturan Keterlambatan</h2>
+      <ol>
+        <li>Penyetoran harus dilakukan sebelum deadline. <span class="highlight">Terlambat 1 menit tetap dianggap terlambat.</span></li>
+        <li>Setiap keterlambatan wajib memberikan bonus sebesar 50% dari jumlah LPM/PFP yang diorder cust dan mendapat potongan 50% dari store.</li>
+            <div class="format-container">
+        <div class="format-box"><b>Contoh</b>
+Budi handle orderan 1K LPM dl jam 20.00
+Tapi di jam 20.01 orderan masih belum selesai di kerjakan dan belum ada ss an yang di setor maka budi wajib memberikan bonus 
+1K × 50% = 500 LPM ke cust.
+Jadi total jumlah LPM yang budi setorkan untuk Cust 1K ( orderan Cust ) + 500 LPM ( Bonus ) = 1.500
+
+Dan budi mendapatkan potongan 500 LPM dari store</div>
+              </div>
+        <div class="format-container">
+        <div class="format-box"><b>Kasus Lain</b>
+Jika orderan 10K LPM namun saat deadline baru terselesaikan 5K LPM, maka bonus dihitung dari sisa yang belum selesai:
+10K - 5K = 5K (Orderan yang belum selesai)
+5K × 50% = 2.500 LPM (bonus yang harus dibayar)</div>
+        </div>
+        <li>Tidak menerima alasan apapun termaksud lupa setor, jika terlambat kompensasi tetap harus dibayarkan.</li>
+        <li>Aman jika sebelum deadline sudah mengonfirmasi ke admin atau team lain untuk mengambil alih orderan.</li>
+      </ol>
+      <div class="alert">Kalau berat buat diterima, jangan telat.</div>
+      
+    </div>
+
+    <div class="card" id="j-hitung">
+      <h2><span class="h2-num">09</span>Cara Perhitungan Total Jaseb</h2>
+      <ul>
+        <li><span class="highlight">LPM/PFP</span> = Jumlah × Sesi × Hari.</li>
+        <li><span class="highlight">Fee Foto/Video</span> = Sesi × Hari.</li>
+        <li><span class="highlight">Fee Inrush</span> = 1 per orderan.</li>
+        <li><span class="highlight">Fee Inrush Sesi</span> = dihitung jumlah hari.</li>
+        <li><span class="highlight">Fee 18+</span> = Sesi × Hari (jika tertulis 18+ pada format).</li>
+        <li><span class="highlight">Fee Luar Jam</span> = 1 per hari.</li>
+        <li><span class="highlight">Fee Dukungan</span> = dihitung per SS snap.</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- ===================== TAB CUSTOM ===================== -->
+  <div id="tab-custom" class="tab-content hidden">
+
+    <div class="nav-card">
+      <div class="nav-title">
+        <div class="nt-icon"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg></div>
+        Menu Cepat &middot; Custom
+      </div>
+
+      <div class="custom-dropdown" id="ddCustom">
+        <button type="button" class="dd-toggle" onclick="toggleDropdown('ddCustom')">
+          <span class="dd-label">Pilih Bagian...</span>
+          <svg viewBox="0 0 24 24" class="dd-chevron"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="dd-menu">
+          <div class="dd-option" data-target="c-trial" onclick="selectOption('ddCustom','c-trial','Khusus Yang Masih Trial')"><span class="dd-opt-left"><span class="dd-num">01</span><span>Aturan Selama Trial</span></span><svg viewBox="0 0 24 24" class="dd-check"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+          <div class="dd-option" data-target="c-wajib" onclick="selectOption('ddCustom','c-wajib','Hal Yang Wajib Diperhatikan')"><span class="dd-opt-left"><span class="dd-num">02</span><span>Hal Yang Wajib Diperhatikan</span></span><svg viewBox="0 0 24 24" class="dd-check"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+          <div class="dd-option" data-target="c-ketentuan" onclick="selectOption('ddCustom','c-ketentuan','Ketentuan Gaji + Aturan')"><span class="dd-opt-left"><span class="dd-num">03</span><span>Ketentuan Gaji + Aturan</span></span><svg viewBox="0 0 24 24" class="dd-check"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+          <div class="dd-option" data-target="c-update" onclick="selectOption('ddCustom','c-update','Tutor Update Orderan')"><span class="dd-opt-left"><span class="dd-num">04</span><span>Tutor Update Orderan</span></span><svg viewBox="0 0 24 24" class="dd-check"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+          <div class="dd-option" data-target="c-mb" onclick="selectOption('ddCustom','c-mb','Harga Moodboard Setup')"><span class="dd-opt-left"><span class="dd-num">05</span><span>Harga Moodboard Setup</span></span><svg viewBox="0 0 24 24" class="dd-check"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+          <div class="dd-option" data-target="c-wd" onclick="selectOption('ddCustom','c-wd','Harga Wording Setup')"><span class="dd-opt-left"><span class="dd-num">06</span><span>Harga Wording Setup</span></span><svg viewBox="0 0 24 24" class="dd-check"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+          <div class="dd-option" data-target="c-tw" onclick="selectOption('ddCustom','c-tw','Twibbon Pack Birthday')"><span class="dd-opt-left"><span class="dd-num">07</span><span>Twibbon Pack Birthday</span></span><svg viewBox="0 0 24 24" class="dd-check"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+          <div class="dd-option" data-target="c-wb" onclick="selectOption('ddCustom','c-wb','Wording Pack Birthday')"><span class="dd-opt-left"><span class="dd-num">08</span><span>Wording Pack Birthday</span></span><svg viewBox="0 0 24 24" class="dd-check"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+          <div class="dd-option" data-target="c-gcpack" onclick="selectOption('ddCustom','c-gcpack','Detail Harga Pack GC')"><span class="dd-opt-left"><span class="dd-num">09</span><span>Detail Harga Pack GC</span></span><svg viewBox="0 0 24 24" class="dd-check"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+          <div class="dd-option" data-target="c-ig" onclick="selectOption('ddCustom','c-ig','Setup ACC Instagram')"><span class="dd-opt-left"><span class="dd-num">10</span><span>Setup ACC Instagram</span></span><svg viewBox="0 0 24 24" class="dd-check"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+          <div class="dd-option" data-target="c-igl" onclick="selectOption('ddCustom','c-igl','Setup Instagram Paket Lengkap')"><span class="dd-opt-left"><span class="dd-num">11</span><span>Setup Instagram Paket Lengkap</span></span><svg viewBox="0 0 24 24" class="dd-check"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+          <div class="dd-option" data-target="c-igt" onclick="selectOption('ddCustom','c-igt','Tambahan Setup Instagram')"><span class="dd-opt-left"><span class="dd-num">12</span><span>Tambahan Setup Instagram</span></span><svg viewBox="0 0 24 24" class="dd-check"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+          <div class="dd-option" data-target="c-ambil" onclick="selectOption('ddCustom','c-ambil','Tutor Ambil Gaji')"><span class="dd-opt-left"><span class="dd-num">13</span><span>Tutor Ambil Gaji</span></span><svg viewBox="0 0 24 24" class="dd-check"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+          <div class="dd-option" data-target="c-telat" onclick="selectOption('ddCustom','c-telat','Aturan Keterlambatan')"><span class="dd-opt-left"><span class="dd-num">14</span><span>Aturan Keterlambatan</span></span><svg viewBox="0 0 24 24" class="dd-check"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+          <div class="dd-option" data-target="c-waktu" onclick="selectOption('ddCustom','c-waktu','Waktu Pengerjaan No Rush')"><span class="dd-opt-left"><span class="dd-num">15</span><span>Waktu Pengerjaan No Rush</span></span><svg viewBox="0 0 24 24" class="dd-check"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+          <div class="dd-option" data-target="c-kirim" onclick="selectOption('ddCustom','c-kirim','Tutorial Kirim Orderan')"><span class="dd-opt-left"><span class="dd-num">16</span><span>Tutorial Kirim Orderan</span></span><svg viewBox="0 0 24 24" class="dd-check"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="c-trial">
+      <h2><span class="h2-num">01</span>Aturan Selama Trial</h2>
+      <ol>
+        <li>Selama masa trial diharapkan sering menghandle orderan sebagai bukti bahwa kamu aktif.</li>
+        <li>Jika kesulitan dalam mendapatkan orderan bisa minta ke admin secara langsung (rekomendasi).</li>
+        <li>Minimalisir kesalahan terutama deadline orderan, jangan sampai ada keterlambatan.</li>
+        <li>Durasi trial ditentukan langsung oleh owner, jika dinyatakan telah diterima, maka berbahagialah.</li>
+        <li>Selama masa trial tidak ada absen.</li>
+        <li>Isi data crew jika diangkat menjadi team DiptARM.</li>
+      </ol>
+    </div>
+
+    <div class="card" id="c-wajib">
+      <h2><span class="h2-num">02</span>Hal Yang Wajib Diperhatikan</h2>
+      <ol>
+        <li>Jangan telat.</li>
+        <li>Konfirmasi jika tidak sanggup melanjutkan orderan.</li>
+        <li>Tanggung jawab dengan orderan jika sudah mengambil.</li>
+        <li>Perhatikan deadline.</li>
+        <li>Kerjakan sesegera mungkin.</li>
+      </ol>
+    </div>
+
+    <div class="card" id="c-ketentuan">
+      <h2><span class="h2-num">03</span>Ketentuan Gaji + Aturan</h2>
+      <ol>
+        <li>Potongan 10% dari total harga.</li>
+        <li>Absen 1× = 50 LPM.</li>
+        <li>Terlambat tanpa konfirmasi, potongan 50%.</li>
+        <li>Customer minta refund (karena terlambat), potong gaji dari total orderan yang telat.</li>
+        <li>Nonaktif selama 2 minggu tanpa konfirmasi (kick).</li>
+        <li>Terlambat dengan konfirmasi, wajib bayar biaya inrush team yang handle.</li>
+      </ol>
+    </div>
+
+    <div class="card" id="c-update">
+      <h2><span class="h2-num">04</span>Tutor Update Orderan</h2>
+      <div class="img-box">
+        <img src="../foto/up.jpg" alt="Tutor Update Orderan">
+      </div>
+      <p>Setiap take orderan wajib update list ke RC <span class="highlight">+62 851-1132-1658<br>Jika tidak melakukan rekap, gaji tidak akan dibayarkan.</span></p>
+      <div class="alert alert-warn">Wajib rekap setiap mendapatkan orderan</div>
+    </div>
+
+    <!-- ===== DETAIL HARGA: SETUP ACC & PACK BIRTHDAY ===== -->
+
+    <div class="card" id="c-mb">
+      <h2><span class="h2-num">05</span>Harga Moodboard Setup</h2>
+      <div class="price-list">
+        <div class="price-row"><span class="p-name">Paket Asik 1-3<span class="p-sub">MB Basic: 3s + Header</span></span><span class="p-val">5K</span></div>
+        <div class="price-row"><span class="p-name">Paket Asik 4-6<span class="p-sub">MB Basic: 6s + Header</span></span><span class="p-val">7K</span></div>
+        <div class="price-row"><span class="p-name">Paket Degan 1-3<span class="p-sub">MB Deco/Design: 3s + Header</span></span><span class="p-val">13K</span></div>
+        <div class="price-row"><span class="p-name">Paket Degan 4-6<span class="p-sub">MB Deco/Design: 6s + Header</span></span><span class="p-val">17K</span></div>
+      </div>
+
+      <h3 class="h3-warn">( ! ) Harga Inrush Moodboard</h3>
+      <div class="price-list">
+        <div class="price-row"><span class="p-name">Inrush 48 Jam</span><span class="p-val">4K</span></div>
+        <div class="price-row"><span class="p-name">Inrush 72 Jam</span><span class="p-val">2K</span></div>
+      </div>
+
+      <p><span class="highlight">Detail isi:</span>
+      <a href="https://diptarm.netlify.app/web" target="_blank">diptarm.netlify.app/web</a></p>
+    </div>
+
+    <div class="card" id="c-wd">
+      <h2><span class="h2-num">06</span>Harga Wording Setup</h2>
+      <div class="price-list">
+        <div class="price-row"><span class="p-name">Paket Asik 1</span><span class="p-val">4K</span></div>
+        <div class="price-row"><span class="p-name">Paket Asik 2</span><span class="p-val">5K</span></div>
+        <div class="price-row"><span class="p-name">Paket Asik 3</span><span class="p-val">9K</span></div>
+        <div class="price-row"><span class="p-name">Paket Asik 4</span><span class="p-val">8K</span></div>
+        <div class="price-row"><span class="p-name">Paket Asik 5</span><span class="p-val">11K</span></div>
+        <div class="price-row"><span class="p-name">Paket Asik 6</span><span class="p-val">13K</span></div>
+        <div class="price-row"><span class="p-name">Paket Degan 1</span><span class="p-val">6K</span></div>
+        <div class="price-row"><span class="p-name">Paket Degan 2</span><span class="p-val">13K</span></div>
+        <div class="price-row"><span class="p-name">Paket Degan 3</span><span class="p-val">19K</span></div>
+        <div class="price-row"><span class="p-name">Paket Degan 4</span><span class="p-val">18K</span></div>
+        <div class="price-row"><span class="p-name">Paket Degan 5</span><span class="p-val">25K</span></div>
+        <div class="price-row"><span class="p-name">Paket Degan 6</span><span class="p-val">30K</span></div>
+      </div>
+
+      <h3 class="h3-warn">( ! ) Harga Inrush Wording</h3>
+      <div class="price-list">
+        <div class="price-row"><span class="p-name">Inrush 48 Jam</span><span class="p-val">4K</span></div>
+        <div class="price-row"><span class="p-name">Inrush 72 Jam</span><span class="p-val">2K</span></div>
+      </div>
+
+      <p><span class="highlight">Detail isi:</span>
+      <a href="https://diptarm.netlify.app/web" target="_blank">diptarm.netlify.app/web</a></p>
+    </div>
+
+    <div class="card" id="c-tw">
+      <h2><span class="h2-num">07</span>Twibbon Pack Birthday</h2>
+      <div class="price-list">
+        <div class="price-row"><span class="p-name">Birthday Mini<span class="p-sub">1 Twibbon</span></span><span class="p-val">5K</span></div>
+        <div class="price-row"><span class="p-name">Birthday Med<span class="p-sub">2 Twibbon</span></span><span class="p-val">10K</span></div>
+        <div class="price-row"><span class="p-name">Birthday Party<span class="p-sub">2 Twibbon + Merch: 7K = 2 Pcs</span></span><span class="p-val">10K</span></div>
+      </div>
+      <p class="price-note">Kalau tambah merch, per pcs nya 2K.</p>
+
+      <h3 class="h3-warn">( ! ) Harga Inrush Twibbon</h3>
+      <div class="price-list">
+        <div class="price-row"><span class="p-name">Inrush 48 Jam</span><span class="p-val">2K</span></div>
+        <div class="price-row"><span class="p-name">Inrush 72 Jam</span><span class="p-val">1,5K</span></div>
+        <div class="price-row"><span class="p-name">Inrush 120 Jam</span><span class="p-val">1K</span></div>
+      </div>
+    </div>
+
+    <div class="card" id="c-wb">
+      <h2><span class="h2-num">08</span>Wording Pack Birthday</h2>
+      <div class="price-list">
+        <div class="price-row"><span class="p-name">Wording Mini &amp; Med<span class="p-sub">Wordingnya Medium</span></span><span class="p-val">5K</span></div>
+        <div class="price-row"><span class="p-name">Wording Party<span class="p-sub">Wordingnya Long</span></span><span class="p-val">8K</span></div>
+      </div>
+
+      <h3 class="h3-warn">( ! ) Harga Inrush Wording</h3>
+      <div class="price-list">
+        <div class="price-row"><span class="p-name">Inrush 48 Jam</span><span class="p-val">2K</span></div>
+        <div class="price-row"><span class="p-name">Inrush 72 Jam</span><span class="p-val">1,5K</span></div>
+        <div class="price-row"><span class="p-name">Inrush 120 Jam</span><span class="p-val">1K</span></div>
+      </div>
+
+      <p><span class="highlight">Detail isi:</span>
+      <a href="https://diptarm.netlify.app/web" target="_blank">diptarm.netlify.app/web</a></p>
+    </div>
+
+    <!-- ===== DETAIL HARGA PACK GC ===== -->
+    <div class="card" id="c-gcpack">
+      <h2><span class="h2-num">09</span>Detail Harga Pack GC</h2>
+
+      <h3>1. Set Up Opmemb 1</h3>
+      <div class="price-list">
+        <div class="price-row"><span class="p-name">List Grup</span><span class="p-val">8K</span></div>
+        <div class="price-row"><span class="p-name">Poster Opmemb</span><span class="p-val">8K</span></div>
+        <div class="price-row"><span class="p-name">BC Syarat Join</span><span class="p-val">5K</span></div>
+        <div class="price-row"><span class="p-name">Poster Closememb</span><span class="p-val">7K</span></div>
+      </div>
+
+      <h3>2. Set Up Opmemb 2</h3>
+      <div class="price-list">
+        <div class="price-row"><span class="p-name">List Grup</span><span class="p-val">8K</span></div>
+        <div class="price-row"><span class="p-name">List Oplink</span><span class="p-val">8K</span></div>
+        <div class="price-row"><span class="p-name">Poster Oplink</span><span class="p-val">8K</span></div>
+        <div class="price-row"><span class="p-name">Poster Opmemb</span><span class="p-val">8K</span></div>
+        <div class="price-row"><span class="p-name">BC Syarat Join</span><span class="p-val">5K</span></div>
+        <div class="price-row"><span class="p-name">Poster Closememb</span><span class="p-val">7K</span></div>
+      </div>
+
+      <h3>3. Set Up Trainee 1</h3>
+      <div class="price-list">
+        <div class="price-row"><span class="p-name">IDC Team</span><span class="p-val">6K</span></div>
+        <div class="price-row"><span class="p-name">IDC Trainee</span><span class="p-val">6K</span></div>
+        <div class="price-row"><span class="p-name">Sertifikat</span><span class="p-val">5K</span></div>
+        <div class="price-row"><span class="p-name">Template Event</span><span class="p-val">9K</span></div>
+        <div class="price-row"><span class="p-name">BC Event</span><span class="p-val">5K</span></div>
+        <div class="price-row"><span class="p-name">BC Perkenalan Team &amp; Trainee</span><span class="p-val">5K</span></div>
+      </div>
+
+      <h3>4. Set Up Trainee 2</h3>
+      <div class="price-list">
+        <div class="price-row"><span class="p-name">IDC Team</span><span class="p-val">6K</span></div>
+        <div class="price-row"><span class="p-name">IDC Trainee</span><span class="p-val">6K</span></div>
+        <div class="price-row"><span class="p-name">KKS</span><span class="p-val">6K</span></div>
+        <div class="price-row"><span class="p-name">Ijazah</span><span class="p-val">6K</span></div>
+        <div class="price-row"><span class="p-name">Sertifikat</span><span class="p-val">5K</span></div>
+        <div class="price-row"><span class="p-name">Template Event</span><span class="p-val">9K</span></div>
+        <div class="price-row"><span class="p-name">BC Event</span><span class="p-val">5K</span></div>
+        <div class="price-row"><span class="p-name">BC Perkenalan Team &amp; Trainee</span><span class="p-val">5K</span></div>
+        <div class="price-row"><span class="p-name">Twibbon</span><span class="p-val">6K</span></div>
+        <div class="price-row"><span class="p-name">Wording Birthday</span><span class="p-val">5K</span></div>
+      </div>
+
+      <h3>5. Set Up Trainee 3</h3>
+      <div class="price-list">
+        <div class="price-row"><span class="p-name">IDC Team</span><span class="p-val">6K</span></div>
+        <div class="price-row"><span class="p-name">IDC Trainee</span><span class="p-val">6K</span></div>
+        <div class="price-row"><span class="p-name">KKS</span><span class="p-val">6K</span></div>
+        <div class="price-row"><span class="p-name">Ijazah</span><span class="p-val">6K</span></div>
+        <div class="price-row"><span class="p-name">Sertifikat</span><span class="p-val">5K</span></div>
+        <div class="price-row"><span class="p-name">Template Event</span><span class="p-val">9K</span></div>
+        <div class="price-row"><span class="p-name">BC Event</span><span class="p-val">5K</span></div>
+        <div class="price-row"><span class="p-name">BC Perkenalan Team &amp; Trainee</span><span class="p-val">5K</span></div>
+        <div class="price-row"><span class="p-name">Twibbon</span><span class="p-val">6K</span></div>
+        <div class="price-row"><span class="p-name">Wording Birthday</span><span class="p-val">5K</span></div>
+        <div class="price-row"><span class="p-name">BC Task</span><span class="p-val">8K</span></div>
+        <div class="price-row"><span class="p-name">BC Materi</span><span class="p-val">8K</span></div>
+        <div class="price-row"><span class="p-name">Profil Grup 1</span><span class="p-val">5K</span></div>
+        <div class="price-row"><span class="p-name">Profil Grup 2</span><span class="p-val">5K</span></div>
+      </div>
+
+      <h3>6. Set Up Trainee 4</h3>
+      <div class="price-list">
+        <div class="price-row"><span class="p-name">IDC Team</span><span class="p-val">6K</span></div>
+        <div class="price-row"><span class="p-name">IDC Trainee</span><span class="p-val">6K</span></div>
+        <div class="price-row"><span class="p-name">KKS</span><span class="p-val">6K</span></div>
+        <div class="price-row"><span class="p-name">Ijazah</span><span class="p-val">6K</span></div>
+        <div class="price-row"><span class="p-name">Sertifikat</span><span class="p-val">5K</span></div>
+        <div class="price-row"><span class="p-name">Template Event</span><span class="p-val">9K</span></div>
+        <div class="price-row"><span class="p-name">BC Event</span><span class="p-val">5K</span></div>
+        <div class="price-row"><span class="p-name">BC Perkenalan</span><span class="p-val">5K</span></div>
+        <div class="price-row"><span class="p-name">Twibbon</span><span class="p-val">6K</span></div>
+        <div class="price-row"><span class="p-name">Wording Birthday</span><span class="p-val">5K</span></div>
+        <div class="price-row"><span class="p-name">BC Task</span><span class="p-val">8K</span></div>
+        <div class="price-row"><span class="p-name">BC Materi</span><span class="p-val">8K</span></div>
+        <div class="price-row"><span class="p-name">Profil Grup 1</span><span class="p-val">5K</span></div>
+        <div class="price-row"><span class="p-name">Profil Grup 2</span><span class="p-val">5K</span></div>
+        <div class="price-row"><span class="p-name">List Opmemb</span><span class="p-val">8K</span></div>
+        <div class="price-row"><span class="p-name">Poster Opmemb</span><span class="p-val">8K</span></div>
+        <div class="price-row"><span class="p-name">Poster Closememb</span><span class="p-val">7K</span></div>
+        <div class="price-row"><span class="p-name">Formulir Pendaftaran</span><span class="p-val">5K</span></div>
+      </div>
+
+      <h3>7. Set Up Hirteam</h3>
+      <div class="price-list">
+        <div class="price-row"><span class="p-name">List Hirteam</span><span class="p-val">8K</span></div>
+        <div class="price-row"><span class="p-name">Poster Hirteam</span><span class="p-val">9K</span></div>
+        <div class="price-row"><span class="p-name">BC Wawancara</span><span class="p-val">7K</span></div>
+        <div class="price-row"><span class="p-name">IDC Calteam</span><span class="p-val">6K</span></div>
+      </div>
+
+      <h3>8. Set Katalog</h3>
+      <div class="price-list">
+        <div class="price-row"><span class="p-name">Katalog 1</span><span class="p-val">5K</span></div>
+        <div class="price-row"><span class="p-name">Katalog 2</span><span class="p-val">5K</span></div>
+        <div class="price-row"><span class="p-name">IDC Team</span><span class="p-val">6K</span></div>
+        <div class="price-row"><span class="p-name">IDC Member</span><span class="p-val">6K</span></div>
+        <div class="price-row"><span class="p-name">Desk Katalog</span><span class="p-val">7K</span></div>
+      </div>
+
+      <h3>9. Set Up Grup</h3>
+      <div class="price-list">
+        <div class="price-row"><span class="p-name">Profil Grup 1</span><span class="p-val">6K</span></div>
+        <div class="price-row"><span class="p-name">Profil Grup 2</span><span class="p-val">6K</span></div>
+        <div class="price-row"><span class="p-name">Desk Grup</span><span class="p-val">7K</span></div>
+      </div>
+    </div>
+
+    <!-- ===== SETUP ACC INSTAGRAM ===== -->
+    <div class="card" id="c-ig">
+      <h2><span class="h2-num">10</span>Setup ACC Instagram</h2>
+
+      <h3 class="h3-total">Size Short <span class="tot">Rp 8.000</span></h3>
+      <div class="price-list">
+        <div class="price-row"><span class="p-name">Nickname</span><span class="p-val">1K</span></div>
+        <div class="price-row"><span class="p-name">Display</span><span class="p-val">1K</span></div>
+        <div class="price-row"><span class="p-name">Bio</span><span class="p-val">1K</span></div>
+        <div class="price-row"><span class="p-name">3 Title Sorotan</span><span class="p-val">2K</span></div>
+        <div class="price-row"><span class="p-name">3 MB Sorotan</span><span class="p-val">3K</span></div>
+      </div>
+
+      <h3 class="h3-total">Size Med <span class="tot">Rp 11.000</span></h3>
+      <div class="price-list">
+        <div class="price-row"><span class="p-name">Nickname</span><span class="p-val">1K</span></div>
+        <div class="price-row"><span class="p-name">Display</span><span class="p-val">1,5K</span></div>
+        <div class="price-row"><span class="p-name">Bio</span><span class="p-val">2,5K</span></div>
+        <div class="price-row"><span class="p-name">3 Title Sorotan</span><span class="p-val">3K</span></div>
+        <div class="price-row"><span class="p-name">3 MB Sorotan</span><span class="p-val">3K</span></div>
+      </div>
+
+      <h3 class="h3-total">Size Long <span class="tot">Rp 13.000</span></h3>
+      <div class="price-list">
+        <div class="price-row"><span class="p-name">Nickname</span><span class="p-val">1K</span></div>
+        <div class="price-row"><span class="p-name">Display</span><span class="p-val">2K</span></div>
+        <div class="price-row"><span class="p-name">Bio</span><span class="p-val">3K</span></div>
+        <div class="price-row"><span class="p-name">3 Title Sorotan</span><span class="p-val">3,5K</span></div>
+        <div class="price-row"><span class="p-name">3 MB Sorotan</span><span class="p-val">3,5K</span></div>
+      </div>
+    </div>
+
+    <div class="card" id="c-igl">
+      <h2><span class="h2-num">11</span>Setup Instagram &mdash; Paket Lengkap</h2>
+
+      <h3 class="h3-total">Size Short <span class="tot">Rp 12.000</span></h3>
+      <div class="price-list">
+        <div class="price-row"><span class="p-name">Nickname + Display</span><span class="p-val">1K</span></div>
+        <div class="price-row"><span class="p-name">Bio</span><span class="p-val">2K</span></div>
+        <div class="price-row"><span class="p-name">3 Title Sorotan</span><span class="p-val">2K</span></div>
+        <div class="price-row"><span class="p-name">3 MB Sorotan</span><span class="p-val">3K</span></div>
+        <div class="price-row"><span class="p-name">3 MB Feeds</span><span class="p-val">3K</span></div>
+        <div class="price-row"><span class="p-name">Fake Link</span><span class="p-val">1K</span></div>
+      </div>
+
+      <h3 class="h3-total">Size Med <span class="tot">Rp 15.000</span></h3>
+      <div class="price-list">
+        <div class="price-row"><span class="p-name">Nickname</span><span class="p-val">1K</span></div>
+        <div class="price-row"><span class="p-name">Display</span><span class="p-val">1K</span></div>
+        <div class="price-row"><span class="p-name">Bio</span><span class="p-val">2,5K</span></div>
+        <div class="price-row"><span class="p-name">3 Title Sorotan</span><span class="p-val">3K</span></div>
+        <div class="price-row"><span class="p-name">3 MB Sorotan</span><span class="p-val">3K</span></div>
+        <div class="price-row"><span class="p-name">3 MB Feeds</span><span class="p-val">3K</span></div>
+        <div class="price-row"><span class="p-name">Fake Link</span><span class="p-val">1,5K</span></div>
+      </div>
+
+      <h3 class="h3-total">Size Long <span class="tot">Rp 18.000</span></h3>
+      <div class="price-list">
+        <div class="price-row"><span class="p-name">Nickname</span><span class="p-val">1,5K</span></div>
+        <div class="price-row"><span class="p-name">Display</span><span class="p-val">1,5K</span></div>
+        <div class="price-row"><span class="p-name">Bio</span><span class="p-val">3K</span></div>
+        <div class="price-row"><span class="p-name">3 Title Sorotan</span><span class="p-val">3,5K</span></div>
+        <div class="price-row"><span class="p-name">3 MB Sorotan</span><span class="p-val">3,5K</span></div>
+        <div class="price-row"><span class="p-name">3 MB Feeds</span><span class="p-val">3,5K</span></div>
+        <div class="price-row"><span class="p-name">Fake Link</span><span class="p-val">2K</span></div>
+      </div>
+    </div>
+
+    <div class="card" id="c-igt">
+      <h2><span class="h2-num">12</span>Tambahan Setup Instagram</h2>
+
+      <h3>Fake Link</h3>
+      <div class="price-list">
+        <div class="price-row"><span class="p-name">Short</span><span class="p-val">+ Rp 1.000</span></div>
+        <div class="price-row"><span class="p-name">Medium</span><span class="p-val">+ Rp 2.000</span></div>
+        <div class="price-row"><span class="p-name">Long</span><span class="p-val">+ Rp 3.000</span></div>
+      </div>
+
+      <h3>MB Sorotan</h3>
+      <div class="price-list">
+        <div class="price-row"><span class="p-name">Tambahan MB Sorotan</span><span class="p-val">+ Rp 1.500 / pict</span></div>
+      </div>
+    </div>
+
+    <div class="card" id="c-ambil">
+      <h2><span class="h2-num">13</span>Tutor Ambil Gaji</h2>
+      <div class="img-box">
+        <img src="../foto/ambil.jpg" alt="Tutor Ambil Gaji">
+      </div>
+      <ol>
+        <li>Info gajian keluar.</li>
+        <li>Up all result di sini:<a href="https://chat.whatsapp.com/Lnx0tT0Oh9PHaKD61kd1j1" target="_blank">GC Up Result</a></li>
+        <li>Isi template di bawah ini.</li>
+      </ol>
+
+      <div class="format-container">
+        <button class="btn-copy" onclick="copyFormat(this)">Salin</button>
+        <div class="format-box">NICKNAME:
+LIST ORDERAN:
+1.
+
+Sisa absen yang belum dibayar:
+Nomor E-Wallet:
+Platform: Dana/GoPay/QRIS (Pilih 1)</div>
+      </div>
+
+      <ol start="4">
+        <li>Kirim ke: <a href="https://chat.whatsapp.com/BRkAydZiZO20VM4aTEp2uc?s=cl&p=a&mlu=3&amv=2" target="_blank">GC Ambil Gaji</a></li>
+      </ol>
+    </div>
+
+    <div class="card" id="c-telat">
+      <h2><span class="h2-num">14</span>Aturan Keterlambatan</h2>
+      <ol>
+        <li>Jika orderan cust melewati batas deadline yang sudah ditentukan, misal lebih dari 7 hari (jika orderan norush), maka team akan mendapatkan potongan sebesar 50% dari harga total orderan.</li>
+      </ol>
+      <div class="alert">Kalau berat buat dibaca, ya jangan telat.</div>
+    </div>
+
+    <div class="card" id="c-waktu">
+      <h2><span class="h2-num">15</span>Waktu Pengerjaan No Rush</h2>
+      <div class="price-list">
+        <div class="price-row"><span class="p-name">Manips</span><span class="p-val">5 Hari</span></div>
+        <div class="price-row"><span class="p-name">Moodboard</span><span class="p-val">6 Hari</span></div>
+        <div class="price-row"><span class="p-name">Editing lebih dari 2</span><span class="p-val">6 Hari</span></div>
+        <div class="price-row"><span class="p-name">Editing 1</span><span class="p-val">5 Hari</span></div>
+      </div>
+      <p><em>Dihitung dari hari pertama order.</em></p>
+    </div>
+
+    <div class="card" id="c-kirim">
+      <h2><span class="h2-num">16</span>Tutorial Kirim Orderan</h2>
+      <div class="img-box">
+        <img src="../foto/kirim.jpg" alt="Tutorial Kirim Orderan">
+      </div>
+      <p><span class="highlight">Kirim ke:</span>
+      <a href="https://chat.whatsapp.com/IITHfyybVSg93F1NwbUiIj?s=cl&p=a&mlu=3&amv=2" target="_blank">GC Kirim Orderan</a></p>
+      <div class="alert alert-warn">Preview wajib dikirim di Gc</div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Tombol kembali ke atas -->
+<button id="toTopBtn" class="hidden" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Kembali ke atas">
+  <svg viewBox="0 0 24 24" class="ic" style="stroke:#fff;width:20px;height:20px"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+</button>
+
+<!-- Tombol pengumuman (merah, mengambang) -->
+<button id="annBtn" type="button" onclick="openAnn()" title="Pengumuman Team" aria-label="Buka pengumuman">!</button>
+
+<div class="modal-overlay" id="annModal" onclick="if(event.target===this)closeAnn()">
+  <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="annTitle">
+    <div class="modal-head">
+      <span class="m-ic">!</span>
+      <span id="annTitle">Announcement @all Team DiptARM !!</span>
+      <button class="modal-close" type="button" onclick="closeAnn()" aria-label="Tutup">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p>Mengingat banyaknya kasus pelanggaran yang berujung pada pemecatan team, telah dilakukan evaluasi terhadap seluruh aturan yang berlaku.</p>
+      <p>Mulai sekarang, seluruh team <b>WAJIB MEMATUHI SEMUA ATURAN TANPA TERKECUALI.</b><br>
+      Silakan baca dan pahami kembali seluruh aturan:<br>
+      <a href="https://diptarm.netlify.app/crew/snk" target="_blank">diptarm.netlify.app/crew/snk</a></p>
+      <p>Setiap pelanggaran akan ditindak sesuai ketentuan. <b>Jika tidak mengikuti aturan, maka gaji tidak akan dihitung dan dibayarkan.</b> Harap diperhatikan dan jangan sampai pelanggaran yang sama terulang kembali.</p>
+      <div class="alert alert-warn"><b>Note:</b> Batas waktu rekap orderan ke RC jam 00.00, lebih dari itu silahkan ijin dan berikan alasan yang logis.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Tab Logic
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+    document.getElementById('tab-' + btn.dataset.tab).classList.remove('hidden');
+    closeAllDropdowns();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+});
+
+// Dropdown Nav Logic
+function toggleDropdown(id) {
+  const dd = document.getElementById(id);
+  const willOpen = !dd.classList.contains('is-open');
+  closeAllDropdowns();
+  if (willOpen) {
+    dd.classList.add('is-open');
+    dd.querySelector('.dd-toggle').classList.add('open');
+    dd.querySelector('.dd-menu').classList.add('open');
+  }
+}
+
+function closeAllDropdowns() {
+  document.querySelectorAll('.custom-dropdown').forEach(dd => {
+    dd.classList.remove('is-open');
+    dd.querySelector('.dd-toggle').classList.remove('open');
+    dd.querySelector('.dd-menu').classList.remove('open');
+  });
+}
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.custom-dropdown')) closeAllDropdowns();
+});
+
+function selectOption(ddId, targetId, label) {
+  const dd = document.getElementById(ddId);
+  dd.querySelector('.dd-label').innerText = label;
+  dd.querySelectorAll('.dd-option').forEach(o => o.classList.toggle('selected', o.dataset.target === targetId));
+  closeAllDropdowns();
+  jumpTo(targetId);
+}
+
+function jumpTo(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// Copy to Clipboard Logic
+function copyFormat(btn) {
+  const container = btn.closest('.format-container');
+  const formatBox = container.querySelector('.format-box');
+  const textToCopy = formatBox.innerText;
+
+  navigator.clipboard.writeText(textToCopy).then(() => {
+    const originalText = btn.innerText;
+    btn.innerText = 'Tersalin!';
+    btn.classList.add('copied');
+    
+    setTimeout(() => {
+      btn.innerText = originalText;
+      btn.classList.remove('copied');
+    }, 2000);
+  }).catch(err => {
+    alert("Gagal menyalin teks. Silakan salin manual.");
+  });
+}
+
+// Scroll To Top
+const toTopBtn = document.getElementById('toTopBtn');
+window.addEventListener('scroll', () => {
+  toTopBtn.classList.toggle('hidden', window.scrollY < 300);
+});
+
+// Pengumuman
+const annModal = document.getElementById('annModal');
+function openAnn(){ annModal.classList.add('show'); document.body.style.overflow = 'hidden'; }
+function closeAnn(){ annModal.classList.remove('show'); document.body.style.overflow = ''; }
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAnn(); });
+</script>
+</body>
+</html>
