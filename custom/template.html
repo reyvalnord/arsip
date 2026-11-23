@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template DiptArm</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        @font-face {
+            font-family: 'FontAtas';
+            src: url('../font/font1.otf') format('opentype'),
+                 url('../font/font1.ttf') format('truetype');
+            font-display: block;
+        }
+
+        @font-face {
+            font-family: 'FontBawah';
+            src: url('../font/font.otf') format('opentype'),
+                 url('../font/font.ttf') format('truetype');
+            font-display: block;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #0f0f11;
+            color: #f3f4f6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 16px;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        .container {
+            background: #18181c;
+            padding: 24px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 450px;
+            box-sizing: border-box;
+            border: 1px solid #26262b;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        h2 {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 24px;
+            font-weight: 800;
+            font-size: 22px;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #ffffff 0%, #a1a1aa 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .form-group { 
+            margin-bottom: 18px; 
+        }
+
+        label { 
+            display: block; 
+            margin-bottom: 8px; 
+            font-size: 12px; 
+            font-weight: 700; 
+            color: #9ca3af; 
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        /* MODUL TOMBOL SAMPINGAN (SEGMENTED CONTROL) */
+        .mode-selector {
+            display: flex;
+            background: #222227;
+            border: 1px solid #33333a;
+            border-radius: 12px;
+            padding: 4px;
+            gap: 4px;
+        }
+
+        .mode-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: #9ca3af;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .mode-btn:hover {
+            color: #fff;
+        }
+
+        .mode-btn.active {
+            background: #3b82f6;
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 14px 16px;
+            background: #222227;
+            color: #fff;
+            border: 1px solid #33333a;
+            border-radius: 12px;
+            box-sizing: border-box;
+            font-size: 14px;
+            font-family: inherit;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+            background: #26262c;
+        }
+
+        /* INPUT FILE UTAMA */
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            background: #222227;
+            color: #9ca3af;
+            border: 1px dashed #44444f;
+            border-radius: 12px;
+            box-sizing: border-box;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        input[type="file"]:hover {
+            border-color: #555562;
+            background: #25252b;
+        }
+
+        input[type="file"]::file-selector-button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            margin-right: 12px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        input[type="file"]::file-selector-button:hover {
+            background: #2563eb;
+        }
+
+        input[type="color"] {
+            width: 100%;
+            height: 48px;
+            padding: 4px;
+            background: #222227;
+            border: 1px solid #33333a;
+            border-radius: 12px;
+            cursor: pointer;
+            box-sizing: border-box;
+        }
+
+        button.download-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            margin-top: 10px;
+            box-shadow: 0 4px 12px rgba(29, 78, 216, 0.3);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        button.download-btn:hover { 
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(29, 78, 216, 0.4);
+            filter: brightness(1.1);
+        }
+
+        button.download-btn:active {
+            transform: translateY(1px);
+        }
+
+        .grid-inputs {
+            background: #1c1c22;
+            padding: 16px;
+            border-radius: 14px;
+            border: 1px solid #2d2d35;
+            margin-top: 5px;
+        }
+
+        /* STRUKTUR INPUT GRID SAMPINGAN */
+        .grid-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .file-box {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .file-box label {
+            font-size: 11px;
+            color: #71717a;
+            margin-bottom: 4px;
+            text-transform: none;
+            font-weight: 600;
+        }
+
+        .grid-inputs .grid-row input[type="file"] {
+            padding: 6px;
+            font-size: 11px;
+            border-radius: 8px;
+        }
+
+        .grid-inputs .grid-row input[type="file"]::file-selector-button {
+            padding: 4px 8px;
+            margin-right: 4px;
+            font-size: 10px;
+            border-radius: 4px;
+        }
+
+        .canvas-wrapper {
+            position: relative;
+            margin-top: 24px;
+            width: 100%;
+            max-width: 500px;
+            display: none; 
+            border-radius: 16px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            cursor: crosshair;
+            overflow: hidden;
+            border: 1px solid #2d2d35;
+        }
+
+        #bgCanvas {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        #textCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .note { 
+            font-size: 12px; 
+            color: #6b7280; 
+            margin-top: 20px; 
+            text-align: center; 
+            line-height: 1.6;
+        }
+        
+        .note b {
+            color: #3b82f6;
+        }
+
+        .font-preload { visibility: hidden; position: absolute; width: 0; height: 0; overflow: hidden; }
+    </style>
+</head>
+<body>
+
+    <div class="font-preload">
+        <span style="font-family: 'FontAtas';">Load Atas</span>
+        <span style="font-family: 'FontBawah';">Load Bawah</span>
+    </div>
+
+    <div class="container">
+        <h2>Template Editor</h2>
+
+        <div class="form-group">
+            <label>Pilih Mode Gambar</label>
+            <div class="mode-selector">
+                <button type="button" class="mode-btn active" data-mode="single">1 Pict</button>
+                <button type="button" class="mode-btn" data-mode="four">Moodboard</button>
+            </div>
+        </div>
+
+        <div class="form-group" id="singleGroup">
+            <label>Pict Editan</label>
+            <input type="file" id="mainImage" accept="image/*">
+        </div>
+
+        <div id="fourGroup" style="display: none;">
+            <div class="form-group grid-inputs">
+                <label style="color: #60a5fa; font-size: 12px; margin-bottom: 6px;">Header</label>
+                <input type="file" id="imgHeader" accept="image/*" style="margin-bottom: 14px;">
+                
+                <label style="color: #f59e0b; font-size: 12px; margin-bottom: 2px;">3 Slide</label>
+                <div class="grid-row">
+                    <div class="file-box">
+                        <input type="file" id="imgCat1" accept="image/*">
+                    </div>
+                    <div class="file-box">
+                        <input type="file" id="imgCat2" accept="image/*">
+                    </div>
+                    <div class="file-box">
+                        <input type="file" id="imgCat3" accept="image/*">
+                    </div>
+                </div>
+                
+                <label style="color: #10b981; font-size: 12px; margin-bottom: 2px;">6 Slide</label>
+                <div class="grid-row">
+                    <div class="file-box">
+                        <input type="file" id="imgCat4" accept="image/*">
+                    </div>
+                    <div class="file-box">
+                        <input type="file" id="imgCat5" accept="image/*">
+                    </div>
+                    <div class="file-box">
+                        <input type="file" id="imgCat6" accept="image/*">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Warna Label</label>
+            <input type="color" id="colorPicker" value="#04387f">
+        </div>
+
+        <div class="form-group">
+            <label>Nama Editor</label>
+            <input type="text" id="textTop" value="" placeholder="Masukkan nama editor...">
+        </div>
+
+        <div class="form-group">
+            <label>Nama Editan</label>
+            <input type="text" id="textBottom" value="" placeholder="Masukkan nama editan...">
+        </div>
+
+        <button id="downloadBtn" class="download-btn">Download Gambar</button>
+
+        <div class="note">
+            *Tips: klik pada gambar untuk menyalin warna!
+        </div>
+    </div>
+
+    <div class="canvas-wrapper" id="canvasWrapper">
+        <canvas id="bgCanvas"></canvas>
+        <canvas id="textCanvas"></canvas>
+    </div>
+
+    <script>
+        const canvasWrapper = document.getElementById('canvasWrapper');
+        const bgCanvas = document.getElementById('bgCanvas');
+        const textCanvas = document.getElementById('textCanvas');
+        const bgCtx = bgCanvas.getContext('2d', { alpha: false }); 
+        const textCtx = textCanvas.getContext('2d', { alpha: true });
+
+        const modeButtons = document.querySelectorAll('.mode-btn');
+        const singleGroup = document.getElementById('singleGroup');
+        const fourGroup = document.getElementById('fourGroup');
+
+        const mainImageInput = document.getElementById('mainImage');
+        const textTopInput = document.getElementById('textTop');
+        const textBottomInput = document.getElementById('textBottom');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const colorPicker = document.getElementById('colorPicker'); 
+
+        const imgHeaderInput = document.getElementById('imgHeader');
+        const imgCat1Input = document.getElementById('imgCat1');
+        const imgCat2Input = document.getElementById('imgCat2');
+        const imgCat3Input = document.getElementById('imgCat3');
+        const imgCat4Input = document.getElementById('imgCat4');
+        const imgCat5Input = document.getElementById('imgCat5');
+        const imgCat6Input = document.getElementById('imgCat6');
+
+        const mainImg = new Image();
+        const logoImg = new Image();
+
+        const partHeader = new Image();
+        const partCat1 = new Image();
+        const partCat2 = new Image();
+        const partCat3 = new Image();
+        const partCat4 = new Image();
+        const partCat5 = new Image();
+        const partCat6 = new Image();
+
+        let hasMain = false;
+
+        const HD = 2;
+        let baseW = 1080; 
+        let baseH = 720;
+        let scaleRatio = 1; 
+        let badgeColor = '#04387f'; 
+
+        logoImg.src = '../foto/log1.png';
+        logoImg.onload = () => { if (hasMain) drawBackground(); };
+
+        modeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                modeButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+
+                const selectedMode = button.getAttribute('data-mode');
+                if (selectedMode === 'single') {
+                    singleGroup.style.display = 'block';
+                    fourGroup.style.display = 'none';
+                } else {
+                    singleGroup.style.display = 'none';
+                    fourGroup.style.display = 'block';
+                }
+            });
+        });
+
+        function drawRoundedRect(context, x, y, w, h, r) {
+            const radius = Math.min(r, w / 2, h / 2);
+            context.beginPath();
+            context.moveTo(x + radius, y);
+            context.lineTo(x + w - radius, y);
+            context.quadraticCurveTo(x + w, y, x + w, y + radius);
+            context.lineTo(x + w, y + h - radius);
+            context.quadraticCurveTo(x + w, y + h, x + w - radius, y + h);
+            context.lineTo(x + radius, y + h);
+            context.quadraticCurveTo(x, y + h, x, y + h - radius);
+            context.lineTo(x, y + radius);
+            context.quadraticCurveTo(x, y, x + radius, y);
+            context.closePath();
+        }
+
+        let typeTimeout;
+        function updateTextOnly() {
+            if (!hasMain) return;
+            clearTimeout(typeTimeout);
+            typeTimeout = setTimeout(drawText, 20); 
+        }
+
+        textTopInput.addEventListener('input', updateTextOnly);
+        textBottomInput.addEventListener('input', updateTextOnly);
+
+        colorPicker.addEventListener('input', (e) => {
+            badgeColor = e.target.value;
+            updateTextOnly();
+        });
+
+        textCanvas.addEventListener('click', (e) => {
+            if (!hasMain) return;
+            const rect = textCanvas.getBoundingClientRect();
+            const canvasX = (e.clientX - rect.left) / rect.width * (baseW * HD);
+            const canvasY = (e.clientY - rect.top) / rect.height * (baseH * HD);
+            const pixel = bgCtx.getImageData(canvasX, canvasY, 1, 1).data;
+            const r = pixel[0].toString(16).padStart(2, '0');
+            const g = pixel[1].toString(16).padStart(2, '0');
+            const b = pixel[2].toString(16).padStart(2, '0');
+            const hexColor = `#${r}${g}${b}`;
+            badgeColor = hexColor;
+            colorPicker.value = hexColor;
+            drawText();
+        });
+
+        mainImageInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (event) => { mainImg.src = event.target.result; };
+            reader.readAsDataURL(file);
+        });
+
+        const handleFourUpload = (input, imgObj) => {
+            input.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    imgObj.src = event.target.result;
+                    imgObj.onload = () => { combineFourPhotos(); };
+                };
+                reader.readAsDataURL(file);
+            });
+        };
+
+        handleFourUpload(imgHeaderInput, partHeader);
+        handleFourUpload(imgCat1Input, partCat1);
+        handleFourUpload(imgCat2Input, partCat2);
+        handleFourUpload(imgCat3Input, partCat3);
+        handleFourUpload(imgCat4Input, partCat4);
+        handleFourUpload(imgCat5Input, partCat5);
+        handleFourUpload(imgCat6Input, partCat6);
+
+        // LOGIKA DIBERBAIKI: HEADER DAN BARIS KEDUA SEKARANG FULL DINAMIS & OPSIONAL
+        function combineFourPhotos() {
+            const hasHeader = !!partHeader.src;
+            const hasCat1 = !!partCat1.src;
+            const hasCat2 = !!partCat2.src;
+            const hasCat3 = !!partCat3.src;
+            const hasCat4 = !!partCat4.src;
+            const hasCat5 = !!partCat5.src;
+            const hasCat6 = !!partCat6.src;
+
+            // Jangan jalankan jika belum ada satu pun foto yang diupload
+            if (!hasHeader && !hasCat1 && !hasCat2 && !hasCat3 && !hasCat4 && !hasCat5 && !hasCat6) return;
+
+            const gridCanvas = document.createElement('canvas');
+            const gridCtx = gridCanvas.getContext('2d');
+
+            const targetW = 1080; 
+            // Jika ada header, hitung tingginya. Jika tidak ada, tinggi header = 0
+            const hH = hasHeader ? Math.round(targetW * (681 / 1211)) : 0; 
+            
+            const cW = 360; 
+            const hasSecondRow = (hasCat4 || hasCat5 || hasCat6);
+            const hC = hasSecondRow ? 720 : 360; 
+
+            gridCanvas.width = targetW;
+            gridCanvas.height = hH + hC; 
+
+            // Gambar Header hanya jika ada datanya
+            if (hasHeader) {
+                const headerRatio = 1211 / 681;
+                let imgRatioH = partHeader.naturalWidth / partHeader.naturalHeight;
+                let sX_H = 0, sY_H = 0, sW_H = partHeader.naturalWidth, sH_H = partHeader.naturalHeight;
+
+                if (imgRatioH > headerRatio) {
+                    sW_H = partHeader.naturalHeight * headerRatio;
+                    sX_H = (partHeader.naturalWidth - sW_H) / 2;
+                } else {
+                    sH_H = partHeader.naturalWidth / headerRatio;
+                    sY_H = (partHeader.naturalHeight - sH_H) / 2;
+                }
+                gridCtx.drawImage(partHeader, sX_H, sY_H, sW_H, sH_H, 0, 0, targetW, hH);
+            }
+
+            const catalogs = [partCat1, partCat2, partCat3, partCat4, partCat5, partCat6];
+            
+            catalogs.forEach((cat, index) => {
+                if (index >= 3 && !hasSecondRow) return;
+
+                const col = index % 3;
+                const row = Math.floor(index / 3);
+                const x = col * cW;
+                const y = hH + (row * 360); // Posisi Y otomatis bergeser mulus mengikuti ada/tidaknya tinggi header
+
+                if (cat.src) {
+                    let sX = 0, sY = 0, sW = cat.naturalWidth, sH = cat.naturalHeight;
+                    if (cat.naturalWidth > cat.naturalHeight) {
+                        sW = cat.naturalHeight;
+                        sX = (cat.naturalWidth - sW) / 2;
+                    } else {
+                        sH = cat.naturalWidth;
+                        sY = (cat.naturalHeight - sH) / 2;
+                    }
+                    gridCtx.drawImage(cat, sX, sY, sW, sH, x, y, cW, 360);
+                } else {
+                    gridCtx.fillStyle = '#222';
+                    gridCtx.fillRect(x, y, cW, 360);
+                }
+            });
+
+            mainImg.src = gridCanvas.toDataURL('image/png');
+        }
+
+        mainImg.onload = () => {
+            hasMain = true;
+            canvasWrapper.style.display = 'block'; 
+            
+            let imgRatio = mainImg.width / mainImg.height;
+
+            if (imgRatio < 9 / 16) {
+                imgRatio = 9 / 16; 
+            } else if (imgRatio > 9 / 5) {
+                imgRatio = 9 / 5;  
+            }
+
+            baseW = 1080; 
+            baseH = 1080 / imgRatio; 
+
+            scaleRatio = Math.min(baseW, baseH) / 1080;
+
+            bgCanvas.width = baseW * HD; 
+            bgCanvas.height = baseH * HD;
+            textCanvas.width = baseW * HD; 
+            textCanvas.height = baseH * HD;
+
+            drawBackground(); 
+            setTimeout(drawText, 100); 
+        };
+
+        function drawBackground() {
+            bgCtx.setTransform(HD, 0, 0, HD, 0, 0);
+            bgCtx.clearRect(0, 0, baseW, baseH);
+            
+            bgCtx.fillStyle = '#111111';
+            bgCtx.fillRect(0, 0, baseW, baseH);
+
+            bgCtx.imageSmoothingEnabled = true;
+            bgCtx.imageSmoothingQuality = 'high';
+
+            bgCtx.save();
+            bgCtx.filter = 'blur(20px) brightness(0.6)';
+            bgCtx.drawImage(mainImg, -baseW * 0.05, -baseH * 0.05, baseW * 1.1, baseH * 1.1);
+            bgCtx.restore();
+
+            const scaleMain = Math.min((baseW * 0.92) / mainImg.width, (baseH * 0.92) / mainImg.height);
+            const mW = mainImg.width * scaleMain;
+            const mH = mainImg.height * scaleMain;
+            
+            bgCtx.save();
+            bgCtx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+            bgCtx.shadowBlur = 50; 
+            bgCtx.drawImage(mainImg, (baseW - mW) / 2, (baseH - mH) / 2, mW, mH);
+            bgCtx.restore();
+
+            if (logoImg.complete && logoImg.naturalWidth !== 0) {
+                const logoTargetW = 380; 
+                const logoScale = logoTargetW / logoImg.width;
+                const lW = logoImg.width * logoScale;
+                const lH = logoImg.height * logoScale;
+                bgCtx.drawImage(logoImg, 15, 7, lW, lH);
+            }
+        }
+
+        function drawText() {
+            if (!hasMain) return;
+            
+            textCtx.setTransform(HD, 0, 0, HD, 0, 0);
+            textCtx.clearRect(0, 0, baseW, baseH); 
+
+            textCtx.shadowBlur = 0;
+            textCtx.shadowColor = 'transparent';
+            textCtx.filter = 'none';
+
+            const txtT = (textTopInput.value || '').trim();
+            const txtB = (textBottomInput.value || '').trim();
+            
+            const fSizeB = 46;
+            const fSizeA = 42;
+            const strokeW = 22;
+            const padX = 64;
+            const hB = 76;
+            const margin = 35;
+            const cornerRad = 40;
+            const textOffsetX = 30;
+            const offsetY = 6;
+
+            let badgeWB = 0, badgeHB = 0, bxB = 0, byB = 0;
+            let textX_T = 0, textY_T = 0;
+
+            textCtx.font = `900 ${fSizeB}px "FontBawah", sans-serif`;
+            const textWidthB = textCtx.measureText(txtB).width;
+            badgeWB = Math.ceil(textWidthB + padX);
+            badgeHB = hB;
+            bxB = baseW - badgeWB - margin;
+            byB = baseH - badgeHB - margin; 
+
+            textCtx.font = `900 ${fSizeA}px "FontAtas", sans-serif`;
+            const textWidthT = textCtx.measureText(txtT).width;
+            textX_T = (bxB + badgeWB) - (textWidthT / 2) - textOffsetX; 
+            textY_T = byB - offsetY;
+
+            if (txtB !== '') {
+                textCtx.save();
+                textCtx.fillStyle = badgeColor; 
+                drawRoundedRect(textCtx, bxB, byB, badgeWB, badgeHB, cornerRad);
+                textCtx.fill();
+                textCtx.restore();
+            }
+
+            if (txtT !== '') {
+                textCtx.save();
+                textCtx.textBaseline = 'middle';
+                textCtx.textAlign = 'center';
+                textCtx.font = `900 ${fSizeA}px "FontAtas", sans-serif`;
+                textCtx.lineJoin = 'round';
+                textCtx.miterLimit = 2;
+                textCtx.lineWidth = strokeW; 
+                textCtx.strokeStyle = badgeColor; 
+                textCtx.strokeText(txtT, textX_T, textY_T);
+                textCtx.restore();
+            }
+
+            if (txtB !== '') {
+                textCtx.save();
+                textCtx.font = `900 ${fSizeB}px "FontBawah", sans-serif`;
+                textCtx.textBaseline = 'middle';
+                textCtx.textAlign = 'center';
+                textCtx.fillStyle = '#ffffff';
+                textCtx.fillText(txtB, bxB + badgeWB / 2, byB + badgeHB / 2 + 2);
+                textCtx.restore();
+            }
+
+            if (txtT !== '') {
+                textCtx.save();
+                textCtx.font = `900 ${fSizeA}px "FontAtas", sans-serif`;
+                textCtx.textBaseline = 'middle';
+                textCtx.textAlign = 'center';
+                textCtx.fillStyle = '#ffffff';
+                textCtx.fillText(txtT, textX_T, textY_T);
+                textCtx.restore();
+            }
+        }
+
+        downloadBtn.addEventListener('click', () => {
+            if (!hasMain) return alert('Upload foto dulu!');
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = baseW * HD;
+            tempCanvas.height = baseH * HD;
+            const tempCtx = tempCanvas.getContext('2d');
+            tempCtx.drawImage(bgCanvas, 0, 0);
+            tempCtx.drawImage(textCanvas, 0, 0);
+
+            const link = document.createElement('a');
+            link.download = 'Diptarm.png';
+            link.href = tempCanvas.toDataURL('image/png', 1.0);
+            link.click();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile to HD PNG Converter</title>
+    
+    <script src="https://unpkg.com/html-to-image@1.11.11/dist/html-to-image.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        /* LAYOUT & BACKGROUND MODERN */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f6f8fd 0%, #f1f5f9 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 40px 20px;
+            margin: 0;
+            color: #333;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row;
+            gap: 40px;
+            max-width: 900px;
+            width: 100%;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+
+        /* =========================================
+           KARTU UTAMA (KOTAK HASIL) - KEMBALI KE ASLI
+           ========================================= */
+        .card {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 400px;
+            padding: 24px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .header h3 {
+            margin: 0;
+            font-size: 15px;
+            color: #555;
+            font-weight: 600;
+        }
+
+        .header a {
+            text-decoration: none;
+            color: #888;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .gallery img {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            border-radius: 12px;
+            background-color: #eee;
+        }
+
+        .divider {
+            border: none;
+            height: 4px;
+            background-color: #f4f4f4;
+            margin: 0 -24px 24px -24px;
+        }
+
+        .info-row {
+            display: flex;
+            align-items: flex-start; 
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .info-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-row.align-center {
+            align-items: center; 
+        }
+
+        .icon {
+            width: 15px; 
+            height: 15px;
+            fill: none;
+            stroke: #555;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            flex-shrink: 0;
+            margin-top: 2px; 
+        }
+
+        .info-row.align-center .icon {
+            margin-top: 0; 
+        }
+
+        .content {
+            flex: 1;
+            font-size: 13px;
+            color: #111;
+            line-height: 1.5;
+            white-space: pre-line;
+        }
+
+        .info-row.align-center .content {
+            line-height: 1; 
+            display: flex;
+            align-items: center;
+        }
+
+        .content code {
+            background-color: #f4f4f4;
+            color: #d63384;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+
+        .split-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .email-link {
+            text-decoration: none;
+            font-weight: 500;
+            color: #2b7bb9;
+        }
+
+        .ig-link {
+            text-decoration: none;
+            color: #555;
+        }
+
+
+        /* =========================================
+           PANEL EDITOR - TAMPILAN MODERN
+           ========================================= */
+        .editor-panel {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 400px;
+            padding: 28px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            box-sizing: border-box;
+            border: 1px solid #e2e8f0;
+        }
+
+        .editor-panel h4 {
+            margin: 0 0 20px 0;
+            color: #0f172a;
+            font-size: 18px;
+            font-weight: 700;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 8px;
+        }
+
+        .form-group input[type="text"], 
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 14px;
+            box-sizing: border-box;
+            transition: all 0.2s ease;
+            color: #334155;
+            background-color: #f8fafc;
+        }
+
+        .form-group input[type="text"]:focus, 
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+            line-height: 1.5;
+        }
+
+        .file-inputs {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .file-inputs input[type="file"] {
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        .file-inputs input[type="file"]::file-selector-button {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid #cbd5e1;
+            background-color: #f1f5f9;
+            color: #475569;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-right: 12px;
+        }
+
+        .file-inputs input[type="file"]::file-selector-button:hover {
+            background-color: #e2e8f0;
+        }
+
+        .btn-download {
+            width: 100%;
+            border: none;
+            padding: 14px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* TOMBOL BIRU YANG DIPERBAGUS */
+        .btn-blue {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+        }
+
+        .btn-blue:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-blue:active {
+            transform: translateY(0);
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .card, .editor-panel {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <!-- =========================================
+             KARTU UTAMA (KOTAK HASIL) - KEMBALI KE ASLI
+             ========================================= -->
+        <div class="card" id="result-card">
+            <div class="header">
+                <h3>Products</h3>
+                <a href="#">SEE ALL &gt;</a>
+            </div>
+
+            <div class="gallery">
+                <img id="preview-img-1" src="https://images.unsplash.com/photo-1531722569936-825d3dd91b15?w=300&h=300&fit=crop" alt="Foto 1">
+                <img id="preview-img-2" src="https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=300&h=300&fit=crop" alt="Foto 2">
+                <img id="preview-img-3" src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=300&h=300&fit=crop" alt="Foto 3">
+            </div>
+
+            <hr class="divider">
+
+            <div class="info-row">
+                <!-- Ukuran katalog.png bisa kamu ubah pada width dan height di bawah ini -->
+                <img src="../foto/katalog.png" class="icon" style="width: 14px; height: 14px; margin-top: 0;" alt="Katalog">
+                <div class="content" id="preview-desc"></div>
+            </div>
+
+            <div class="info-row align-center">
+                <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                <div class="content split-content"><span>Open</span><span>DiptArm</span></div>
+            </div>
+
+            <div class="info-row align-center" id="row-email">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                <div class="content"><a href="mailto:Coastal@es.Latino" class="email-link" id="preview-email"></a></div>
+            </div>
+
+            <div class="info-row align-center" id="row-ig">
+                <svg class="icon" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                <div class="content split-content"><span>Instagram</span><a href="https://instagram.com/" target="_blank" class="ig-link" id="preview-ig"></a></div>
+            </div>
+        </div>
+
+        <!-- PANEL EDITOR -->
+        <div class="editor-panel">
+            <h4>Isi Konten</h4>
+            
+            <div class="form-group">
+                <label>Upload Katalog:</label>
+                <div class="file-inputs">
+                    <input type="file" id="input-img-1" accept="image/*">
+                    <input type="file" id="input-img-2" accept="image/*">
+                    <input type="file" id="input-img-3" accept="image/*">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="input-desc">Teks Deskripsi:</label>
+                <textarea id="input-desc"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="input-email">Email:</label>
+                <input type="text" id="input-email" value="">
+            </div>
+
+            <div class="form-group">
+                <label for="input-ig">IG:</label>
+                <input type="text" id="input-ig" value="">
+            </div>
+
+            <!-- Mengganti class menjadi btn-blue -->
+            <button class="btn-download btn-blue" id="btn-save-png">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                Download HD PNG
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let currentImages = {
+            img1: document.getElementById('preview-img-1').src,
+            img2: document.getElementById('preview-img-2').src,
+            img3: document.getElementById('preview-img-3').src
+        };
+
+        function parseFormatting(text) {
+            let html = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            html = html.replace(/\*(.*?)\*/g, '<b>$1</b>');
+            html = html.replace(/_(.*?)_/g, '<i>$1</i>');
+            html = html.replace(/~(.*?)~/g, '<s>$1</s>');
+            html = html.replace(/`(.*?)`/g, '<code>$1</code>');
+            return html;
+        }
+
+        function setupImageUpload(inputEl, imgPreviewEl, key) {
+            inputEl.addEventListener('change', function() {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.addEventListener('load', function() {
+                        imgPreviewEl.setAttribute('src', this.result);
+                        currentImages[key] = this.result;
+                    });
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+        setupImageUpload(document.getElementById('input-img-1'), document.getElementById('preview-img-1'), 'img1');
+        setupImageUpload(document.getElementById('input-img-2'), document.getElementById('preview-img-2'), 'img2');
+        setupImageUpload(document.getElementById('input-img-3'), document.getElementById('preview-img-3'), 'img3');
+
+        const inputDesc = document.getElementById('input-desc');
+        const previewDesc = document.getElementById('preview-desc');
+        previewDesc.innerHTML = parseFormatting(inputDesc.value);
+        inputDesc.addEventListener('input', function() { previewDesc.innerHTML = parseFormatting(this.value); });
+
+        const inputEmail = document.getElementById('input-email');
+        const previewEmail = document.getElementById('preview-email');
+        const rowEmail = document.getElementById('row-email');
+        function updateEmailRow() {
+            const val = inputEmail.value.trim();
+            if (val === "") { rowEmail.style.display = "none"; } else {
+                rowEmail.style.display = "flex"; previewEmail.textContent = val;
+                previewEmail.setAttribute('href', 'mailto:' + val);
+            }
+        }
+        inputEmail.addEventListener('input', updateEmailRow); updateEmailRow();
+
+        const inputIg = document.getElementById('input-ig');
+        const previewIg = document.getElementById('preview-ig');
+        const rowIg = document.getElementById('row-ig');
+        function updateIgRow() {
+            const val = inputIg.value.trim();
+            if (val === "") { rowIg.style.display = "none"; } else {
+                rowIg.style.display = "flex"; previewIg.textContent = val;
+            }
+        }
+        inputIg.addEventListener('input', updateIgRow); updateIgRow();
+
+        // Download HD PNG
+        document.getElementById('btn-save-png').addEventListener('click', function() {
+            const node = document.getElementById('result-card');
+            const scale = 3; 
+            const btn = this;
+            const originalText = btn.innerHTML;
+
+            // Efek loading pada tombol
+            btn.innerHTML = 'Sedang memproses...';
+            btn.style.opacity = '0.7';
+            btn.style.pointerEvents = 'none';
+
+            htmlToImage.toPng(node, {
+                width: node.offsetWidth * scale,
+                height: node.offsetHeight * scale,
+                bgcolor: '#ffffff',
+                style: {
+                    transform: 'scale(' + scale + ')',
+                    transformOrigin: 'top left',
+                    width: node.offsetWidth + 'px',
+                    height: node.offsetHeight + 'px'
+                }
+            })
+            .then(function (dataUrl) {
+                const link = document.createElement('a');
+                link.download = 'profile-result-hd.png';
+                link.href = dataUrl;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            })
+            .catch(function (error) {
+                console.error('Ada masalah saat membuat gambar HD:', error);
+                alert('Gagal mengunduh gambar HD.');
+            })
+            .finally(function () {
+                // Mengembalikan tampilan tombol seperti semula
+                btn.innerHTML = originalText;
+                btn.style.opacity = '1';
+                btn.style.pointerEvents = 'auto';
+            });
+        });
+    </script>
+
+</body>
+</html>

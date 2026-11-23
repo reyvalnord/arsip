@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cilok Isi Sanu</title>
+    
+    <script src="https://unpkg.com/html-to-image@1.11.11/dist/html-to-image.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        /* LAYOUT & BACKGROUND MODERN */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f6f8fd 0%, #f1f5f9 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 40px 20px;
+            margin: 0;
+            color: #333;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row;
+            gap: 40px;
+            max-width: 900px;
+            width: 100%;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        /* =========================================
+           KARTU UTAMA DENGAN SISTEM VARIABEL WARNA
+           ========================================= */
+        .card {
+            /* WARNA DEFAULT: TEMA TERANG (PUTIH) */
+            --card-bg: #ffffff;
+            --card-text: #111111;
+            --card-muted: #555555;
+            --card-divider: #f0f2f5;
+            --btn-bg: #ffffff;
+            --btn-border: #e0e0e0;
+            --btn-text: #111111;
+            --btn-stroke: black;
+            --icon-stroke: #555555;
+            --icon-filter: none;
+            --code-bg: #f4f4f4;
+            --code-color: #d63384;
+            
+            /* PENGATUR DEFAULT FONT ADJUSTMENT */
+            --font-adjust: 0px;
+
+            background-color: var(--card-bg);
+            width: 100%;
+            max-width: 400px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            box-sizing: border-box;
+            position: relative;
+            overflow: hidden; 
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        /* WARNA OVERRIDE: TEMA GELAP (HITAM) */
+        .card.dark {
+            --card-bg: #0b1014;
+            --card-text: #e9edef;
+            --card-muted: #8696a0;
+            --card-divider: #070a0d;
+            --btn-bg: #111b21;
+            --btn-border: #202c33;
+            --btn-text: #e9edef;
+            --btn-stroke: #e9edef;
+            --icon-stroke: #8696a0;
+            --icon-filter: invert(1);
+            --code-bg: #202c33;
+            --code-color: #ff8fab;
+        }
+
+        .cover-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            display: none;
+        }
+
+        .profile-pic-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .profile-pic {
+            width: 112px;
+            height: 112px;
+            border-radius: 50%;
+            border: 4px solid var(--card-bg); 
+            object-fit: cover;
+            background-color: #eee;
+            display: none;
+            box-sizing: border-box;
+        }
+
+        .profile-name {
+            margin: 10px 0 20px 0;
+            font-size: calc(14px + var(--font-adjust)); /* FONT BISA DIUBAH */
+            font-weight: 700;
+            text-align: center;
+            color: var(--card-text);
+            display: none;
+            width: 100%;
+            padding: 0 20px;
+            box-sizing: border-box;
+            white-space: pre-wrap; 
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 24px;
+            padding: 0 24px;
+        }
+
+        .action-btn {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 25px;
+            border: 1px solid var(--btn-border);
+            border-radius: 12px;
+            background: var(--btn-bg);
+            gap: 8px;
+        }
+
+        .action-btn svg {
+            width: 16px;
+            height: 16px;
+            stroke: var(--btn-stroke); 
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            fill: none;
+        }
+
+        .action-btn span {
+            font-size: calc(12px + var(--font-adjust)); /* FONT BISA DIUBAH */
+            color: var(--btn-text);
+            font-weight: 500;
+        }
+
+        .action-icon {
+            width: 17px;
+            height: 17px;
+            object-fit: contain;
+            display: block;
+            filter: var(--icon-filter); 
+        }
+
+        .thick-divider {
+            border: none;
+            height: 8px;
+            background-color: var(--card-divider);
+            margin: 0; 
+        }
+
+        /* CONTAINER ISI */
+        .card-body {
+            padding: 24px 24px 16px 24px; 
+            display: flex;
+            flex-direction: column;
+            gap: 16px; 
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .header h3 {
+            margin: 0;
+            font-size: calc(12px + var(--font-adjust)); /* FONT BISA DIUBAH */
+            color: var(--card-muted);
+            font-weight: 600;
+        }
+
+        .header a {
+            text-decoration: none;
+            color: #888;
+            font-size: calc(11.5px + var(--font-adjust)); /* FONT BISA DIUBAH */
+            font-weight: 500;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .gallery img {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            border-radius: 12px;
+            background-color: #eee;
+        }
+
+        .divider {
+            border: none;
+            height: 4px;
+            background-color: var(--card-divider);
+            margin: 0 -24px 0 -24px; 
+        }
+
+        .info-row {
+            display: flex;
+            align-items: flex-start; 
+            gap: 16px;
+        }
+
+        .info-row.align-center {
+            align-items: center; 
+        }
+
+        .icon {
+            width: 15px; 
+            height: 15px;
+            fill: none;
+            stroke: var(--icon-stroke);
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            flex-shrink: 0;
+            margin-top: 2px; 
+        }
+
+        .info-row.align-center .icon {
+            margin-top: 0; 
+        }
+
+        .content {
+            flex: 1;
+            font-size: calc(11.6px + var(--font-adjust)); /* FONT BISA DIUBAH */
+            color: var(--card-text);
+            line-height: 1.5;
+            white-space: pre-wrap; 
+        }
+
+        .info-row.align-center .content {
+            line-height: 1; 
+            display: flex;
+            align-items: center;
+        }
+
+        .content code {
+            background-color: var(--code-bg);
+            color: var(--code-color);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: calc(11px + var(--font-adjust)); /* FONT BISA DIUBAH */
+        }
+
+        .split-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .link-style {
+            text-decoration: none;
+            font-weight: 500;
+            color: #00a884;
+        }
+
+        .ig-link {
+            text-decoration: none;
+            color: var(--card-muted);
+        }
+
+        /* =========================================
+           PANEL EDITOR - TAMPILAN MODERN
+           ========================================= */
+        .editor-panel {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 440px; 
+            padding: 28px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            box-sizing: border-box;
+            border: 1px solid #e2e8f0;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .editor-panel h4 {
+            margin: 0 0 16px 0;
+            color: #0f172a;
+            font-size: 16px;
+            font-weight: 700;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .editor-section {
+            margin-bottom: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 11.5px;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 8px;
+        }
+
+        .form-group input[type="text"], 
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 11.5px;
+            box-sizing: border-box;
+            transition: all 0.2s ease;
+            color: #334155;
+            background-color: #f8fafc;
+        }
+
+        .form-group input[type="text"]:focus, 
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+            line-height: 1.5;
+        }
+
+        .file-inputs {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 10px;
+        }
+        
+        .file-inputs.single {
+            grid-template-columns: 1fr;
+        }
+
+        .file-inputs input[type="file"] {
+            width: 100%;
+            font-size: 11px;
+            color: #64748b;
+            border: 1.5px dashed #cbd5e1; 
+            border-radius: 8px;
+            padding: 6px;
+            box-sizing: border-box;
+            background-color: #f8fafc;
+            transition: all 0.2s;
+        }
+
+        .file-inputs input[type="file"]:hover {
+            border-color: #94a3b8;
+            background-color: #f1f5f9;
+        }
+
+        .file-inputs input[type="file"]::file-selector-button {
+            padding: 6px 10px;
+            border-radius: 6px;
+            border: none;
+            background-color: #3b82f6; 
+            color: white;
+            font-weight: 600;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-right: 6px;
+        }
+
+        .file-inputs input[type="file"]::file-selector-button:hover {
+            background-color: #2563eb;
+        }
+
+        .btn-download {
+            width: 100%;
+            border: none;
+            padding: 14px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-blue {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+        }
+
+        .btn-blue:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .card, .editor-panel {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <div class="card" id="result-card">
+            
+            <img id="preview-cover" class="cover-img" alt="Cover" data-uploaded="false" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+            
+            <div class="profile-pic-container">
+                <img id="preview-pp" class="profile-pic" alt="Profile Picture" data-uploaded="false" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+                <div id="preview-dn" class="profile-name"></div>
+            </div>
+
+            <div class="action-buttons" id="action-buttons" style="display: none;">
+                <div class="action-btn">
+                    <img src="../foto/chat.png" class="action-icon" alt="">
+                    <span>Message</span>
+                </div>
+                <div class="action-btn">
+                    <img src="../foto/call.png" class="action-icon" alt="Telepon">
+                    <span>Call</span>
+                </div>
+                <div class="action-btn">
+                    <img src="../foto/kat.png" class="action-icon" alt="Katalog">
+                    <span>Catalog</span>
+                </div>
+            </div>
+
+            <hr class="thick-divider" id="divider-1" style="display: none;">
+
+            <div class="card-body">
+                
+                <div id="section-katalog" style="display: none;">
+                    <div class="header">
+                        <h3>Products</h3>
+                        <a href="#">SEE ALL &gt;</a>
+                    </div>
+
+                    <div class="gallery">
+                        <img id="preview-img-1" style="display: none;" alt="Katalog 1" data-uploaded="false" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+                        <img id="preview-img-2" style="display: none;" alt="Katalog 2" data-uploaded="false" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+                        <img id="preview-img-3" style="display: none;" alt="Katalog 3" data-uploaded="false" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+                        <img id="preview-img-4" style="display: none;" alt="Katalog 4" data-uploaded="false" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+                        <img id="preview-img-5" style="display: none;" alt="Katalog 5" data-uploaded="false" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+                        <img id="preview-img-6" style="display: none;" alt="Katalog 6" data-uploaded="false" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+                    </div>
+
+                    <hr class="divider">
+                </div>
+
+                <div class="info-row" id="row-desc" style="display: none;">
+                    <img src="../foto/katalog.png" class="icon" style="width: 14px; height: 14px; margin-top: 0; filter: var(--icon-filter);" alt="Katalog" onerror="this.style.display='none'">
+                    <div class="content" id="preview-desc"></div>
+                </div>
+
+                <div class="info-row align-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    <div class="content split-content"><span>Created</span><span>DiptArm</span></div>
+                </div>
+                
+                <div class="info-row" id="row-loc" style="display: none;">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    <div class="content"><a href="#" class="link-style" id="preview-loc"></a></div>
+                </div>
+
+                <div class="info-row align-center" id="row-email" style="display: none;">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                    <div class="content"><a href="" class="link-style" id="preview-email"></a></div>
+                </div>
+
+                <div class="info-row align-center" id="row-ig" style="display: none;">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                    <div class="content split-content"><span>Instagram</span><a href="" target="_blank" class="ig-link" id="preview-ig"></a></div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="editor-panel">
+            
+            <div class="editor-section">
+                <h4>Setup R-Sult</h4>
+                
+                <div class="form-group">
+                    <label for="input-theme">Theme:</label>
+                    <select id="input-theme">
+                        <option value="light">Terang</option>
+                        <option value="dark">Gelap</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Header / Cover:</label>
+                    <div class="file-inputs single">
+                        <input type="file" id="input-cover" accept="image/*">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Profile Picture:</label>
+                    <div class="file-inputs single">
+                        <input type="file" id="input-pp" accept="image/*">
+                    </div>
+                </div>
+            </div>
+
+            <div class="editor-section">
+                <h4>Moodboard</h4>
+                <div class="form-group">
+                    <div class="file-inputs">
+                        <input type="file" id="input-img-1" accept="image/*" title="Slide 1">
+                        <input type="file" id="input-img-2" accept="image/*" title="Slide 2">
+                        <input type="file" id="input-img-3" accept="image/*" title="Slide 3">
+                        <input type="file" id="input-img-4" accept="image/*" title="Slide 4">
+                        <input type="file" id="input-img-5" accept="image/*" title="Slide 5">
+                        <input type="file" id="input-img-6" accept="image/*" title="Slide 6">
+                    </div>
+                </div>
+            </div>
+
+            <div class="editor-section">
+                <h4>Wording</h4>
+                <div class="form-group">
+                    <label for="input-font-size">Ukuran Font:</label>
+                    <select id="input-font-size">
+                        <option value="-2">-2px</option>
+                        <option value="-1">-1px</option>
+                        <option value="-0.5">-0.5px</option>
+                        <option value="0" selected>Normal</option>
+                        <option value="0.5">+0.5px</option>
+                        <option value="1">+1px</option>
+                        <option value="2">+2px</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="input-dn">Display Name:</label>
+                    <input type="text" id="input-dn" value="" placeholder="Contoh: abc" maxlength="100">
+                </div>
+                <div class="form-group">
+                    <label for="input-desc">Desc:</label>
+                    <textarea id="input-desc" maxlength=""></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="input-loc">Loc:</label>
+                    <textarea id="input-loc" placeholder="Contoh: chat if you have any problem..." maxlength="256"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="input-email">Email:</label>
+                    <input type="text" id="input-email" value="" maxlength="40">
+                </div>
+                <div class="form-group">
+                    <label for="input-ig">IG:</label>
+                    <input type="text" id="input-ig" value="" maxlength="30">
+                </div>
+            </div>
+
+            <button class="btn-download btn-blue" id="btn-save-png">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                Download
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function parseFormatting(text) {
+            let html = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            html = html.replace(/\*(.*?)\*/g, '<b>$1</b>');
+            html = html.replace(/_(.*?)_/g, '<i>$1</i>');
+            html = html.replace(/~(.*?)~/g, '<s>$1</s>');
+            html = html.replace(/`(.*?)`/g, '<code>$1</code>');
+            return html;
+        }
+
+        function setupImageUpload(inputEl, imgPreviewEl, callback) {
+            inputEl.addEventListener('change', function() {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.addEventListener('load', function() {
+                        imgPreviewEl.setAttribute('src', this.result);
+                        imgPreviewEl.setAttribute('data-uploaded', 'true');
+                        if (callback) callback(); 
+                    });
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        const cardElement = document.getElementById('result-card');
+        const inputTheme = document.getElementById('input-theme');
+        const inputFontSize = document.getElementById('input-font-size');
+        const imgCover = document.getElementById('preview-cover');
+        const imgPP = document.getElementById('preview-pp');
+        const inputDN = document.getElementById('input-dn');
+        const previewDN = document.getElementById('preview-dn');
+        const actionBtns = document.getElementById('action-buttons');
+        const divider1 = document.getElementById('divider-1');
+
+        // LOGIKA SWITCH TEMA
+        inputTheme.addEventListener('change', function() {
+            if (this.value === 'dark') {
+                cardElement.classList.add('dark');
+            } else {
+                cardElement.classList.remove('dark');
+            }
+        });
+
+        // LOGIKA PENGUBAH UKURAN FONT
+        inputFontSize.addEventListener('change', function() {
+            cardElement.style.setProperty('--font-adjust', this.value + 'px');
+        });
+
+        function updateProfileHeader() {
+            const hasCover = imgCover.getAttribute('data-uploaded') === 'true';
+            const hasPP = imgPP.getAttribute('data-uploaded') === 'true';
+            const dnVal = inputDN.value;
+
+            imgCover.style.display = hasCover ? 'block' : 'none';
+            imgPP.style.display = hasPP ? 'block' : 'none';
+            
+            if (hasCover) {
+                imgPP.style.marginTop = '-80px';
+            } else {
+                imgPP.style.marginTop = '24px';
+            }
+
+            if (dnVal.trim() === "") {
+                previewDN.style.display = 'none';
+                actionBtns.style.display = 'none';
+                divider1.style.display = 'none';
+            } else {
+                previewDN.style.display = 'block';
+                previewDN.textContent = dnVal;
+                actionBtns.style.display = 'flex';
+                divider1.style.display = 'block';
+            }
+        }
+
+        setupImageUpload(document.getElementById('input-cover'), imgCover, updateProfileHeader);
+        setupImageUpload(document.getElementById('input-pp'), imgPP, updateProfileHeader);
+        inputDN.addEventListener('input', updateProfileHeader);
+
+
+        const sectionKatalog = document.getElementById('section-katalog');
+        const imgs = [
+            document.getElementById('preview-img-1'),
+            document.getElementById('preview-img-2'),
+            document.getElementById('preview-img-3'),
+            document.getElementById('preview-img-4'),
+            document.getElementById('preview-img-5'),
+            document.getElementById('preview-img-6')
+        ];
+
+        function updateKatalogRow() {
+            let hasAnyImage = false;
+            imgs.forEach(img => {
+                const hasImg = img.getAttribute('data-uploaded') === 'true';
+                img.style.display = hasImg ? 'block' : 'none';
+                if (hasImg) hasAnyImage = true;
+            });
+            if (hasAnyImage) {
+                sectionKatalog.style.display = 'block';
+            } else {
+                sectionKatalog.style.display = 'none';
+            }
+        }
+        
+        setupImageUpload(document.getElementById('input-img-1'), imgs[0], updateKatalogRow);
+        setupImageUpload(document.getElementById('input-img-2'), imgs[1], updateKatalogRow);
+        setupImageUpload(document.getElementById('input-img-3'), imgs[2], updateKatalogRow);
+        setupImageUpload(document.getElementById('input-img-4'), imgs[3], updateKatalogRow);
+        setupImageUpload(document.getElementById('input-img-5'), imgs[4], updateKatalogRow);
+        setupImageUpload(document.getElementById('input-img-6'), imgs[5], updateKatalogRow);
+
+
+        const inputDesc = document.getElementById('input-desc');
+        const previewDesc = document.getElementById('preview-desc');
+        const rowDesc = document.getElementById('row-desc');
+        
+        function updateDescRow() {
+            const val = inputDesc.value;
+            if (val.trim() === "") { 
+                rowDesc.style.display = "none"; 
+            } else {
+                rowDesc.style.display = "flex"; 
+                previewDesc.innerHTML = parseFormatting(val);
+            }
+        }
+        inputDesc.addEventListener('input', updateDescRow); 
+
+
+        const inputLoc = document.getElementById('input-loc');
+        const previewLoc = document.getElementById('preview-loc');
+        const rowLoc = document.getElementById('row-loc');
+        
+        function updateLocRow() {
+            const val = inputLoc.value;
+            if (val.trim() === "") { 
+                rowLoc.style.display = "none"; 
+            } else {
+                rowLoc.style.display = "flex"; 
+                previewLoc.innerHTML = parseFormatting(val);
+            }
+        }
+        inputLoc.addEventListener('input', updateLocRow); 
+
+
+        const inputEmail = document.getElementById('input-email');
+        const previewEmail = document.getElementById('preview-email');
+        const rowEmail = document.getElementById('row-email');
+        
+        function updateEmailRow() {
+            const val = inputEmail.value.trim();
+            if (val === "") { 
+                rowEmail.style.display = "none"; 
+            } else {
+                rowEmail.style.display = "flex"; 
+                previewEmail.textContent = val;
+                previewEmail.setAttribute('href', 'mailto:' + val);
+            }
+        }
+        inputEmail.addEventListener('input', updateEmailRow); 
+
+
+        const inputIg = document.getElementById('input-ig');
+        const previewIg = document.getElementById('preview-ig');
+        const rowIg = document.getElementById('row-ig');
+        
+        function updateIgRow() {
+            const val = inputIg.value.trim();
+            if (val === "") { 
+                rowIg.style.display = "none"; 
+            } else {
+                rowIg.style.display = "flex"; 
+                previewIg.textContent = val;
+            }
+        }
+        inputIg.addEventListener('input', updateIgRow); 
+
+        updateProfileHeader();
+        updateKatalogRow();
+        updateDescRow();
+        updateLocRow();
+        updateEmailRow();
+        updateIgRow();
+
+        document.getElementById('btn-save-png').addEventListener('click', function() {
+            const node = document.getElementById('result-card');
+            const scale = 4; 
+            const btn = this;
+            const originalText = btn.innerHTML;
+
+            btn.innerHTML = 'Sedang memproses...';
+            btn.style.opacity = '0.7';
+            btn.style.pointerEvents = 'none';
+
+            const activeTheme = inputTheme.value;
+            const captureBgColor = activeTheme === 'dark' ? '#0b1014' : '#ffffff';
+
+            htmlToImage.toPng(node, {
+                pixelRatio: scale,
+                bgcolor: captureBgColor,
+                cacheBust: true,
+                filter: function (n) {
+                    if (n.style && n.style.display === 'none') return false;
+                    return true;
+                },
+                style: {
+                    transform: 'none',
+                    transformOrigin: 'top left',
+                    width: node.offsetWidth + 'px',
+                    height: node.offsetHeight + 'px'
+                }
+            })
+            .then(function (dataUrl) {
+                const link = document.createElement('a');
+                link.download = 'diptarm.png';
+                link.href = dataUrl;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            })
+            .catch(function (error) {
+                console.error('Ada masalah saat membuat gambar HD:', error);
+                alert('Gagal mengunduh gambar HD.');
+            })
+            .finally(function () {
+                btn.innerHTML = originalText;
+                btn.style.opacity = '1';
+                btn.style.pointerEvents = 'auto';
+            });
+        });
+    </script>
+
+</body>
+</html>
