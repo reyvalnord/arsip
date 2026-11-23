@@ -1,0 +1,1582 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Pricelist DiptARM</title>
+<link rel="icon" type="image/png" href="foto/log.png">
+
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;700;900&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* =========================================================
+       THEME: REAL MADRID 2D CARTOON (POLISHED & PREMIUM THEME)
+       ========================================================= */
+    html { font-size: 12px; }
+    * { box-sizing: border-box; }
+    
+    :root {
+      --rm-blue: #0b2a6f;
+      --rm-blue2: #1d4ed8;
+      --rm-gold: #d4af37;
+      --rm-gold2: #f5d26a;
+      --rm-ice: #f6f8ff;
+      --rm-white: #ffffff;
+
+      --ink: #0b2a6f;
+      --stroke: rgba(11,42,111,.18);
+      --shadow: rgba(11,42,111,.14);
+      --muted: rgba(11,42,111,.70);
+
+      --primary: var(--rm-blue);
+      --secondary: var(--rm-gold);
+      --accent: var(--rm-blue2);
+
+      --card-bg: #ffffff;
+      --card-radius: 12px;
+      --transition: 250ms;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Poppins", sans-serif;
+      color: var(--primary);
+      padding: 24px 16px;
+      overflow-x: hidden;
+
+      background:
+        radial-gradient(circle at 15% 18%, rgba(212,175,55,.18), transparent 45%),
+        radial-gradient(circle at 85% 22%, rgba(29,78,216,.14), transparent 44%),
+        radial-gradient(circle at 55% 110%, rgba(109,40,217,.10), transparent 48%),
+        linear-gradient(135deg, #ffffff 0%, #f0f4ff 50%, #ffffff 100%);
+      background-attachment: fixed;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .12;
+      background-image: radial-gradient(circle, var(--ink) 1px, transparent 2px);
+      background-size: 20px 20px;
+      mix-blend-mode: multiply;
+    }
+
+    @keyframes fadeIn { from { opacity:0; transform: translateY(14px);} to {opacity:1; transform:none;} }
+    @keyframes floaty { 0%,100%{transform:translateY(0) rotate(-1.5deg)} 50%{transform:translateY(10px) rotate(1.5deg)} }
+    @keyframes shimmer { 0% {background-position: -200% center;} 100% {background-position: 200% center;} }
+
+    /* Header */
+    .header-wrap {
+      max-width: 880px;
+      margin: 0 auto 16px;
+      position: relative;
+      z-index: 1;
+      animation: fadeIn .7s ease;
+    }
+
+    .header-bar {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 18px;
+      background: linear-gradient(180deg, #fff, var(--rm-ice));
+      border-radius: 20px;
+      border: 2.5px solid var(--ink);
+      box-shadow: 8px 8px 0px var(--shadow);
+      overflow: hidden;
+    }
+
+    .header-bar::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 8px;
+      background:
+        linear-gradient(90deg, var(--rm-gold) 0 22%, transparent 22% 78%, var(--rm-gold) 78% 100%),
+        linear-gradient(90deg, var(--rm-blue) 0 100%);
+      opacity: .95;
+    }
+
+    h1 {
+      margin: 8px 0 0;
+      font-family: "Outfit", sans-serif;
+      font-weight: 900;
+      font-size: 2.2rem;
+      letter-spacing: .2px;
+      color: var(--rm-blue);
+      text-shadow: 0 2px 0 rgba(255,255,255,.9);
+    }
+
+    .subtitle {
+      margin: 10px auto 0;
+      width: fit-content;
+      text-align: center;
+      font-weight: 800;
+      font-size: .8rem;
+      color: var(--rm-blue);
+      background: rgba(212,175,55,.15);
+      border: 1.5px solid var(--ink);
+      border-radius: 999px;
+      padding: 6px 14px;
+      box-shadow: 0 4px 8px rgba(11,42,111,.05);
+    }
+
+    /* QRIS button */
+    .qris-btn {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      background: linear-gradient(180deg, #fff, var(--rm-ice));
+      border: 2px solid rgba(11,42,111,.1);
+      box-shadow: 3px 3px 6px rgba(11,42,111,.08);
+      transition: all .2s ease;
+    }
+    .qris-btn:hover { border-color: var(--rm-gold); transform: translateY(-2px); }
+    .qris-btn:active { transform: translateY(2px) rotate(6deg); box-shadow: 1px 1px 0px var(--shadow); }
+    .qris-icon { width: 44px; height: 44px; object-fit: contain; display: block; }
+
+    /* Mascot */
+    .mascot {
+      position: fixed;
+      right: 24px;
+      top: 110px;
+      width: 80px; height: 80px;
+      border-radius: 22px;
+      z-index: 2;
+      pointer-events: none;
+      opacity: .92;
+      filter: drop-shadow(0 12px 18px rgba(11,42,111,.16));
+      animation: floaty 3.2s ease-in-out infinite;
+    }
+    @media (max-width: 720px){ .mascot{ display:none; } }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 20px auto 22px;
+      position: relative;
+      z-index: 1;
+      max-width: 880px;
+    }
+    .tab {
+      padding: 10px 16px;
+      border-radius: 14px;
+      border: 2.5px solid var(--ink);
+      background: rgba(255,255,255,.8);
+      color: var(--rm-blue);
+      font-weight: 900;
+      font-family: "Outfit", sans-serif;
+      cursor: pointer;
+      font-size: .85rem;
+      box-shadow: 4px 4px 0px var(--shadow);
+      transition: all .2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .tab::after {
+      content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 3px; background: var(--rm-gold); transform: scaleX(0); transition: transform 0.2s ease;
+    }
+    .tab:hover {
+      transform: translateY(-3px);
+      background: rgba(245,210,106,.15);
+      box-shadow: 6px 6px 0px var(--shadow);
+    }
+    .tab:hover::after { transform: scaleX(1); }
+    .tab.active {
+      background: var(--rm-blue);
+      color: #fff;
+      border-color: var(--rm-blue);
+    }
+    .tab.active::after { display: none; }
+    .tab:active {
+      transform: translateY(2px);
+      box-shadow: 2px 2px 0px var(--shadow);
+    }
+
+    /* Content containers */
+    .container { display: none; grid-template-columns: minmax(0,1fr); max-width: 880px; margin: 0 auto; }
+    .category.active { display: grid; }
+
+    .pricelist-container {
+      width: 100%;
+      background: linear-gradient(180deg, #fff, var(--rm-ice));
+      border-radius: 16px;
+      border: 2.5px solid var(--rm-blue);
+      box-shadow: 8px 8px 0px var(--shadow);
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+      animation: fadeIn .55s ease;
+    }
+
+    .pricelist-container::after {
+      content: "👑⚽";
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      font-size: 1.8rem;
+      opacity: .2;
+      pointer-events: none;
+    }
+
+    .section-title1, .section-title2 {
+      width: fit-content;
+      margin: 8px auto 18px;
+      padding: 10px 22px;
+      border-radius: 999px;
+      font-weight: 900;
+      font-size: 0.95rem;
+      letter-spacing: .8px;
+      text-transform: uppercase;
+      font-family: "Outfit", sans-serif;
+      border: 2px solid rgba(255,255,255,.6);
+      outline: 2.5px solid var(--ink);
+      box-shadow: 4px 4px 0px var(--shadow);
+      text-align: center;
+    }
+    .section-title1 {
+      background: linear-gradient(135deg, var(--rm-blue), var(--rm-blue2));
+      color: #fff;
+    }
+    .section-title2 {
+      background: linear-gradient(135deg, var(--rm-gold), var(--rm-gold2));
+      color: var(--rm-blue);
+    }
+
+    .hint {
+      text-align: center;
+      margin: 6px 0 16px;
+      font-size: .9rem;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    /* Table Enhancements */
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin-top: 12px;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 2.5px solid var(--rm-blue);
+      background: #fff;
+    }
+    thead th {
+      background: linear-gradient(90deg, var(--rm-blue), #153c98);
+      color: white;
+      padding: 14px 12px;
+      text-align: center;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      letter-spacing: 0.5px;
+    }
+    td, th {
+      padding: 12px;
+      border-bottom: 1.5px solid var(--stroke);
+      border-right: 1.5px solid var(--stroke);
+      text-align: center;
+      font-weight: 600;
+      color: var(--rm-blue);
+      font-size: 0.9rem;
+    }
+    table tr:last-child td { border-bottom: none; }
+    table td:last-child { border-right: none; }
+    tbody tr:nth-child(even) { background: rgba(212, 175, 55, 0.05); }
+    tbody tr:hover { background: rgba(29, 78, 216, 0.06); }
+
+    .price {
+      font-weight: 900;
+      font-family: "Outfit", sans-serif;
+      color: var(--rm-blue);
+      font-size: 1.1em;
+    }
+
+
+    .price-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      flex-wrap: nowrap;
+    }
+    .price-box, .png-box {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 34px;
+      padding: 5px 9px;
+      border-radius: 9px;
+      border: 1.5px solid var(--rm-blue);
+      box-sizing: border-box;
+      white-space: nowrap;
+      font-family: "Outfit", sans-serif;
+      font-weight: 900;
+    }
+    .price-box {
+      background: rgba(29, 78, 216, 0.06);
+      font-size: 1em;
+    }
+    .png-box {
+      background: rgba(212, 175, 55, 0.10);
+      color: var(--rm-blue);
+      font-size: .78em;
+    }
+    @media (max-width: 520px) {
+      .price-wrap { gap: 4px; }
+      .price-box, .png-box { padding: 5px 6px; }
+      .png-box { font-size: .7em; }
+    }
+
+    .note {
+      margin-top: 20px;
+      border-radius: 14px;
+      padding: 18px;
+      border: 2px dashed rgba(11,42,111,.25);
+      background: rgba(212,175,55,.08);
+      font-size: 0.85rem;
+      color: var(--rm-blue);
+      box-shadow: inset 0 0 12px rgba(11,42,111,.02);
+      font-weight: 600;
+      line-height: 1.6;
+    }
+    .note strong { font-family: "Outfit", sans-serif; font-weight: 900; color: #153c98; }
+
+    .button-wrapper {
+      display: flex;
+      gap: 14px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+    .order-btn {
+      flex: 1;
+      min-width: 140px;
+      border: none;
+      padding: 14px 20px;
+      border-radius: 14px;
+      font-family: "Outfit", sans-serif;
+      font-weight: 900;
+      cursor: pointer;
+      font-size: 1rem;
+      text-transform: uppercase;
+      transition: all .2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      background: var(--rm-blue);
+      color: #fff;
+      border: 2.5px solid var(--rm-gold);
+      box-shadow: 4px 4px 0px rgba(11,42,111,.15);
+      position: relative;
+      overflow: hidden;
+    }
+    /* Shine effect */
+    .order-btn::after {
+      content: "";
+      position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+      background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%);
+      transform: skewX(-20deg);
+      transition: all 0.5s;
+    }
+    .order-btn:hover::after { left: 200%; }
+    
+    .order-btn.alt {
+      background: var(--rm-gold);
+      color: var(--rm-blue);
+      border: 2.5px solid var(--rm-blue);
+    }
+    .order-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 6px 6px 0px rgba(11,42,111,.2);
+    }
+    .order-btn:active {
+      transform: translateY(2px) !important;
+      box-shadow: 0 2px 0 var(--rm-gold) !important;
+    }
+    .order-btn.alt:active {
+      box-shadow: 0 2px 0 var(--rm-blue) !important;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 26px;
+      font-size: .85rem;
+      color: rgba(11,42,111,.8);
+      font-weight: 800;
+      position: relative;
+      z-index: 1;
+      font-family: "Outfit", sans-serif;
+      letter-spacing: 0.5px;
+    }
+
+    @media (max-width: 480px){
+      html { font-size: 11px; }
+      body { padding: 14px 12px 24px; }
+      .pricelist-container { padding: 22px 16px; }
+      .order-btn { width: 100%; text-align: center; }
+    }
+  
+    /* WRAPPER GRID MADING */
+    .snk-wrapper {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 18px;
+      margin-top: 16px;
+    }
+
+    /* CARD MADING */
+    .snk-card {
+      position: relative;
+      padding: 20px 18px;
+      border-radius: 16px;
+      background: linear-gradient(180deg, #ffffff, #f6f8ff);
+      border: 2.5px solid var(--ink);
+      box-shadow: 6px 6px 0px var(--shadow);
+      overflow: hidden;
+      transition: all .25s ease;
+    }
+
+    .snk-card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, #d4af37, #1d4ed8);
+    }
+
+    .snk-card:hover {
+      transform: translateY(-4px);
+      background: rgba(245,210,106,.08);
+      box-shadow: 8px 8px 0px var(--shadow);
+    }
+
+    .snk-badge {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      font-size: .9rem;
+      font-weight: 900;
+      font-family: "Outfit", sans-serif;
+      color: rgba(11,42,111,.25);
+    }
+
+    .snk-card h3 {
+      margin: 0 0 10px;
+      font-family: "Outfit", sans-serif;
+      font-size: 1.05rem;
+      font-weight: 900;
+      color: var(--rm-blue);
+      letter-spacing: .5px;
+    }
+
+    .snk-card p {
+      margin: 0;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: var(--rm-blue);
+      font-weight: 600;
+    }
+
+    /* =========================================================
+       NEW FACILITY UI (PREMIUM CARDS)
+       ========================================================= */
+    .facility-wrap {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+      justify-items: center;
+    }
+
+    .facility-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      text-decoration: none;
+      background: linear-gradient(180deg, #ffffff, var(--rm-ice));
+      border: 2.5px solid var(--ink);
+      border-radius: 16px;
+      padding: 20px 12px;
+      box-shadow: 5px 5px 0px var(--shadow);
+      transition: all .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    /* Top gold line effect */
+    .facility-card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 6px;
+      background: linear-gradient(90deg, var(--rm-gold), var(--rm-gold2));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .3s ease;
+      z-index: -1;
+    }
+
+    .facility-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 8px 8px 0px rgba(212,175,55,.3);
+      border-color: var(--rm-blue);
+      background: #ffffff;
+    }
+
+    .facility-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .facility-circle {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      border: 3px solid var(--rm-blue);
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(11,42,111,.1);
+      transition: transform .4s cubic-bezier(0.34, 1.56, 0.64, 1), border-color .3s ease;
+      margin-bottom: 14px;
+    }
+
+    .facility-card:hover .facility-circle {
+      transform: scale(1.15) rotate(6deg);
+      border-color: var(--rm-gold);
+    }
+
+    .facility-circle img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .facility-title {
+      font-family: "Outfit", sans-serif;
+      font-weight: 900;
+      font-size: 0.95rem;
+      color: var(--rm-blue);
+      text-align: center;
+      line-height: 1.2;
+      margin-bottom: 10px;
+    }
+
+    .facility-action {
+      font-family: "Outfit", sans-serif;
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: var(--rm-blue);
+      background: var(--rm-gold2);
+      padding: 6px 16px;
+      border-radius: 99px;
+      border: 1.5px solid var(--rm-blue);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: all .2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .facility-card:hover .facility-action {
+      background: var(--rm-blue);
+      color: #fff;
+      border-color: var(--ink);
+      box-shadow: 0 4px 8px rgba(11,42,111,.2);
+    }
+
+    .info-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .info-label {
+      font-family: "Outfit", sans-serif;
+      font-weight: 900;
+      font-size: .85rem;
+      letter-spacing: 0.5px;
+      color: var(--rm-blue);
+    }
+
+    .info-badge {
+      font-family: "Outfit", sans-serif;
+      font-weight: 800;
+      font-size: .8rem;
+      background: var(--rm-blue);
+      color: #fff;
+      padding: 4px 12px;
+      border-radius: 900px;
+      border: 1.5px solid var(--ink);
+    }
+
+    /* FLOATING CHAT GLOBAL */
+    .floating-chat {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 999;
+    }
+
+    .chat-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: .9rem;
+      font-weight: 800;
+      font-family: "Outfit", sans-serif;
+      padding: 10px 18px;
+      border-radius: 999px;
+      text-decoration: none;
+      color: #fff;
+      background: linear-gradient(135deg, var(--rm-blue2), var(--rm-blue));
+      border: 2.5px solid rgba(255,255,255,.4);
+      box-shadow: 0 8px 16px rgba(29,78,216,.25);
+      transition: all .2s ease;
+    }
+
+    .chat-btn:hover {
+      transform: translateY(-4px) scale(1.02);
+      filter: saturate(1.2);
+      box-shadow: 0 10px 20px rgba(29,78,216,.3);
+    }
+
+    .chat-btn svg { width: 18px; height: 18px; fill: #fff; }
+
+    /* FLOATING PP (atas chat) */
+    .floating-pp {
+      position: fixed;
+      bottom: 70px;
+      right: 24px;
+      z-index: 999;
+    }
+
+    .floating-pp img {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3.5px solid var(--rm-blue);
+      background: #fff;
+      box-shadow: 4px 4px 0px var(--shadow);
+      transition: all .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .floating-pp img:hover {
+      transform: translateY(-5px) scale(1.1);
+      border-color: var(--rm-gold);
+      box-shadow: 6px 6px 0px rgba(212,175,55,.4);
+    }
+  </style>
+</head>
+
+<body>
+
+
+  <div class="header-wrap">
+    <div class="header-bar">
+      <a href="https://whatsapp.com/channel/0029VbBYIXSGpLHMjxkI631E" class="qris-btn" title="Bayar via QRIS">
+        <img src="foto/logo.png" alt="QRIS" class="qris-icon" />
+      </a>
+      <h1>DiptARM StoRE</h1>
+      <p class="subtitle">Jam Open Store DiptArm 09.00 - 21.00 WIB</p>
+    </div>
+  </div>
+
+  <div class="tabs" role="tablist">
+    <button class="tab active" data-target="snk" role="tab">MADING</button>
+    <button class="tab" data-target="jaseb" role="tab" aria-selected="true">JASEB</button>
+    <button class="tab" data-target="reacted" role="tab">JASDUK</button>
+    <button class="tab" data-target="edit" role="tab">EDIT</button>
+    <button class="tab" data-target="mb" role="tab">MB</button>
+    <button class="tab" data-target="setup" role="tab">SET ACC</button>
+    <button class="tab" data-target="memb" role="tab">FOLL CH</button>
+    <button class="tab" data-target="wor" role="tab">WORDING</button>
+    <button class="tab" data-target="bday" role="tab">EDITING PACK</button>
+  </div>
+
+  
+  <div id="snk" class="container category active">
+    <div class="pricelist-container">
+
+      <div class="section-title1">MADING STORE</div>
+      <p class="hint">Mohon dibaca sebelum melakukan order.</p>
+
+      <div class="snk-wrapper">
+        
+<div class="snk-card">
+
+  <span class="snk-badge">01</span>
+
+  <div class="info-wrap">
+    <span class="info-badge">SYSTEM</span>
+    <span class="info-label">ADMIN UPDATE</span>
+  </div>
+
+  <p>
+    Layanan DiptARM Store kini sudah kembali berjalan normal seperti biasanya.
+
+    <br>
+
+    Seluruh layanan order, konfirmasi, dan pertanyaan kini telah aktif kembali NO kendala.
+
+    <br><br>
+
+    </bold>Namun mulai sekarang admin resmi berpindah ke nomor baru untuk seluruh kebutuhan customer.<bold>
+
+    <br><br>
+
+    <b>ADMIN BARU :</b>
+  <a href="https://wa.me/6285111374801"
+    target="_blank"
+    style="
+      color:#4da3ff;
+      text-decoration:none;
+      font-weight:700;
+    ">
+      https://wa.me/6285111374801
+    </a>
+
+    <br><br>
+
+    Mohon untuk tidak menghubungi nomor lama lagi agar proses order dan respon admin berjalan dengan lancar.
+
+    <br><br>
+
+    Terima kasih telah menunggu dan tetap menggunakan layanan di DiptARM Store, Salam dari Admin dan Owner.
+  </p>
+
+</div>
+        
+
+
+        <div class="snk-card">
+          <span class="snk-badge">02</span><div class="info-wrap">
+            <span class="info-label">INFORMASI</span>
+            <span class="info-badge">Penting</span>
+          </div>
+          <p>Cust, bantu admin yu, buat tetap pantau orderannya masing masing.
+          Karena orderan yang masuk cukup banyak, admin belum tentu bisa memantau semuanya secara terus-menerus atau mengingat satu per satu. Jadi akan sangat membantu kalau dari cust juga aktif menanyakan progres orderannya.
+
+          <br><br>Kalau sudah mendekati estimasi atau dl, boleh langsung follow up ke admin terkait status orderannya, Jika belum selesai. Nanti admin akan bantu cek dan lanjut follow up ke tim yang mengerjakan.
+
+          <br><br>Jangan malah dilupain bahkan sampe dianggurin berminggu-minggu, terus tau tau ada gosipan dari luar soal orderan kalian yang mangkrak di DiptARM store, jadi mohon bantuannya ya buat mempermudah, kita win win solution aja, admin dibantu, kamu diuntungkan karena orderannya tepat waktu.❤️🙌🏻
+
+          <br><br>Dari Admin DiptARM Store</p>
+        </div>
+        
+        <div class="snk-card">
+          <span class="snk-badge">03</span>
+          <div class="info-wrap">
+            <span class="info-badge">CARA</span>
+            <span class="info-label">Order</span>
+          </div>
+          <p>
+            1. Klik pilihan yang mau kamu beli.<br>
+            2. Lalu klik format order.<br>
+            3. Pilih format yang ( Select ▼)<br>
+            4. Isi format sesuai orderanmu.<br>
+            5. Kirim ke admin DiptARM.<br>
+            6. Tunggu dibalas untuk melakukan pembayaran.
+          </p>
+        </div>
+      </div>
+      
+      <div class="section-title2" style="margin-top: 40px;">FASILITAS</div>
+      <p class="hint">Akses cepat ke grup, channel, dan layanan lainnya.</p>
+
+      <div class="facility-wrap">
+        <a href="https://chat.whatsapp.com/EZBewKdIN8dHtp2bn7WXwo" class="facility-card">
+          <div class="facility-circle">
+            <img src="foto/pp4.jpg" alt="PP Store 1" onerror="this.style.display='none'">
+          </div>
+          <span class="facility-title">Store 1</span>
+          <span class="facility-action">Join ➔</span>
+        </a>
+
+        <a href="https://chat.whatsapp.com/Kio8gRFYvh48uOg3YsH8KY" class="facility-card">
+          <div class="facility-circle">
+            <img src="foto/pp4.jpg" alt="PP Store 2" onerror="this.style.display='none'">
+          </div>
+          <span class="facility-title">Store 2</span>
+          <span class="facility-action">Join ➔</span>
+        </a>
+
+        <a href="https://whatsapp.com/channel/0029VbE2dNw4o7qHefd3bA18" class="facility-card">
+          <div class="facility-circle">
+            <img src="foto/pp4.jpg" alt="PP Base" onerror="this.style.display='none'">
+          </div>
+          <span class="facility-title">OFC Store CH</span>
+          <span class="facility-action">Join ➔</span>
+        </a>
+
+        <a href="https://chat.whatsapp.com/I7N7Jd2T8al9omHzTtYwAJ" class="facility-card">
+          <div class="facility-circle">
+            <img src="foto/diprem.jpg" alt="PP Apk" onerror="this.style.display='none'">
+          </div>
+          <span class="facility-title">DiPrem</span>
+          <span class="facility-action">Join ➔</span>
+        </a>
+
+        <a href="https://whatsapp.com/channel/0029Vb71dMEGpLHR90ppGX23" class="facility-card">
+          <div class="facility-circle">
+            <img src="foto/pp5.png" alt="PP Payment" onerror="this.style.display='none'">
+          </div>
+          <span class="facility-title">Draf Ready</span>
+          <span class="facility-action">Kunjungi ➔</span>
+        </a>
+
+                <a href="https://whatsapp.com/channel/0029Vb71dMEGpLHR90ppGX23" class="facility-card">
+          <div class="facility-circle">
+            <img src="foto/pp6.jpg" alt="PP Payment" onerror="this.style.display='none'">
+          </div>
+          <span class="facility-title">Draf Manips</span>
+          <span class="facility-action">Kunjungi ➔</span>
+                </a>
+
+        <a href="https://whatsapp.com/channel/0029VbD8UViLtOj3Jp7iup0z" class="facility-card">
+          <div class="facility-circle">
+            <img src="foto/pp1.jpg" alt="PP Pricelist" onerror="this.style.display='none'">
+          </div>
+          <span class="facility-title">Pricelist</span>
+          <span class="facility-action">Lihat ➔</span>
+        </a>
+                <a href="https://whatsapp.com/channel/0029VbD8UViLtOj3Jp7iup0z" class="facility-card">
+          <div class="facility-circle">
+            <img src="foto/pp7.png" alt="PP Pricelist" onerror="this.style.display='none'">
+          </div>
+          <span class="facility-title">Draf Custom</span>
+          <span class="facility-action">Lihat ➔</span>
+                </a>
+      </div>
+      </div>
+  </div>
+
+  <div id="jaseb" class="container category">
+    <div class="pricelist-container">
+      <div class="section-title1">JASA SEBAR LIST</div>
+      <p class="hint">Jasa Sebar List, berlaku sampai kelipatan 10K LPM/Hari.</p>
+
+      <table>
+        <thead>
+          <tr><th colspan="2">JASEB LPM</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>50 LPM</td><td class="price">Rp 100</td></tr>
+          <tr><td>100 LPM</td><td class="price">Rp 200</td></tr>
+          <tr><td>200 LPM</td><td class="price">Rp 400</td></tr>
+          <tr><td>300 LPM</td><td class="price">Rp 600</td></tr>
+          <tr><td>400 LPM</td><td class="price">Rp 800</td></tr>
+          <tr><td>500 LPM</td><td class="price">Rp 1.000</td></tr>
+          <tr><td>1.000 LPM</td><td class="price">Rp 2.000</td></tr>
+          <tr><td>5.000 LPM</td><td class="price">Rp 10.000</td></tr>
+          <tr><td>10.000 LPM</td><td class="price">Rp 20.000</td></tr>
+        </tbody>
+      </table>
+
+      <table style="margin-top:14px;">
+        <thead>
+          <tr><th colspan="2">JASEB LPFP</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>50 LPFP</td><td class="price">Rp 150</td></tr>
+          <tr><td>100 LPFP</td><td class="price">Rp 300</td></tr>
+          <tr><td>200 LPFP</td><td class="price">Rp 600</td></tr>
+          <tr><td>300 LPFP</td><td class="price">Rp 900</td></tr>
+          <tr><td>400 LPFP</td><td class="price">Rp 1.200</td></tr>
+          <tr><td>500 LPFP</td><td class="price">Rp 1.500</td></tr>
+          <tr><td>5.000 LPFP</td><td class="price">Rp 15.000</td></tr>
+        </tbody>
+      </table>
+
+      <div class="note">
+        <strong>NOTE PENTING:</strong><br>
+        Banned List 18+ Vulg*r, Bisnis RL &amp; Judol<br>
+        List berfoto fee + <strong>100P</strong> per penyebaran / Kelipatan 500 LPM.<br>
+        List bervideo fee + <strong>200P</strong> per penyebaran / Kelipatan 500 LPM.<br>
+        Harga rush menyesuaikan jumlah LPM range 200 – 2K.<br>
+        Penyebaran maksimal 10 sesi dan 15 hari.
+      </div>
+
+      <div class="button-wrapper">
+        <button class="order-btn" onclick="location.href='format.html'">Format Order</button>
+        <button class="order-btn alt" onclick="location.href='kalkulator.html'">Kalkulator</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="reacted" class="container category">
+    <div class="pricelist-container">
+      <div class="section-title2">JASA DUKUNGAN/ VOTE WEB</div>
+      <p class="hint">Hanya menerima react dengan emoji Default.</p>
+
+      <table>
+        <thead>
+          <tr><th colspan="2">JASDUK POST REACTED CH WA</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>+ 10 React</td><td class="price">Rp 400</td></tr>
+          <tr><td>+ 50 React</td><td class="price">Rp 2.000</td></tr>
+          <tr><td>+ 100 React</td><td class="price">Rp 4.000</td></tr>
+          <tr><td>+ 200 React</td><td class="price">Rp 8.000</td></tr>
+          <tr><td>+ 300 React</td><td class="price">Rp 12.000</td></tr>
+          <tr><td>+ 500 React</td><td class="price">Rp 20.000</td></tr>
+          <tr><td>+ 1.000 React</td><td class="price">Rp 40.000</td></tr>
+        </tbody>
+      </table>
+ <table>
+        <thead>
+          <tr><th colspan="2">REACTED SPESIAL EMOJI 🏆🔥👏🎉</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>+ 10 React</td><td class="price">Rp 500</td></tr>
+          <tr><td>+ 50 React</td><td class="price">Rp 2.500</td></tr>
+          <tr><td>+ 100 React</td><td class="price">Rp 5.000</td></tr>
+          <tr><td>+ 200 React</td><td class="price">Rp 10.000</td></tr>
+          <tr><td>+ 300 React</td><td class="price">Rp 15.000</td></tr>
+          <tr><td>+ 500 React</td><td class="price">Rp 25.000</td></tr>
+          <tr><td>+ 1.000 React</td><td class="price">Rp 50.000</td></tr>
+        </tbody>
+      </table>
+
+      <table style="margin-top:14px;">
+        <thead>
+          <tr><th colspan="2">JASDUK POST POSTER SW</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>5 Dukungan</td><td class="price">Rp 1.000</td></tr>
+          <tr><td>10 Dukungan</td><td class="price">Rp 2.000</td></tr>
+          <tr><td>20 Dukungan</td><td class="price">Rp 4.000</td></tr>
+          <tr><td>40 Dukungan</td><td class="price">Rp 8.000</td></tr>
+        </tbody>
+      </table>
+      
+      <table style="margin-top:14px;">
+        <thead>
+          <tr><th colspan="2">JASDUK VOTE VIA WEB</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1 Vote</td><td class="price">Rp 200</td></tr>
+          <tr><td>5 Vote</td><td class="price">Rp 1.000</td></tr>
+          <tr><td>10 Vote</td><td class="price">Rp 2.000</td></tr>
+          <tr><td>20 Vote</td><td class="price">Rp 4.000</td></tr>
+          <tr><td>50 Vote</td><td class="price">Rp 10.000</td></tr>
+          <tr><td>100 Vote</td><td class="price">Rp 20.000</td></tr>          
+        </tbody>
+      </table>
+
+      <div class="note">
+        ( React ) Maksimal Order 10K.<br>
+        ( React ) Waktu Pengerjaan 10 Menit setiap 1 Emoji / Tergantung sistem.<br>
+        ( React ) Emoji default: 😂 / 🙏 / ❤️ / 👍 / 😲.<br>
+        ( React ) Spesial Emoji - Wajib tanya stok: 🏆 / 🔥 / 👏 / 🎉.<br>
+        ( Post SW ) Tidak bisa Rush.<br>
+        ( Vote ) 1 Vote berlaku untuk 1 Pilihan atau 1 Nomor.
+        ( Vote ) Vote Google Form hanya berlaku untuk 10 Akun.
+      </div>
+
+      <div class="button-wrapper">
+        <button class="order-btn" onclick="location.href='format.html'">Format Order</button>
+        <button class="order-btn alt" onclick="location.href='https://whatsapp.com/channel/0029Vb6sHbp1nozEpB074I0W'">Menu Lain</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="memb" class="container category">
+    <div class="pricelist-container">
+      <div class="section-title1">+ PENGIKUT CHANNEL WA</div>
+      <p class="hint">Channel WhatsApp Member.</p>
+
+      <table>
+        <thead>
+          <tr><th colspan="2">REFIL 30D</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>+ 10 Subs</td><td class="price">Rp 1.000</td></tr>
+          <tr><td>+ 20 Subs</td><td class="price">Rp 2.000</td></tr>
+          <tr><td>+ 50 Subs</td><td class="price">Rp 5.000</td></tr>
+          <tr><td>+ 100 Subs</td><td class="price">Rp 10.000</td></tr>
+          <tr><td>+ 200 Subs</td><td class="price">Rp 20.000</td></tr>
+          <tr><td>+ 300 Subs</td><td class="price">Rp 30.000</td></tr>
+          <tr><td>+ 500 Subs</td><td class="price">Rp 50.000</td></tr>
+          <tr><td>+ 1.000 Subs</td><td class="price">Rp 100.000</td></tr>
+        </tbody>
+      </table>
+      <table style="margin-top:14px;">
+        <thead>
+          <tr><th colspan="2">NO REFILL</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>+ 10 Subs</td><td class="price">Rp 500</td></tr>
+          <tr><td>+ 20 Subs</td><td class="price">Rp 1.000</td></tr>
+          <tr><td>+ 50 Subs</td><td class="price">Rp 2.500</td></tr>
+          <tr><td>+ 100 Subs</td><td class="price">Rp 5.000</td></tr>
+          <tr><td>+ 200 Subs</td><td class="price">Rp 10.000</td></tr>
+          <tr><td>+ 300 Subs</td><td class="price">Rp 15.000</td></tr>
+          <tr><td>+ 500 Subs</td><td class="price">Rp 25.000</td></tr>
+          <tr><td>+ 1.000 Subs</td><td class="price">Rp 50.000</td></tr>
+        </tbody>
+      </table>
+
+      <div class="note">
+        Maksimal Order 10K Pengikut.<br>
+        Waktu Pengerjaan <strong>10 menit</strong> atau tergantung sistem.<br>
+        Pengikut bersifat tidak Permanen.
+      </div>
+
+      <div class="button-wrapper">
+        <button class="order-btn" onclick="location.href='format.html'">Format Order</button>
+        <button class="order-btn alt" onclick="location.href='https://whatsapp.com/channel/0029Vb6sHbp1nozEpB074I0W'">Menu Lain</button>
+      </div>
+    </div>
+  </div>
+
+
+<div id="wor" class="container category">
+  <div class="pricelist-container">
+
+    <div class="section-title2">
+      ✒ WORDING
+    </div>
+
+    <p class="hint">
+      Jasa Pembuatan Wording, Open Custom selain di list.
+    </p>
+    <table>
+      <thead>
+        <tr><th colspan="2">WORDING PACK</th></tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="2"><strong>Avail :</strong> display name, biography, location, fake ig</td></tr>
+
+        <tr><td><strong>WORDING PACK – Short</strong></td><td class="price">Rp 6.000</td></tr>
+        <tr><td><strong>WORDING PACK – Medium</strong></td><td class="price">Rp 8.000</td></tr>
+        <tr><td><strong>WORDING PACK – Long</strong></td><td class="price">Rp 14.000</td></tr>
+      </tbody>
+    </table>
+
+     <table style="margin-top:14px;">
+      <thead>
+        <tr><th colspan="2">STORY ATAU PLOT</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Per 100 Kata/W</td><td class="price">Rp 7.000</td></tr>
+      </tbody>
+    </table>   
+    
+    <table style="margin-top:14px;">
+      <thead>
+        <tr><th colspan="2">WORDING BIO</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Short</td><td class="price">Rp 3.000</td></tr>
+        <tr><td>Medium</td><td class="price">Rp 5.000</td></tr>
+        <tr><td>Long</td><td class="price">Rp 7.000</td></tr>
+      </tbody>
+    </table>
+
+    <table style="margin-top:14px;">
+      <thead>
+        <tr><th colspan="2">WORDING PFP</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Short</td><td class="price">Rp 4.000</td></tr>
+        <tr><td>Medium</td><td class="price">Rp 5.000</td></tr>
+        <tr><td>Long</td><td class="price">Rp 7.000</td></tr>
+      </tbody>
+    </table>
+
+    <table style="margin-top:14px;">
+      <thead>
+        <tr><th colspan="2">WORDING LOCATION</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Short</td><td class="price">Rp 1.000</td></tr>
+        <tr><td>Medium</td><td class="price">Rp 2.000</td></tr>
+        <tr><td>Long</td><td class="price">Rp 3.000</td></tr>
+      </tbody>
+    </table>
+
+    <table style="margin-top:14px;">
+      <thead>
+        <tr><th colspan="2">WORDING DISPLAY NAME</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Short</td><td class="price">Rp 500</td></tr>
+        <tr><td>Medium</td><td class="price">Rp 1.000</td></tr>
+        <tr><td>Long</td><td class="price">Rp 2.000</td></tr>
+      </tbody>
+    </table>
+
+    <table style="margin-top:14px;">
+      <thead>
+        <tr><th colspan="2">WORDING TITLE KATALOG ( /1 )</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Short</td><td class="price">Rp 1.000</td></tr>
+        <tr><td>Medium</td><td class="price">Rp 1.500</td></tr>
+        <tr><td>Long</td><td class="price">Rp 2.000</td></tr>
+      </tbody>
+    </table>
+
+    <table style="margin-top:14px;">
+      <thead>
+        <tr><th colspan="2">WORDING LIST GROUP</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Short</td><td class="price">Rp 6.000</td></tr>
+        <tr><td>Medium</td><td class="price">Rp 8.000</td></tr>
+        <tr><td>Long</td><td class="price">Rp 10.000</td></tr>
+      </tbody>
+    </table>
+
+    <table style="margin-top:14px;">
+      <thead>
+        <tr><th colspan="2">WORDING BIRTHDAY</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Medium</td><td class="price">Rp 5.000</td></tr>
+        <tr><td>Long</td><td class="price">Rp 8.000</td></tr>
+      </tbody>
+    </table>
+
+    <table style="margin-top:14px;">
+      <thead>
+        <tr><th colspan="2">WORDING UP-CHR</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Short</td><td class="price">Rp 4.000</td></tr>
+        <tr><td>Medium</td><td class="price">Rp 5.000</td></tr>
+        <tr><td>Long</td><td class="price">Rp 6.000</td></tr>
+      </tbody>
+    </table>
+
+    <table style="margin-top:14px;">
+      <thead>
+        <tr><th colspan="2">WORDING LIST HASTAG</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Medium</td><td class="price">Rp 5.000</td></tr>
+        <tr><td>Long</td><td class="price">Rp 7.000</td></tr>
+      </tbody>
+    </table>
+
+    <table style="margin-top:14px;">
+      <thead>
+        <tr><th colspan="2">WORDING DESK GRUP</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Medium</td><td class="price">Rp 7.000</td></tr>
+        <tr><td>Long</td><td class="price">Rp 10.000</td></tr>
+      </tbody>
+    </table>
+    
+    <table style="margin-top:14px;">
+      <thead>
+        <tr><th colspan="2">WORDING DESK KATALOG</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Short</td><td class="price">Rp 5.000</td></tr>
+        <tr><td>Medium</td><td class="price">Rp 7.000</td></tr>
+        <tr><td>Long</td><td class="price">Rp 10.000</td></tr>
+      </tbody>
+    </table>
+
+    <div class="note">
+      Inrush 12 Jam: +Rp. 5.000<br>
+      Inrush 1 hari: +Rp 3.000<br>
+      Inrush 2 Hari: +Rp 2.000<br>
+      Inrush 3 Hari: +Rp 1.000<br>
+      Inrush hanya untuk 1 atau 2 editan<br>
+      Inrush dibawah berlaku untuk 1 sampai 2 Wording<br>
+      Pengerjaan maksimal 7 hari & revisi maksimal 3 kali<br>
+      Bisa request wording lain, langsung tanyakan
+    </div>
+
+    <div class="button-wrapper">
+        <button class="order-btn alt" onclick="location.href='format.html'">Format Order</button>
+        <button class="order-btn" onclick="location.href='https://t.me/testimonidiptarm'">Result</button>
+    </div>
+
+  </div>
+</div>
+
+  <div id="edit" class="container category">
+  <div class="pricelist-container">
+    <div class="section-title1">EDITING / MANIPS</div>
+    <p class="hint">
+      Open Jasa Edit <strong>Setup Group</strong> Editan Cakep.<br>
+    </p>
+
+    <table>
+      <thead><tr><th colspan="2">EDITING GROUP</th></tr></thead>
+      <tbody>
+        <tr><td>Profile</td><td class="price">Rp 5.500 - 7.000</td></tr>
+        <tr><td>Katalog</td><td class="price">Rp 4.500 - 6.500 /slide</td></tr>
+        <tr><td>Sertifikat</td><td class="price">Rp 5.000 - 7.000</td></tr>
+        <tr><td>Poster</td><td class="price">Rp 7.500 - 12.000</td></tr>
+        <tr><td>ID Card</td><td class="price">Rp 5.500 - 8.000</td></tr>
+      </tbody>
+    </table>
+
+    <table style="margin-top:14px;">
+      <thead><tr><th colspan="2">EDITING SET</th></tr></thead>
+      <tbody>
+        <tr><td>Twibbon B’day</td><td class="price">Rp 5.500 - 7.000</td></tr>
+        <tr><td>Ava</td><td class="price">Rp 5.500 - 7.000</td></tr>
+        <tr><td>Yearbook</td><td class="price">Rp 7.500 - 13.000</td></tr>
+      </tbody>
+    </table>
+
+    <table style="margin-top:14px;">
+      <thead><tr><th colspan="2">MANIPS</th></tr></thead>
+      <tbody>
+        <tr><td>Selca</td><td class="price">Rp 5.000</td></tr>
+        <tr><td>Half Body</td><td class="price">Rp 7.000</td></tr>
+        <tr><td>Full Body</td><td class="price">Rp 9.000</td></tr>
+      </tbody>
+    </table>
+
+    <table style="margin-top:14px;">
+      <thead><tr><th colspan="2">SCRIBBLE</th></tr></thead>
+      <tbody>
+        <tr><td>Kissed By</td><td class="price">Rp 2.000</td></tr>
+        <tr><td>Half Scribble</td><td class="price">Rp 7.000</td></tr>
+        <tr><td>Full Scribble</td><td class="price">Rp 9.000</td></tr>
+      </tbody>
+    </table>
+
+    <div class="note">
+      Inrush 1 hari: +Rp 5.000<br>
+      Inrush 3 Hari: +Rp 2.000<br>
+      Inrush hanya untuk 1 sampai 2 editan<br>
+      Pengerjaan maksimal 7 hari (tergantung antrian)<br>
+      Revisi max 3 kali, lebih dari itu ada fee tambahan<br>
+       Dilarang mengganti muse/design saat orderan diproses<br>
+      Poster maksimal 3 muse, lebih +Rp 1.000 /muse<br>
+      Yearbook maksimal 5 muse, lebih +Rp 1.000 /muse
+    </div>
+      <div class="button-wrapper">
+        <button class="order-btn" onclick="location.href='format.html'">Format Order</button>
+        <button class="order-btn alt" onclick="location.href='https://pin.it/L3oaVW0Ap'">Result</button>
+      </div>
+    </div>
+  </div>
+  
+  <div id="setup" class="container category">
+    <div class="pricelist-container">
+      <div class="section-title2">SET ACCOUNT ( MB + WD )</div>
+      <p class="hint">Open order jasa setup account.</p>
+
+      <table>
+        <thead><tr><th colspan="2">PAKET ASIK WA ( BASIC )</th></tr></thead>
+        <tbody>
+          <tr><td>Paket Asik 1<br><small style="opacity:.75;font-weight:700;">MB 3S Basic + Header + dn, bio short</small></td><td class="price">Rp. 9.000</td></tr>
+          <tr><td>Paket Asik 2<br><small style="opacity:.75;font-weight:700;">MB 3S Basic + Header + dn, bio, loc med</small></td><td class="price">Rp. 11.000</td></tr>
+          <tr><td>Paket Asik 3<br><small style="opacity:.75;font-weight:700;">MB 3S Basic + Header + dn, bio, loc long</small></td><td class="price">Rp. 14.000</td></tr>
+          <tr><td>Paket Asik 4<br><small style="opacity:.75;font-weight:700;">MB 6S Basic+ Header + dn, bio short</small></td><td class="price">Rp. 15.000</td></tr>
+          <tr><td>Paket Asik 5<br><small style="opacity:.75;font-weight:700;">MB 6S Basic + Header + dn, bio, loc med</small></td><td class="price">Rp. 18.000</td></tr>
+          <tr><td>Paket Asik 6<br><small style="opacity:.75;font-weight:700;">MB 6S Basic + Header + dn, bio, loc long</small></td><td class="price">Rp. 20.000</td></tr>
+        </tbody>
+      </table>
+
+      <table style="margin-top:14px;">
+        <thead><tr><th colspan="2">PAKET DEGAN WA ( DECO / DESIGN )</th></tr></thead>
+        <tbody>
+          <tr><td>Paket Degan 1<br><small style="opacity:.75;font-weight:700;">MB 3S + Header + dn, bio, loc short, fake instagram</small></td><td class="price">Rp. 24.000</td></tr>
+          <tr><td>Paket Degan 2<br><small style="opacity:.75;font-weight:700;">MB 3S + Header + dn, bio, loc med, 3's title katalog, fake instagram/gmail</small></td><td class="price">Rp. 27.000</td></tr>
+          <tr><td>Paket Degan 3<br><small style="opacity:.75;font-weight:700;">MB 3S + Header + dn, bio, loc long, 3's title katalog, fake insta/gmail, bc kontak</small></td><td class="price">Rp. 31.000</td></tr>
+          <tr><td>Paket Degan 4<br><small style="opacity:.75;font-weight:700;">MB 6S + Header + dn, bio, loc, pfp short, 6's title katalog, fake insta/gmail, bc kontak</small></td><td class="price">Rp. 40.000</td></tr>
+          <tr><td>Paket Degan 5<br><small style="opacity:.75;font-weight:700;">MB 6S + Header + dn, bio, loc, pfp med, 6's title katalog, fake insta/gmail, bc kontak</small></td><td class="price">Rp. 44.0000</td></tr>
+          <tr><td>Paket Degan 6<br><small style="opacity:.75;font-weight:700;">MB 6S + Header + dn, bio, loc, pfp long, 6's title katalog, fake insta/gmail, bc kontak, greetings pfp</small></td><td class="price">Rp. 48.000</td></tr>
+        </tbody>
+      </table>
+
+      <table style="margin-top:22px;">
+        <thead><tr><th colspan="2">SETUP ACC INSTAGRAM</th></tr></thead>
+        <tbody>
+          <tr><td><strong>SIZE SHORT</strong><br><small style="opacity:.75;font-weight:700;">Nickname, Display, Bio, 3 Title Sorotan + 3 MB Sorotan</small></td><td class="price">Rp 8.000</td></tr>
+          <tr><td><strong>SIZE MED</strong><br><small style="opacity:.75;font-weight:700;">Nickname, Display, Bio, 3 Title Sorotan + 3 MB Sorotan</small></td><td class="price">Rp 11.000</td></tr>
+          <tr><td><strong>SIZE LONG</strong><br><small style="opacity:.75;font-weight:700;">Nickname, Display, Bio, 3 Title Sorotan + 3 MB Sorotan</small></td><td class="price">Rp 13.000</td></tr>
+        </tbody>
+      </table>
+
+      <table style="margin-top:14px;">
+        <thead><tr><th colspan="2">SETUP INSTAGRAM — PAKET LENGKAP</th></tr></thead>
+        <tbody>
+          <tr><td><strong>SIZE SHORT</strong><br><small style="opacity:.75;font-weight:700;">Nickname, Display, Bio, 3 Title Sorotan + 3 MB Sorotan + 3 MB Feeds + Fake Link</small></td><td class="price">Rp 12.000</td></tr>
+          <tr><td><strong>SIZE MED</strong><br><small style="opacity:.75;font-weight:700;">Nickname, Display, Bio, 3 Title Sorotan + 3 MB Sorotan + 3 MB Feeds + Fake Link</small></td><td class="price">Rp 15.000</td></tr>
+          <tr><td><strong>SIZE LONG</strong><br><small style="opacity:.75;font-weight:700;">Nickname, Display, Bio, 3 Title Sorotan + 3 MB Sorotan + 3 MB Feeds + Fake Link</small></td><td class="price">Rp 18.000</td></tr>
+        </tbody>
+      </table>
+
+      <div class="note" style="margin-top:14px;">
+        <strong>SETUP INSTAGRAM:</strong><br>
+        Fake Link: Short +Rp 1.000 &nbsp;|&nbsp; Medium +Rp 2.000 &nbsp;|&nbsp; Long +Rp 3.000<br>
+        Tambahan MB Sorotan +Rp 1.500 / slide<br>
+        Kebutuhan lainnya bisa ditambahkan sesuai request dan akan dikenakan biaya tambahan.
+       <br><br><strong>PAKET DEGAN/ ASIK: </strong><br>
+         Inrush 2 hari: + Rp. 8.000<br>
+         Inrush 3 hari: + Rp. 5.000<br>
+         Pengerjaan maksimal 8 hari<br>
+         Revisi maksimal 3 kali<br>
+         Harap kirim contoh editan yang diinginkan<br>
+         Dilarang mengganti muse/design saat order telah diproses
+      </div>
+
+      <div class="button-wrapper">
+        <button class="order-btn" onclick="location.href='format.html'">Format Order</button>
+        <button class="order-btn alt" onclick="location.href='https://pin.it/L3oaVW0Ap'">Result</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="riddle" class="container category">
+    <div class="pricelist-container">
+      <div class="section-title2" style="text-align:center;">RIDDLE & NARASI</div>
+      <p class="hint">Open order jasa Riddle, Narasi, Labirin & Paket Kombinasi.</p>
+
+      <table>
+        <thead><tr><th colspan="2">RIDDLE NARASI ONLY</th></tr></thead>
+        <tbody>
+          <tr><td>Short<br><small style="opacity:.75;font-weight:700;">Include: Riddle Narasi, Penjelasan Riddle, Kunci Jawaban</small></td><td class="price">7k</td></tr>
+          <tr><td>Medium<br><small style="opacity:.75;font-weight:700;">Include: Riddle Narasi, Penjelasan Riddle, Kunci Jawaban</small></td><td class="price">10k</td></tr>
+          <tr><td>Long<br><small style="opacity:.75;font-weight:700;">Include: Riddle Narasi, Penjelasan Riddle, Kunci Jawaban</small></td><td class="price">15k</td></tr>
+        </tbody>
+      </table>
+
+      <table style="margin-top:14px;">
+        <thead><tr><th colspan="2">RIDDLE LINK RUSAK ONLY</th></tr></thead>
+        <tbody>
+          <tr><td>Easy<br><small style="opacity:.75;font-weight:700;">Include: Link Rusak, Penjelasan Riddle, Kunci Jawaban</small></td><td class="price">5k</td></tr>
+          <tr><td>Medium<br><small style="opacity:.75;font-weight:700;">Include: Link Rusak, Penjelasan Riddle, Kunci Jawaban</small></td><td class="price">7k</td></tr>
+          <tr><td>Hard<br><small style="opacity:.75;font-weight:700;">Include: Link Rusak, Penjelasan Riddle, Kunci Jawaban</small></td><td class="price">10k</td></tr>
+        </tbody>
+      </table>
+
+      <table style="margin-top:14px;">
+        <thead><tr><th colspan="2">PAKET PUSING (NARASI + LINK RUSAK)</th></tr></thead>
+        <tbody>
+          <tr><td>Pusing 1<br><small style="opacity:.75;font-weight:700;">Narasi Medium, Link Rusak Medium, Penjelasan Riddle, Kunci Jawaban</small></td><td class="price">15k</td></tr>
+          <tr><td>Pusing 2<br><small style="opacity:.75;font-weight:700;">Narasi Medium, Link Rusak Hard, Penjelasan Riddle, Kunci Jawaban</small></td><td class="price">18k</td></tr>
+          <tr><td>Pusing 3<br><small style="opacity:.75;font-weight:700;">Narasi Long, Link Rusak Hard, Penjelasan Riddle, Kunci Jawaban</small></td><td class="price">22k</td></tr>
+        </tbody>
+      </table>
+
+      <table style="margin-top:14px;">
+        <thead><tr><th colspan="2">LABIRIN ONLY</th></tr></thead>
+        <tbody>
+          <tr><td>Labirin Easy<br><small style="opacity:.75;font-weight:700;">Include: Labirin, Posisi File</small></td><td class="price">8k</td></tr>
+          <tr><td>Labirin Medium<br><small style="opacity:.75;font-weight:700;">Include: Labirin, Posisi File</small></td><td class="price">12k</td></tr>
+          <tr><td>Labirin Hard<br><small style="opacity:.75;font-weight:700;">Include: Labirin, Posisi File</small></td><td class="price">16k</td></tr>
+        </tbody>
+      </table>
+
+      <table style="margin-top:14px;">
+        <thead><tr><th colspan="2">PAKET MIGRAIN</th></tr></thead>
+        <tbody>
+          <tr><td>Migrain 1<br><small style="opacity:.75;font-weight:700;">Narasi Long, Link Rusak Medium, Labirin Medium, News Clue/Stegano, Penjelasan Riddle, Kunci Jawaban</small></td><td class="price">30k</td></tr>
+          <tr><td>Medium<br><small style="opacity:.75;font-weight:700;">Narasi Hard, Link Rusak Hard, 1 Editing Pict Clue/1 Editing Video Clue, Sandi Buatan, Labirin Hard, Penjelasan Riddle, Kunci Jawaban</small></td><td class="price">40k</td></tr>
+          <tr><td>Hard<br><small style="opacity:.75;font-weight:700;">Narasi Hard, Link Rusak Hard, 1 Editing Pict, 1 Editing Video, Sandi Buatan, Bahasa Buatan, Labirin Hard, Penjelasan Riddle, Kunci Jawaban</small></td><td class="price">50k</td></tr>
+        </tbody>
+      </table>
+
+      <div class="note">
+        • Open tipe lain untuk Riddle/Misi/Task, tanyakan saja<br>
+        • Revisi maksimal 3 kali<br>
+        • Wajib kirim contoh riddle atau request khusus sebelum order
+      </div>
+
+      <div class="button-wrapper">
+        <button class="order-btn" onclick="location.href='https://chat.whatsapp.com/CBhl3HDPB1N5Ms27lERyEc'">Store</button>
+        <button class="order-btn alt" onclick="location.href='https://wa.me/6285111374801'">Tanya Paket Lain</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="mb" class="container category">
+    <div class="pricelist-container">
+      <div class="section-title1">MOODBOARD</div>
+      <p class="hint">Open order moodboard custom &amp; ready.</p>
+
+      <table>
+        <thead><tr><th colspan="2">MOODBOARD BASIC</th></tr></thead>
+        <tbody>
+          <tr><td>3 Slide + Header</td><td class="price">Rp 5.000</td></tr>
+          <tr><td>6 Slide + Header</td><td class="price">Rp 7.000</td></tr>
+        </tbody>
+      </table>
+
+      <table style="margin-top:14px;">
+        <thead><tr><th colspan="2">MOODBOARD DECO/DESIGN</th></tr></thead>
+        <tbody>
+          <tr><td>3 Slide + Header</td><td class="price">Rp 13.000</td></tr>
+          <tr><td>6 Slide + Header</td><td class="price">Rp 17.000</td></tr>
+        </tbody>
+      </table>
+
+      <table style="margin-top:14px;">
+        <thead><tr><th colspan="2">MOODBOARD LOVEBOARD</th></tr></thead>
+        <tbody>
+          <tr><td>3 Slide + Header</td><td class="price">Rp 14.000</td></tr>
+          <tr><td>6 Slide + Header</td><td class="price">Rp 18.000</td></tr>
+        </tbody>
+      </table>
+
+            <table style="margin-top:14px;">
+        <thead><tr><th colspan="2">MOODBOARD REALISTIC</th></tr></thead>
+        <tbody>
+          <tr><td>3 Slide + Header</td><td class="price">Rp 15.000</td></tr>
+          <tr><td>6 Slide + Header</td><td class="price">Rp 18.000</td></tr>
+        </tbody>
+            </table>
+
+      <div class="note">
+        Inrush 3 hari: +Rp. 2.000<br>
+        Inrush 1 hari: +Rp. 5.000<br>
+        Pengerjaan maksimal 7 hari<br>
+         Revisi maksimal 3 kali.<br>
+         Harap kirim contoh editan yang diinginkan.<br>
+        Dilarang mengganti muse/design saat order telah diproses.
+      </div>
+
+      <div class="button-wrapper">
+        <button class="order-btn" onclick="location.href='format.html'">Format Order</button>
+        <button class="order-btn alt" onclick="location.href='https://pin.it/L3oaVW0Ap'">Result</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="bday" class="container category">
+    <div class="pricelist-container">
+      <div class="section-title1">PACKAGE</div>
+      <p class="hint">FLAT & LOW PRICE</p>
+
+      <table>
+        <thead><tr><th colspan="3">PACK GC</th></tr></thead>
+        <tbody>
+          <tr><td><strong>SET UP OPMEMB 1</strong><br><small style="opacity:.75;font-weight:700;">List Grup, Poster Opmemb 16:9, BC Syarat Join, Poster Closememb</small></td><td class="price">Rp 29.000</td><td class="price">NO PNG +2K</td></tr>
+          <tr><td><strong>SET UP OPMEMB 2</strong><br><small style="opacity:.75;font-weight:700;">List Grup, List Oplink, Poster Oplink, Poster Opmemb 16:9, BC Syarat Join, Poster Closememb</small></td><td class="price">Rp 45.000</td><td class="price">NO PNG +2K</td></tr>
+          <tr><td><strong>SET UP TRAINEE 1</strong><br><small style="opacity:.75;font-weight:700;">IDC Team &amp; Trainee, Sertifikat, Template Event, BC Event, BC Perkenalan Team &amp; Trainee</small></td><td class="price">Rp 38.000</td><td class="price">NO PNG +3K</td></tr>
+          <tr><td><strong>SET UP TRAINEE 2</strong><br><small style="opacity:.75;font-weight:700;">IDC Team &amp; Trainee, KKS, Ijazah, Sertifikat, Template Event, BC Event, BC Perkenalan Team &amp; Trainee, Twibbon &amp; Wording Birthday</small></td><td class="price">Rp 60.000</td><td class="price">NO PNG +3K</td></tr>
+          <tr><td><strong>SET UP TRAINEE 3</strong><br><small style="opacity:.75;font-weight:700;">IDC Team &amp; Trainee, KKS, Ijazah, Sertifikat, Template Event, BC Event, BC Perkenalan Team &amp; Trainee, Twibbon &amp; Wording Birthday, BC Task, BC Materi, 2 Profil Grup</small></td><td class="price">Rp 87.000</td><td class="price">NO PNG +4K</td></tr>
+          <tr><td><strong>SET UP TRAINEE 4</strong><br><small style="opacity:.75;font-weight:700;">IDC Team &amp; Trainee, KKS, Ijazah, Sertifikat, Template Event, BC Event, BC Perkenalan, Twibbon &amp; Wording Birthday, BC Task, BC Materi, 2 Profil Grup, List Opmemb, Poster Opmemb, Poster Closememb, Formulir Pendaftaran</small></td><td class="price">Rp 114.000</td><td class="price">NO PNG +4K</td></tr>
+          <tr><td><strong>SET UP HIRTEAM</strong><br><small style="opacity:.75;font-weight:700;">List Hirteam, Poster Hirteam, BC Wawancara, IDC Calteam</small></td><td class="price">Rp 30.000</td><td class="price">NO PNG +2K</td></tr>
+          <tr><td><strong>SET KATALOG</strong><br><small style="opacity:.75;font-weight:700;">2 Katalog, IDC Team &amp; Member, Desk Katalog</small></td><td class="price">Rp 30.000</td><td class="price">NO PNG +2K</td></tr>
+          <tr><td><strong>SET UP GRUP</strong><br><small style="opacity:.75;font-weight:700;">2 Profil Grup, Desk Grup</small></td><td class="price">Rp 19.000</td><td class="price">NO PNG +1K</td></tr>
+        </tbody>
+      </table>
+
+      <table style="margin-top:14px;">
+        <thead><tr><th colspan="2">TAMBAHAN PACK GC</th></tr></thead>
+        <tbody>
+          <tr><td>Profile GC</td><td class="price">Rp 5.000 / item</td></tr>
+          <tr><td>IDC</td><td class="price">Rp 5.000 / item</td></tr>
+          <tr><td>Poster</td><td class="price">Rp 7.000 / item</td></tr>
+          <tr><td>Sertifikat</td><td class="price">Rp 5.000 / item</td></tr>
+        </tbody>
+      </table>
+
+      <table style="margin-top:22px;">
+        <thead>
+          <tr><th colspan="2">PACK BIRTHDAY</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>BDAY MINI</strong><br><small style="opacity:.75;font-weight:700;">WORDING MED + 1 TWB</small></td>
+            <td class="price">Rp 10.000</td>
+          </tr>
+          <tr>
+            <td><strong>BDAY MED</strong><br><small style="opacity:.75;font-weight:700;">WORDING MED + 2 TWB</small></td>
+            <td class="price">Rp 16.000</td>
+          </tr>
+          <tr>
+            <td><strong>BDAY PARTY</strong><br><small style="opacity:.75;font-weight:700;">WORDING LONG + 2 TWB + 2 MERCHANDISE (bisa custom)</small></td>
+            <td class="price">Rp 26.000</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="note">
+        Khusus Set 1 & 2<br>
+        ( Set GC ) Inrush 5 hari: +Rp 10.000<br>
+        ( Set GC ) Inrush 7 hari: +Rp 8.000<br>
+        Khusus Set 3 & 4 <br>
+        ( Set GC ) Inrush 5 hari: +Rp 12.000<br>
+        ( Set GC ) Inrush 7 hari: +Rp 10.000<br>
+        ( Set GC ) Pengerjaan maksimal 12 hari<br>
+        ( Bday ) Inrush 5 hari: +Rp 2.000<br>
+        ( Bday ) Inrush 3 hari: +Rp 3.000<br>
+        ( Bday ) Inrush 2 hari: +Rp 4.000<br>
+        ( Bday ) Pengerjaan maksimal 7 hari<br>
+Revisi maksimal 3 kali<br>
+Harap kirim contoh editan yang diinginkan<br>
+Dilarang mengganti muse/design saat order telah diproses
+      </div>
+
+      <div class="button-wrapper">
+        <button class="order-btn" onclick="location.href='format.html'">Format Order</button>
+        <button class="order-btn alt" onclick="location.href='https://pin.it/L3oaVW0Ap'">Result</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>© 2025 DiptARM Store</footer>
+
+  <script>
+    // Tab switching
+    document.querySelectorAll('.tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(b => {
+          b.classList.remove('active');
+          b.setAttribute('aria-selected', 'false');
+        });
+        document.querySelectorAll('.category').forEach(c => c.classList.remove('active'));
+
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+
+        const target = btn.getAttribute('data-target');
+        const el = document.getElementById(target);
+        if (el) el.classList.add('active');
+      });
+    });
+  </script>
+  <div class="floating-pp">
+  <a href="https://wa.me/6285111374801">
+    <img src="foto/pp.jpg" alt="PP" onerror="this.style.display='none'">
+  </a>
+</div>
+  <div class="floating-chat">
+  <a href="https://wa.me/6285111374801" class="chat-btn" target="_blank">
+    
+    <svg viewBox="0 0 24 24">
+      <path d="M20 2H4C2.9 2 2 2.9 2 4v14l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+    </svg>
+
+    Admin
+  </a>
+</div>
+</body>
+</html>

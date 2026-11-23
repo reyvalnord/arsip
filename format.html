@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>DiptARM Format</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;700;800&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Global Scale & Colors */
+    html { font-size: 13px; }
+
+    :root {
+      --primary-madrid: #0b2a6f;    /* Royal Blue */
+      --secondary-madrid: #FDB913;  /* Madrid Gold */
+      --madrid-white: #ffffff;
+      --madrid-dark: #0a1b2e;
+      --grunge-gray: #e2e8f0;
+      
+      --radius: 4px; /* Sharper for stamp feel */
+    }
+
+    * { box-sizing: border-box; }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      /* Background: Grungy Collage Feel */
+      background-color: #d1d5db;
+      background-image: 
+        radial-gradient(circle at 2px 2px, rgba(0,82,159,0.1) 1px, transparent 0),
+        linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+      background-size: 24px 24px, 100% 100%;
+      min-height: 100vh;
+      padding: 30px 20px;
+      color: var(--madrid-dark);
+      position: relative; 
+      overflow-x: hidden;
+    }
+
+    /* Decorative Stamps in Background */
+    body::before {
+      content: "1902";
+      position: fixed; top: 10%; right: 5%;
+      font-family: 'Outfit'; font-weight: 800; font-size: 8rem;
+      color: rgba(0,82,159,0.05); transform: rotate(-15deg);
+      pointer-events: none;
+    }
+    
+    body::after {
+      content: "HALA MADRID";
+      position: fixed; bottom: 5%; left: -2%;
+      font-family: 'Outfit'; font-weight: 800; font-size: 6rem;
+      color: rgba(253,185,19,0.05); transform: rotate(10deg);
+      pointer-events: none;
+    }
+
+    .wrap { max-width: 800px; margin: 0 auto; position: relative; z-index: 2; }
+    
+    /* Header - Stamped Banner Style */
+    header { 
+      display: flex; align-items: center; gap: 12px; margin-bottom: 25px; 
+      padding: 15px; background: var(--primary-madrid);
+      border: 4px solid var(--madrid-dark);
+      box-shadow: 8px 8px 0px var(--madrid-dark);
+      transform: rotate(-1deg);
+    }
+    header h1 { 
+      margin: 0; color: var(--madrid-white); 
+      font-family: 'Outfit', sans-serif; font-size: 1.6rem; font-weight: 800;
+      letter-spacing: 1px;
+    }
+
+    header .brand-badge {
+      background: var(--secondary-madrid);
+      color: var(--madrid-dark);
+      padding: 8px 16px; font-weight: 800; font-size: .8rem;
+      text-decoration: none; border: 3px solid var(--madrid-dark);
+      transition: all .2s ease;
+    }
+    header .brand-badge:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--madrid-dark); }
+
+    /* Card - Torn Paper / Stamp Base */
+    .card {
+      background: var(--madrid-white);
+      border: 4px solid var(--madrid-dark);
+      padding: 30px;
+      box-shadow: 12px 12px 0px rgba(10,27,46,0.15);
+      position: relative;
+      background-image: radial-gradient(var(--grunge-gray) 1px, transparent 0);
+      background-size: 20px 20px;
+    }
+
+    /* Top Strip - Club Colors */
+    .card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 12px;
+      background: repeating-linear-gradient(45deg, var(--primary-madrid), var(--primary-madrid) 20px, var(--secondary-madrid) 20px, var(--secondary-madrid) 40px);
+    }
+
+    /* Decorative Corner Stamps */
+    .stamp-decor {
+      position: absolute; width: 80px; height: 80px;
+      border: 3px double var(--primary-madrid);
+      border-radius: 50%; display: grid; place-items: center;
+      font-family: 'Outfit'; font-weight: 800; font-size: 0.7rem;
+      color: var(--primary-madrid); opacity: 0.4;
+      text-align: center; pointer-events: none;
+    }
+    .st-1 { top: 40px; right: 20px; transform: rotate(15deg); }
+    .st-2 { bottom: 80px; left: -30px; transform: rotate(-20deg); background: var(--madrid-white); z-index: 5; }
+
+    /* Layout Form */
+    .top-row { margin-bottom: 20px; }
+    .select-btn {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 15px; border: 3px solid var(--madrid-dark);
+      background: var(--madrid-white); cursor: pointer;
+      font-weight: 700; font-family: 'Outfit', sans-serif;
+    }
+    
+    .caret {
+      background: var(--primary-madrid); color: #fff;
+      padding: 4px 10px; font-size: 10px; border: 2px solid var(--madrid-dark);
+    }
+
+    /* Dropdown Panel */
+    .panel {
+      position: absolute; left: 30px; right: 30px; top: 95px;
+      background: #fff; border: 3px solid var(--madrid-dark);
+      box-shadow: 8px 8px 0 rgba(0,0,0,0.1);
+      z-index: 100; display: none;
+    }
+    .panel.open { display: block; }
+    .option {
+      padding: 12px; cursor: pointer; font-weight: 600;
+      border-bottom: 1px solid var(--grunge-gray);
+    }
+    .option:hover { background: var(--grunge-gray); color: var(--primary-madrid); }
+    .option.selected { background: var(--primary-madrid); color: #fff; }
+
+    /* Editor Textarea */
+    textarea.editor {
+      width: 100%; min-height: 380px; padding: 20px;
+      border: 3px solid var(--madrid-dark);
+      background: #fdfdfd; font-family: 'Poppins', sans-serif;
+      font-size: 0.9rem; line-height: 1.6; color: #1a202c;
+      resize: vertical; outline: none;
+    }
+    textarea.editor:focus { background: #fff; border-color: var(--secondary-madrid); }
+
+    /* Bottom Actions */
+    .bottom-bar { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
+    
+    .hint { 
+      font-size: 0.75rem; font-weight: 600; color: var(--madrid-dark);
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+
+    .btn-copy {
+      background: var(--primary-madrid); color: #fff; border: 3px solid var(--madrid-dark);
+      padding: 15px 30px; cursor: pointer; font-weight: 800;
+      font-family: 'Outfit', sans-serif; text-transform: uppercase;
+      box-shadow: 6px 6px 0 var(--madrid-dark); transition: all .1s;
+    }
+    .btn-copy:hover { transform: translate(-2px, -2px); box-shadow: 8px 8px 0 var(--madrid-dark); background: #003C74; }
+    .btn-copy:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--madrid-dark); }
+
+    /* Overlay Lock - Madrid Style */
+    #promoLockOverlay{
+      position: fixed; inset: 0; display: none; z-index: 99999;
+      background: rgba(10, 27, 46, 0.9); backdrop-filter: blur(5px);
+      align-items: center; justify-content: center; padding: 20px;
+    }
+    .lock-card{
+      background: var(--madrid-white); border: 5px solid var(--madrid-dark);
+      padding: 40px; text-align: center; max-width: 500px;
+      box-shadow: 15px 15px 0 var(--secondary-madrid);
+    }
+    .lock-card h2 { font-family: 'Outfit'; color: var(--primary-madrid); font-size: 1.8rem; margin: 10px 0; }
+    .lock-card .badge { 
+      display: inline-block; padding: 10px 20px; background: var(--primary-madrid); 
+      color: #fff; font-weight: 800; margin: 15px 0;
+    }
+
+    @media (max-width: 500px){
+      header { transform: none; }
+      .st-2 { display: none; }
+      .bottom-bar { flex-direction: column; gap: 15px; }
+      .btn-copy { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="promoLockOverlay" aria-hidden="true">
+    <div class="lock-card">
+      <div style="font-size:3rem;">⚽</div>
+      <h2>HALAMAN DITUTUP</h2>
+      <p>Format order sedang dalam pemeliharaan atau diluar periode aktif.</p>
+      <div class="badge">KEMBALI PADA PERIODE PROMO</div>
+      <p style="font-size: 0.8rem; font-weight: 600; color: #64748b;">DIPTARM STORE x REAL MADRID</p>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <header>
+      <h1>FORMAT ORDER</h1>
+      <div style="flex:1"></div>
+      <a href="web.html" class="brand-badge">KEMBALI</a>
+    </header>
+
+    <div class="card" id="cardRoot">
+      <div class="stamp-decor st-1">REAL MADRID<br>EST. 1902</div>
+      <div class="stamp-decor st-2">CHAMPIONS<br>14X</div>
+
+      <div class="top-row">
+        <div class="custom-select" id="customSelect">
+          <div class="select-btn" id="selectBtn">
+            <span id="selectLabel">Pilih Template</span>
+            <div class="caret">SELECT ▼</div>
+          </div>
+          <div class="panel" id="panel"></div>
+        </div>
+      </div>
+
+      <div class="editor-wrap">
+        <textarea id="editor" class="editor" spellcheck="false" placeholder="Tulis format di sini..."></textarea>
+      </div>
+
+      <div class="bottom-bar">
+        <div class="hint">ℹ️ Klik " SELECT ▼"  untuk mengganti Format.</div>
+        <button class="btn-copy" id="copyBtn">Salin Format</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const DEFAULT_TEMPLATES = {
+
+      "jaseb-1-lpm": { 
+        id: "jaseb-1-lpm", 
+        title: "Jaseb 1 Kali LPM 🚂", 
+        body: `ㅤ\n*🚂 𝅄 𝗙𝗢𝗥𝗠𝗔𝗧 𝗢𝗥𝗗𝗘𝗥 𝗝𝗔𝗦𝗘𝗕 𝟭 𝗞𝗔𝗟𝗜*\nㅤ━━━━━━━━━━━━━━━━  *𝗗𝗜𝗣𝗧𝗔𝗥𝗠*\nㅤ▏ Nomor Customer : 08 *Wajib diisi*\nㅤ▏ Nama List : \nㅤ▏ Jumlah : ... LPM\nㅤ▏ Fee + : Foto/ Video/ 18+ ( Kosongkan Jika Tidak )\nㅤ▏ Secreenshot : pendek/panjang\nㅤ▏ Deadline : \n\nⓘ Total : Rp. \nⓘ Kalkulator : diptarm.netlify.app/kalkulator\n\n\`*KIRIM LIST SETELAH MENGISI FORMAT\`\n*UP*. pastikan mengisi form dengan benar\n_Sebelum memesan jangan lupa membaca note_\nkirim kesini : https://wa.me/6285111374801\nㅤ` 
+      },
+      "jaseb-sesi-lpm": { 
+        id: "jaseb-sesi-lpm", 
+        title: "Jaseb + Sesi LPM 🚂", 
+        body: `ㅤ\n*🚂 𝅄 𝗙𝗢𝗥𝗠𝗔𝗧 𝗢𝗥𝗗𝗘𝗥 𝗝𝗔𝗦𝗘𝗕 + 𝗦𝗘𝗦𝗜*\nㅤ━━━━━━━━━━━━━━━━  *𝗗𝗜𝗣𝗧𝗔𝗥𝗠*\nㅤ▏ Nomor Customer : 08 *Wajib diisi*\nㅤ▏ Nama List : \nㅤ▏ Jumlah : ... LPM\nㅤ▏ Fee + : Foto/ Video/ 18+ ( Kosongkan Jika Tidak )\nㅤ▏ Secreenshot : pendek/panjang\nㅤ▏ Jumlah Hari : ( Kosongkan Jika 1 Hari )\nㅤ▏ Jumlah Sesi : ( Kosongkan Jika 1 Sesi )\nㅤ▏ Jam Penyebaran :\nㅤ     Sesi 1 : 00.00 - 00.00\nㅤ     Sesi 2 : 00.00 - 00.00\n     dst.. ( tambah sesi mandiri )\n\nⓘ Total : Rp. \nⓘ Kalkulator : diptarm.netlify.app/kalkulator\n\n*\`KIRIM LIST SETELAH MENGISI FORMAT\`*\n*UP*. pastikan mengisi form dengan benar\n_Sebelum memesan jangan lupa membaca note_\nkirim kesini : https://wa.me/6285111374801\nㅤ` 
+      },
+      "jaseb-1-lpfp": { 
+        id: "jaseb-1-lpfp", 
+        title: "Jaseb 1 Kali LPFP ⛵", 
+        body: `ㅤ\n*⛵ 𝅄 𝗙𝗢𝗥𝗠𝗔𝗧 𝗢𝗥𝗗𝗘𝗥 𝗝𝗔𝗦𝗘𝗕 𝟭 𝗞𝗔𝗟𝗜*\nㅤ━━━━━━━━━━━━━━━━  *𝗗𝗜𝗣𝗧𝗔𝗥𝗠*\nㅤ▏ Nomor Customer : 08\nㅤ▏ Nama List : \nㅤ▏ Jumlah : ... LPFP\nㅤ▏ Secreenshot : pendek/panjang\nㅤ▏ Deadline : \n\nⓘ Total : Rp. \nⓘ Kalkulator : diptarm.netlify.app/kalkulator\n\n\`*KIRIM LIST SETELAH MENGISI FORMAT\`\n*UP*. pastikan mengisi form dengan benar\n_Sebelum memesan jangan lupa membaca note_\nkirim kesini : https://wa.me/6285111374801\nㅤ` 
+      },
+      "jaseb-sesi-lpfp": { 
+        id: "jaseb-sesi-lpfp", 
+        title: "Jaseb + Sesi LPFP ⛵", 
+        body: `ㅤ\n*⛵ 𝅄 𝗙𝗢𝗥𝗠𝗔𝗧 𝗢𝗥𝗗𝗘𝗥 𝗝𝗔𝗦𝗘𝗕 + 𝗦𝗘𝗦𝗜*\nㅤ━━━━━━━━━━━━━━━━  *𝗗𝗜𝗣𝗧𝗔𝗥𝗠*\nㅤ▏ Nomor Customer : 08\nㅤ▏ Nama List : \nㅤ▏ Jumlah : ... LPFP\nㅤ▏ Secreenshot : pendek/panjang\nㅤ▏ Jumlah Hari : ( Kosongkan Jika 1 Hari )\nㅤ▏ Jumlah Sesi : ( Kosongkan Jika 1 Sesi )\nㅤ▏ Jam Penyebaran :\nㅤ     Sesi 1 : 00.00 - 00.00\nㅤ     Sesi 2 : 00.00 - 00.00\n     dst.. ( tambah sesi mandiri )\n\nⓘ Total : Rp. \nⓘ Kalkulator : diptarm.netlify.app/kalkulator\n\n\`*KIRIM LIST SETELAH MENGISI FORMAT\`\n*UP*. pastikan mengisi form dengan benar\n_Sebelum memesan jangan lupa membaca note_\nkirim kesini : https://wa.me/6285111374801\nㅤ` 
+      },
+      "jasduk": { 
+        id: "jasduk", 
+        title: "Jasa Dukungan 🍖", 
+        body: `ㅤ\n*🍖 𝅄 𝗙𝗢𝗥𝗠𝗔𝗧 𝗢𝗥𝗗𝗘𝗥 𝗝𝗔𝗦𝗔 𝗗𝗨𝗞𝗨𝗡𝗚𝗔𝗡*\nㅤ━━━━━━━━━━━━━━━━━━━  *𝗗𝗜𝗣𝗧𝗔𝗥𝗠*\nㅤ▏ Jenis : React/Snap/Vote Web ( Pilih 1 )\nㅤ▏ Jumlah :\nㅤ▏ Link : ( Kosongkan jika snap )\n\nㅤ▏ *Khusus React*\nㅤㅤEmoji : 😂/😲/👍/❤️/🙏 ( Pilih )\nㅤㅤNote. Memilih lebih dari 1 Emoji +200p/1 Emoji.\nㅤㅤNote. Hanya menerima emoji default.\n\nⓘ Cek Harga : diptarm.netlify.app/web\n\n\`*KIRIM LIST SETELAH MENGISI FORMAT\`\n*UP*. pastikan mengisi form dengan benar\n_Sebelum memesan jangan lupa membaca note_\nkirim kesini : https://wa.me/6285111374801\nㅤ` 
+      },
+      "member-ch": { 
+        id: "member-ch", 
+        title: "Member CH 🍿", 
+        body: `ㅤ\n*🍿 𝅄 𝗙𝗢𝗥𝗠𝗔𝗧 𝗢𝗥𝗗𝗘𝗥 𝗠𝗘𝗠𝗕𝗘𝗥 𝗖𝗛*\nㅤ━━━━━━━━━━━━━━━   *𝗗𝗜𝗣𝗧𝗔𝗥𝗠*\nㅤ▏ Jumlah Pengikut :\nㅤ▏ Jenis : Refill/ No Refill ( Pilih 1 )\nㅤ▏ Link Saluran :\n\nⓘ Cek Harga : diptarm.netlify.app/web\n\n\`*KIRIM LIST SETELAH MENGISI FORMAT\`\n*UP*. pastikan mengisi form dengan benar\n_Sebelum memesan jangan lupa membaca note_\nkirim kesini : https://wa.me/6285111374801\nㅤ` 
+      },
+      "moodboard": { 
+        id: "moodboard", 
+        title: "Moodboard 🍣", 
+        body: `ㅤ\n*🍣 𝅄 𝗙𝗢𝗥𝗠𝗔𝗧 𝗢𝗥𝗗𝗘𝗥 𝗠𝗢𝗢𝗗𝗕𝗢𝗔𝗥𝗗*\nㅤ━━━━━━━━━━━━━━━━  *𝗗𝗜𝗣𝗧𝗔𝗥𝗠*\nㅤ▏ Nomor Customer : 08 *Wajib diisi*\nㅤ▏ Inrush : Ya/Tidak *( 24/48/72 Jam )*\nㅤ    Note. jika tidak Inrush, hapus bagian jam.\n\nㅤ▏ Refrensi : Kirim Via Link/Pict ( Opsional )\nㅤ    *Note. Pesanan inrush wajib membawa refrensi.*\nㅤ▏ Req Team : ( Opsional )\n\nㅤ▏ *Detail Gambar*\nㅤ    Nickname : \nㅤ    Character : ( Nama Lengkap )\nㅤ    Jumlah Slide : 3/6 ( Pilih 1 )\nㅤ    Jenis Editan : Loveboard/ Moodboard ( Pilih 1 ) \nㅤ    Type : Deco/Design/Basic/Relism ( Pilih 1 )\nㅤ    Pakai Header : Ya/Tidak ( Pilih 1 )\nㅤ    Theme : ( Contoh, MBG )\nㅤ    Request Warna : \nㅤ    Teks Di Header : \nㅤ    Request Lainnya : \n\nⓘ Cek Harga : diptarm.netlify.app/web\n\n*UP*. pastikan mengisi form dengan benar\n_Sebelum memesan jangan lupa membaca note_\nkirim kesini : https://wa.me/6285111374801\nㅤ` 
+      },
+      "editing": { 
+        id: "editing", 
+        title: "Editing 🍨", 
+        body: `ㅤ\n*🍨 𝅄 𝗙𝗢𝗥𝗠𝗔𝗧 𝗢𝗥𝗗𝗘𝗥 𝗘𝗗𝗜𝗧𝗜𝗡𝗚*\nㅤ━━━━━━━━━━━━━ *𝗗𝗜𝗣𝗧𝗔𝗥𝗠*\nㅤ▏ Nomor Customer : 08 *Wajib diisi*\nㅤ▏ Nama Customer : \nㅤ▏ Jenis Editan : ( Contoh, Poster )\nㅤ▏ Jumlah : ( Contoh, Idc 2, Poster 1 ) \nㅤ▏ Inrush : Ya/Tidak *( 24 jam/72 jam )*\nㅤ   Note. jika tidak Inrush, hapus bagian jam.\n\nㅤ▏ Refrensi : Kirim Via Link/Pict ( Opsional )\nㅤ▏ Req Team : Opsional\nㅤ   *Note. Pesanan inrush wajib membawa refrensi.*\n\nㅤ▏ *Detail Gambar*\nㅤ   Theme : ( Contoh, Mario Bross )\nㅤ   Ukuran : ( Contoh 1:1 )\nㅤ   Character : ( Jika ada )\nㅤ   Request Warna : \nㅤ   Teks Di Gambar : \nㅤ   Request Lainnya : \n\nⓘ Cek Harga : diptarm.netlify.app/web\n\n*UP*. pastikan mengisi form dengan benar\n_Sebelum memesan jangan lupa membaca note_\nkirim kesini : https://wa.me/6285111374801\nㅤ` 
+      },
+      "manips": { 
+        id: "manips", 
+        title: "Manips 🌻", 
+        body: `ㅤ\n*🌻 𝅄 𝗙𝗢𝗥𝗠𝗔𝗧  𝗢𝗥𝗗𝗘𝗥  𝗠𝗔𝗡𝗜𝗣𝗦*\nㅤ━━━━━━━━━━━━━ *𝗗𝗜𝗣𝗧𝗔𝗥𝗠*\nㅤ▏ Nomor Customer : 08 *Wajib diisi*\nㅤ▏ Nama Customer : \nㅤ▏ Jenis Manips : ( Contoh, Half Body )\nㅤ▏ Jumlah : ( Contoh, 2 Manips ) \nㅤ▏ Inrush : Ya/Tidak *( 24 jam/72 jam )*\nㅤ    Note. jika tidak Inrush, hapus bagian jam.\n\nㅤ▏ Refrensi : Kirim Via Link/Pict ( Opsional )\nㅤ    *Note. Pesanan inrush wajib membawa refrensi.*\nㅤ▏ Req Team : ( Opsional )\n\nㅤ▏ *Detail Gambar*\nㅤ    Ukuran : ( Contoh 1:1 )\nㅤ    Request Add Name : Ya/ Tidak\nㅤ    Character as Name : \n1. ( Nama Lengkap as Nickname )\n2. ( Nama Lengkap as Nickname )\n3. ( Add lebih dari 2 +2K )\nㅤ    Note. Diisi nama chr lengkap + nicknamemu/pasangan\n\nㅤ    Sebagai : ( contoh, hts )\nㅤ    Request Lainnya : ( misal mau req tema )\n\nⓘ Cek Harga : diptarm.netlify.app/web\n\n*UP*. pastikan mengisi form dengan benar\n_Sebelum memesan jangan lupa membaca note_\nkirim kesini : https://wa.me/6285111374801\nㅤ` 
+      },
+      "package-bday": { 
+        id: "package-bday", 
+        title: "Pack Bday 🎉", 
+        body: `ㅤ\n*🎉 𝅄 𝗙𝗢𝗥𝗠𝗔𝗧 𝗢𝗥𝗗𝗘𝗥 𝗣𝗔𝗖𝗞𝗔𝗚𝗘 𝗕𝗗𝗔𝗬*\nㅤ━━━━━━━━━━━━━━━━━━  *𝗗𝗜𝗣𝗧𝗔𝗥𝗠*\nㅤ▏ Nomor Customer : 08 *Wajib diisi*\nㅤ▏ Inrush : Ya/Tidak *( 2/3/5 Hari )*\nㅤ    Note. jika tidak Inrush, hapus bagian hari.\n\nㅤ▏ Refrensi : Kirim Via Link/Pict ( Opsional )\nㅤ    *Note. Pesanan inrush wajib membawa refrensi.*\nㅤ▏ Req Team : ( Opsional )\n\nㅤ▏ *Detail Wording*\nㅤ    Bahasa : \nㅤ    Tanggal Bday : \nㅤ    Request Lainnya : \n\nㅤ▏ *Detail TWB*\nㅤ    Nickname : \nㅤ    Character : ( Nama Lengkap )\nㅤ    Pack Bday : Mini/Med/Party \nㅤ    Theme : ( Contoh, MBG )\nㅤ    Request Warna : \nㅤ    Teks Di TWB : \nㅤ    Request Lainnya : \n\nⓘ Cek Harga : diptarm.netlify.app/web\n\n*UP*. pastikan mengisi form dengan benar\n_Sebelum memesan jangan lupa membaca note_\nkirim kesini : https://wa.me/6285111374801\nㅤ` 
+      },
+      "wording": { 
+        id: "wording", 
+        title: "Wording 🍤", 
+        body: `ㅤ\n*🍤 𝅄 𝗙𝗢𝗥𝗠𝗔𝗧 𝗢𝗥𝗗𝗘𝗥 𝗪𝗢𝗥𝗗𝗜𝗡𝗚*\nㅤ━━━━━━━━━━━━━━  *𝗗𝗜𝗣𝗧𝗔𝗥𝗠*\nㅤ▏ Nomor Customer : 08 *Wajib diisi*\nㅤ▏ Jenis Wording : ( Contoh, Bio )\nㅤ▏ Inrush : Ya/Tidak *( 12 Jam/24 jam/72 jam )*\nㅤ   Note. jika tidak Inrush, hapus bagian jam.\n\nㅤ▏ *Detail Wording*\nㅤ   Nickname : \nㅤ   Character : ( Nama Lengkap )\nㅤ   Bahasa : ( Contoh, English )\nㅤ   Theme : ( Contoh, Elegant )\nㅤ   Size Wording : Short/ Medium/ Long ( Pilih 1 )\nㅤ   Request Lainnya : \n\nⓘ Cek Harga : diptarm.netlify.app/web\n\n*UP*. pastikan mengisi form dengan benar\n_Sebelum memesan jangan lupa membaca note_\nkirim kesini : https://wa.me/6285111374801\nㅤ` 
+      },
+      "setup-acc": { 
+        id: "setup-acc", 
+        title: "Setup Acc 🍱", 
+        body: `ㅤ\n*🍱 𝅄 𝗙𝗢𝗥𝗠𝗔𝗧 𝗢𝗥𝗗𝗘𝗥 𝗦𝗘𝗧𝗨𝗣 𝗔𝗖𝗖*\nㅤ━━━━━━━━━━━━━━━  *𝗗𝗜𝗣𝗧𝗔𝗥𝗠*\nㅤ▏ Nomor Customer : 08 *Wajib diisi*\nㅤ▏ Inrush : Ya/Tidak *( 48 jam/72 Jam )*\nㅤ   Note. jika tidak Inrush, hapus bagian jam.\n\nㅤ▏ Refrensi : Kirim Via Link/Pict ( Opsional )\nㅤ▏ Req Team : Opsional\nㅤ   *Note. Pesanan inrush wajib membawa refrensi.*\n\nㅤ▏ *Detail Wording*\nㅤ   Bahasa : \nㅤ   Request Lainnya : \n\nㅤ▏ *Detail Moodboard*\nㅤ   Nickname : \nㅤ   Character : ( Nama Lengkap )\nㅤ   Paket : ( Contoh, Paket Degan 6 )\nㅤ   Jenis Editan : Loveboard/ Moodboard ( Pilih 1 ) \nㅤ   Type : Deco/Design/Basic ( Pilih 1 )\nㅤ   Pakai Header : Ya/Tidak ( Pilih 1 )\nㅤ   Theme : ( Contoh, MBG )\nㅤ   Request Warna : \nㅤ   Teks Di Header : \nㅤ   Request Lainnya : \n\nⓘ Cek Harga : diptarm.netlify.app/web\n\n*UP*. pastikan mengisi form dengan benar\n_Sebelum memesan jangan lupa membaca note_\nkirim kesini : https://wa.me/6285111374801\nㅤ` 
+      },
+      "setup-gc": { 
+        id: "setup-gc", 
+        title: "Setup GC 🐌", 
+        body: `ㅤ\n*🐌 𝅄 𝗙𝗢𝗥𝗠𝗔𝗧 𝗢𝗥𝗗𝗘𝗥 𝗦𝗘𝗧𝗨𝗣 𝗚𝗖*\nㅤ━━━━━━━━━━━━━━  *𝗗𝗜𝗣𝗧𝗔𝗥𝗠*\nㅤ▏ Nomor Customer : 08 *Wajib diisi*\nㅤ▏ Inrush : Ya/Tidak *( 7 Hari )*\nㅤ    Note. jika tidak Inrush, hapus bagian hari.\n\nㅤ▏ Refrensi : Kirim Via Link/Pict ( Opsional )\nㅤ    *Note. Pesanan inrush wajib membawa refrensi.*\nㅤ▏ Req Team : ( Opsional )\n\nㅤ▏ *Detail Setup*\nㅤ    Paket :\nㅤ    Nama GC :\nㅤ    Tema :\nㅤ    Request Warna :\nㅤ    Request Lainnya :\n\nㅤ▏ *Detail Isi/Design*\nㅤ    Jenis Editan + Ukuran :\n1. ( Contoh. IDC, Persegi/1:1 )\n2. dll\n\nㅤ    Teks : ( bisa req per editan atau bebas )\nㅤ    Foto/Logo/anything : ( bisa dikirim via drive/ png )\nㅤ    Request Lainnya :\n\nㅤ▏ *Detail Tambahan*\nㅤ    File PNG : ( Jika punya kirim link/file PNG )\n        Note. Jika tidak memiliki maka akan dikenakan fee tambahan 1K-4K\nㅤ    Tambahan lainnya :\n\nⓘ Cek Harga : diptarm.netlify.app/web\n\n*UP*. pastikan mengisi form dengan benar\n_Sebelum memesan jangan lupa membaca note_\nkirim kesini : https://wa.me/6285111374801\nㅤ` 
+      },
+      "set-instagram": { 
+        id: "set-instagram", 
+        title: "Set Instagram 📸", 
+        body: `ㅤ\n*📸 𝅄 𝗙𝗢𝗥𝗠𝗔𝗧 𝗢𝗥𝗗𝗘𝗥 𝗦𝗘𝗧 𝗜𝗡𝗦𝗧𝗔𝗚𝗥𝗔𝗠*\nㅤ━━━━━━━━━━━━━━━━━━  *𝗗𝗜𝗣𝗧𝗔𝗥𝗠*\nㅤ▏ Nomor Customer : 08 *Wajib diisi*\nㅤ▏ Inrush : Ya/Tidak *( 48 jam/72 Jam )*\nㅤ   Note. jika tidak Inrush, hapus bagian jam.\n\nㅤ▏ Refrensi : Kirim Via Link/Pict ( Opsional )\nㅤ▏ Req Team : Opsional\nㅤ   *Note. Pesanan inrush wajib membawa refrensi.*\n\nㅤ▏ *Detail Wording*\nㅤ   Bahasa :\nㅤ   Request Lainnya :\n\nㅤ▏ *Detail Setup Instagram*\nㅤ   Paket :\nㅤ   Fake Link : Ya/Tidak\n\nㅤ▏ *Detail Design*\nㅤ   Theme : ( Contoh, MBG )\nㅤ   Request Warna :\nㅤ   Teks Di Design :\nㅤ   Request Lainnya :\n\nⓘ Cek Harga : diptarm.netlify.app/web\n\n*UP*. pastikan mengisi form dengan benar\n_Sebelum memesan jangan lupa membaca note_\nkirim kesini : https://wa.me/6285111374801\nㅤ` 
+      }
+    };
+
+    const STORAGE_KEY = 'diptarm_madrid_v3';
+    const panel = document.getElementById('panel');
+    const selectBtn = document.getElementById('selectBtn');
+    const selectLabel = document.getElementById('selectLabel');
+    const editor = document.getElementById('editor');
+    const copyBtn = document.getElementById('copyBtn');
+
+    let templates = DEFAULT_TEMPLATES;
+    let currentId = Object.keys(templates)[0];
+
+    function renderOptions(){
+      panel.innerHTML = '';
+      Object.keys(templates).forEach(id => {
+        const opt = document.createElement('div');
+        opt.className = 'option';
+        opt.textContent = templates[id].title;
+        opt.addEventListener('click', ()=> selectTemplate(id));
+        panel.appendChild(opt);
+      });
+    }
+
+    function selectTemplate(id){
+      currentId = id;
+      selectLabel.textContent = templates[id].title;
+      editor.value = templates[id].body;
+      panel.classList.remove('open');
+    }
+
+    selectBtn.addEventListener('click', () => panel.classList.toggle('open'));
+
+    copyBtn.addEventListener('click', async ()=>{
+      try {
+        await navigator.clipboard.writeText(editor.value);
+        copyBtn.textContent = "BERHASIL DISALIN!";
+        setTimeout(()=> copyBtn.textContent = "SALIN FORMAT", 1500);
+      } catch(e) { alert("Gagal menyalin"); }
+    });
+
+    // Simple Date Lock (Contoh aktif selamanya untuk demo, sesuaikan start/end UTC jika perlu)
+    (function init(){
+      renderOptions();
+      selectTemplate(currentId);
+      
+      // Menyesuaikan istilah Cust sesuai instruksi User Ledger
+      editor.value = editor.value.replace(/Kak/g, 'Cust');
+    })();
+  </script>
+</body>
+</html>
