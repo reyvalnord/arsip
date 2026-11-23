@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Qurban Virtual</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        /* =========================================
+           GLOBAL RESETS & FONT FIX
+           ========================================= */
+        body {
+            background: radial-gradient(circle at top, #064e3b 0%, #020617 100%);
+            color: #f8fafc;
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background 0.6s ease;
+        }
+
+        button, input {
+            font-family: 'Poppins', sans-serif;
+            outline: none;
+        }
+
+        /* =========================================
+           LAYAR PEMBUKA (SPLASH SCREEN PREMIUM)
+           ========================================= */
+        #splash-intro {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, #064e3b 0%, #020617 100%);
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.6s ease, visibility 0.6s;
+            cursor: pointer;
+        }
+
+        .splash-logo {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #fbbf24, #d97706);
+            transform: rotate(45deg);
+            margin-bottom: 25px;
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.5), inset 0 0 10px rgba(255, 255, 255, 0.5);
+            animation: logoReveal 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            opacity: 0;
+        }
+
+        .splash-powered {
+            font-size: 1rem;
+            color: #a7f3d0;
+            margin: 0 0 5px 0;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-weight: 300;
+            opacity: 0;
+            animation: fadeSlideUp 0.8s ease forwards 0.3s;
+        }
+
+        .splash-brand {
+            font-size: clamp(1.8rem, 7.5vw, 2.8rem);
+            margin: 0;
+            font-weight: 900;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            background: linear-gradient(to right, #fbbf24, #fffbeb, #d97706);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5));
+            opacity: 0;
+            animation: fadeSlideUp 0.8s ease forwards 0.5s;
+        }
+
+        .splash-line {
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #fbbf24, transparent);
+            margin-top: 25px;
+            animation: loadingLine 1.5s ease-in-out forwards 0.8s;
+            box-shadow: 0 0 10px rgba(251, 191, 36, 0.8);
+        }
+
+        @keyframes logoReveal {
+            0% { transform: translateY(20px) rotate(0deg) scale(0); opacity: 0; }
+            100% { transform: translateY(0) rotate(45deg) scale(1); opacity: 1; }
+        }
+        @keyframes fadeSlideUp {
+            0% { transform: translateY(20px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes loadingLine {
+            0% { width: 0; opacity: 0; }
+            50% { opacity: 1; }
+            100% { width: 220px; opacity: 0; }
+        }
+
+        /* =========================================
+           TEMA GLOBAL & STRUKTUR
+           ========================================= */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            z-index: 2;
+            width: 100%;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .glow-bg {
+            position: fixed;
+            top: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90vw;
+            height: 400px;
+            background: radial-gradient(circle, rgba(251, 191, 36, 0.15) 0%, transparent 65%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .hidden { display: none !important; }
+
+        /* =========================================
+           INPUT NAMA & TOMBOL
+           ========================================= */
+        .input-modern {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(251, 191, 36, 0.4);
+            border-radius: 20px;
+            padding: 15px 25px;
+            font-size: clamp(0.9rem, 3.5vw, 1.1rem);
+            color: #fbbf24;
+            width: 85%;
+            max-width: 350px;
+            text-align: center;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            margin-bottom: 25px;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+            font-weight: 500;
+        }
+        
+        .input-modern:focus {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #fbbf24;
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.3), inset 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .input-modern::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+            font-weight: 400;
+        }
+
+        .btn-next {
+            background: linear-gradient(135deg, #10b981, #047857);
+            border: none;
+            padding: 15px 40px;
+            color: white;
+            font-size: 0.95rem;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            box-shadow: 0 8px 0 #022c22, 0 15px 20px rgba(0,0,0,0.5);
+            transition: all 0.1s;
+            width: 85%;
+            max-width: 350px;
+            margin-top: 10px;
+        }
+
+        .btn-next:active {
+            transform: translateY(6px);
+            box-shadow: 0 2px 0 #022c22, 0 8px 10px rgba(0,0,0,0.5);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #a7f3d0;
+            color: #a7f3d0;
+            box-shadow: none;
+            font-weight: 600;
+        }
+        .btn-outline:active {
+            box-shadow: none;
+            transform: translateY(4px);
+        }
+
+        .btn-action {
+            background: linear-gradient(135deg, #ef4444, #991b1b);
+            border: none;
+            padding: 18px 40px;
+            color: white;
+            font-size: clamp(1rem, 3.5vw, 1.2rem);
+            font-weight: 800;
+            border-radius: 50px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            box-shadow: 0 10px 0 #7f1d1d, 0 20px 30px rgba(0,0,0,0.7), inset 0 4px 5px rgba(255,255,255,0.4);
+            transition: all 0.1s;
+            width: 90%;
+            max-width: 350px;
+            z-index: 10;
+        }
+
+        .btn-action:active {
+            transform: translateY(8px);
+            box-shadow: 0 2px 0 #7f1d1d, 0 10px 15px rgba(0,0,0,0.7);
+        }
+
+        .part-selector {
+            display: flex; justify-content: center; gap: 15px; margin-bottom: 25px; width: 85%; max-width: 350px;
+        }
+        .btn-part {
+            flex: 1; background: rgba(255,255,255,0.05); border: 2px solid rgba(251, 191, 36, 0.4);
+            color: #fbbf24; padding: 12px; border-radius: 15px;
+            font-size: 0.95rem; font-weight: 600; letter-spacing: 0.5px;
+            cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .btn-part:hover { background: rgba(255,255,255,0.1); }
+        .btn-part.active {
+            background: linear-gradient(135deg, #fbbf24, #d97706); color: #020617; border-color: #fbbf24;
+            font-weight: 800; box-shadow: 0 5px 15px rgba(251, 191, 36, 0.5); transform: translateY(-2px);
+        }
+
+        /* =========================================
+           KARTU HEWAN (STEP 1 & 2)
+           ========================================= */
+        h1.title-main {
+            font-size: clamp(1.6rem, 5.5vw, 2.3rem);
+            margin-bottom: 5px;
+            font-weight: 900;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.6);
+            color: #ffffff;
+            letter-spacing: 1px;
+        }
+
+        p.subtitle {
+            font-size: clamp(0.85rem, 2.8vw, 1rem);
+            color: #cbd5e1;
+            margin-bottom: 30px;
+            max-width: 90%;
+            line-height: 1.6;
+        }
+
+        .animal-grid {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            padding: 10px;
+            width: 100%;
+        }
+
+        .card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.01));
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            border-left: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 20px 10px;
+            border-radius: 25px;
+            cursor: pointer;
+            width: 135px;
+            box-shadow: 0 10px 0 rgba(2, 6, 23, 0.9), 0 20px 30px rgba(0,0,0,0.5);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover { transform: translateY(-8px); border-color: rgba(251, 191, 36, 0.5); }
+        .card:active { transform: translateY(5px); box-shadow: 0 4px 0 rgba(2, 6, 23, 0.9), 0 10px 15px rgba(0,0,0,0.5); }
+
+        .card img {
+            width: 110px;
+            height: 110px;
+            object-fit: contain;
+            filter: drop-shadow(0 15px 15px rgba(0,0,0,0.6));
+        }
+
+        .card h3 {
+            margin: 15px 0 0 0;
+            font-size: 1rem;
+            font-weight: 800;
+            color: #fbbf24;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .teks-header { margin-bottom: 20px; z-index: 10; position: relative; }
+        .teks-bismillah { font-size: clamp(1.8rem, 7.5vw, 3.3rem); color: #fbbf24; font-weight: 900; margin: 0; text-transform: uppercase; letter-spacing: 5px; text-shadow: 0 0 30px rgba(251, 191, 36, 0.6), 0 5px 15px rgba(0,0,0,0.9); }
+        .teks-subtitle { font-size: clamp(0.85rem, 3vw, 1.1rem); color: #a7f3d0; margin-top: 5px; letter-spacing: 2px; }
+
+        .qurban-wrapper { display: flex; flex-direction: column; align-items: center; position: relative; margin-bottom: 40px; z-index: 5; }
+        .animal-img { height: clamp(200px, 35vh, 320px); width: auto; max-width: 90vw; object-fit: contain; position: relative; z-index: 2; margin-bottom: -55px; filter: drop-shadow(0 25px 15px rgba(0,0,0,0.7)); transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        #final-animal { height: clamp(160px, 28vh, 260px); margin-bottom: -40px; }
+
+        .pedestal {
+            width: clamp(220px, 65vw, 320px);
+            height: clamp(50px, 15vw, 80px);
+            background: linear-gradient(180deg, #10b981 0%, #047857 100%);
+            border-radius: 50%;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 15px 0 #022c22, 0 30px 45px rgba(0,0,0,0.9), inset 0 4px 10px rgba(255,255,255,0.4), inset 0 -4px 15px rgba(0,0,0,0.4);
+        }
+
+        .slash { position: absolute; top: 40%; left: 50%; width: 150%; height: 6px; background: #fff; border-radius: 10px; opacity: 0; z-index: 15; transform: translateX(-50%) rotate(25deg) scaleX(0); box-shadow: 0 0 20px 10px #fff, 0 0 50px 20px #fbbf24; }
+        .active-slash { animation: slice 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        @keyframes slice { 0% { transform: translateX(-50%) rotate(25deg) scaleX(0); opacity: 0; } 50% { transform: translateX(-50%) rotate(25deg) scaleX(1); opacity: 1; } 100% { transform: translateX(-50%) translateY(50px) rotate(25deg) scaleX(0); opacity: 0; } }
+
+        #flash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 999; opacity: 0; pointer-events: none; }
+        .active-flash { animation: flashAnim 1s ease-out forwards; }
+        @keyframes flashAnim { 0% { opacity: 0; } 30% { opacity: 1; } 100% { opacity: 0; } }
+
+        /* =========================================
+           TEMA POSTER AKHIR (LIGHT MODE)
+           ========================================= */
+        body.poster-theme {
+            background: radial-gradient(circle at center, #fdfaf0 0%, #e8e2d2 100%);
+            color: #2d4030;
+        }
+
+        #step-3, #step-5 {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            width: 100%;
+            padding: 30px 20px;
+            box-sizing: border-box;
+            gap: 20px; 
+            animation: fadeInPoster 1s ease-in;
+        }
+
+        @keyframes fadeInPoster { 0% { opacity: 0; } 100% { opacity: 1; } }
+
+        .poster-top { text-align: center; width: 100%; }
+        .poster-selamat { font-size: clamp(1rem, 2.8vw, 1.2rem); color: #4a5c4e; margin: 0 0 -8px 0; font-weight: 600; letter-spacing: 1.5px; }
+
+        .poster-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3.3rem, 13vw, 5.2rem);
+            color: #d4af37; margin: 0; line-height: 1;
+            text-shadow: 1px 1px 0px #a68c53, 2px 2px 0px #856f3e, 3px 3px 0px #635229, 4px 4px 0px #423617, 6px 6px 15px rgba(0,0,0,0.3);
+        }
+
+        .poster-date {
+            display: flex; align-items: center; justify-content: center; gap: 15px;
+            font-size: clamp(0.85rem, 2.8vw, 0.95rem); font-weight: 800; color: #2d4030; margin-top: 15px;
+        }
+        .poster-date::before, .poster-date::after { content: ""; display: block; width: 40px; height: 2px; background-color: #2d4030; }
+
+        .poster-quote { font-size: clamp(0.85rem, 3vw, 1rem); color: #3d5243; margin: 15px auto 0 auto; max-width: 90%; line-height: 1.5; font-weight: 500; }
+        .pedestal-light { box-shadow: 0 14px 0 #022c22, 0 30px 40px rgba(0,0,0,0.25), inset 0 4px 10px rgba(255,255,255,0.4); }
+
+        .poster-badge {
+            background: linear-gradient(135deg, #2d4030, #1e2b20); border: 2px solid #a68c53; border-radius: 15px;
+            padding: 25px 30px 20px 30px; color: #fdfaf0; text-align: center; box-shadow: 0 15px 25px rgba(0,0,0,0.15);
+            position: relative; width: 90%; max-width: 420px; margin-top: 5px;
+        }
+
+        .poster-badge h2 {
+            font-family: 'Playfair Display', serif; font-size: clamp(1.1rem, 4.5vw, 1.4rem); color: #d4af37; margin: 0; font-weight: 700; line-height: 1.3;
+            text-shadow: 1px 1px 0px #856f3e, 2px 2px 0px #635229, 3px 3px 0px #423617, 4px 4px 10px rgba(0,0,0,0.5);
+        }
+
+        .poster-badge p { font-size: clamp(0.8rem, 2.8vw, 0.9rem); margin: 8px 0 0 0; color: #c2cfc5; }
+
+        .badge-icon {
+            position: absolute; top: -20px; left: 50%; transform: translateX(-50%); background: #2d4030; border: 2px solid #a68c53;
+            border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem; color: #d4af37; box-shadow: 0 5px 10px rgba(0,0,0,0.2); animation: pulseIcon 2s infinite;
+        }
+
+        @keyframes pulseIcon {
+            0% { box-shadow: 0 0 0 0 rgba(166, 140, 83, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(166, 140, 83, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(166, 140, 83, 0); }
+        }
+
+        .poster-footer { font-size: 0.8rem; color: #5a6b5e; letter-spacing: 1px; text-align: center; margin-top: 5px; }
+        .poster-footer strong { color: #2d4030; font-weight: 800; text-transform: uppercase; }
+
+        /* =========================================
+           DESAIN KARTU DAGING (TAMPILAN DIPERBAGUS)
+           ========================================= */
+        .kartu-daging {
+            background: #fdfaf0;
+            border: 2px solid #d4af37;
+            position: relative;
+            padding: 40px 20px;
+            width: 90%;
+            max-width: 380px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            border-radius: 15px;
+            color: #2d4030;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .kartu-daging::before, .kartu-daging::after {
+            content: ''; position: absolute; width: 40px; height: 40px; border: 2px solid #a68c53;
+        }
+        .kartu-daging::before { top: 10px; left: 10px; border-right: none; border-bottom: none; border-radius: 10px 0 0 0; }
+        .kartu-daging::after { bottom: 10px; right: 10px; border-left: none; border-top: none; border-radius: 0 0 10px 0; }
+        
+        .kd-header { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: #d4af37; font-weight: 900; margin-bottom: 25px; letter-spacing: 2px; }
+        
+        .kd-hewan-img { 
+            height: 160px; 
+            object-fit: contain; 
+            filter: drop-shadow(0 15px 15px rgba(0,0,0,0.3)); 
+            margin-bottom: 25px; 
+            position: relative; 
+            z-index: 2; 
+        }
+        
+        .kd-badge {
+            background: #2d4030; color: #fbbf24; font-weight: 800; font-size: 0.9rem; letter-spacing: 1px;
+            padding: 10px 25px; border-radius: 30px; display: inline-block; margin-bottom: 30px;
+            border: 2px solid #a68c53; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .kd-info-label { font-size: 0.9rem; color: #5a6b5e; margin-bottom: 5px; font-weight: 500; }
+        .kd-nama { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: #2d4030; font-weight: 900; margin-bottom: 20px;}
+        .kd-garis { border-top: 1px dashed #a68c53; margin: 20px auto; width: 80%; }
+        .kd-sender { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: #a68c53; font-weight: 900; }
+
+        /* =========================================
+           CUSTOM POP-UP ALERT (PENGGANTI ALERT BAWAAN)
+           ========================================= */
+        #custom-alert {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(2, 6, 23, 0.85); z-index: 100000;
+            display: flex; justify-content: center; align-items: center;
+            backdrop-filter: blur(5px); opacity: 0; pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        #custom-alert.show-alert {
+            opacity: 1; pointer-events: auto;
+        }
+
+        .alert-box {
+            background: #fdfaf0; border: 2px solid #d4af37; border-radius: 20px;
+            padding: 30px 20px; width: 85%; max-width: 350px; text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            transform: scale(0.8); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        #custom-alert.show-alert .alert-box {
+            transform: scale(1);
+        }
+
+        .alert-icon { font-size: 3rem; margin-bottom: 10px; }
+        
+        .alert-title {
+            font-family: 'Playfair Display', serif; color: #2d4030;
+            font-size: 1.4rem; font-weight: 900; margin: 0 0 15px 0;
+        }
+        
+        .alert-message {
+            color: #4a5c4e; font-size: 0.95rem; margin-bottom: 25px; line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+<div id="splash-intro" onclick="tutupSplash()">
+    <div class="splash-logo"></div>
+    <p class="splash-powered">Powered by</p>
+    <h2 class="splash-brand">ARM</h2>
+    <div class="splash-line"></div>
+</div>
+
+<div class="glow-bg" id="main-glow"></div>
+<div id="flash-screen"></div>
+
+<div id="custom-alert">
+    <div class="alert-box">
+        <div class="alert-icon" id="alert-icon">✅</div>
+        <h3 class="alert-title" id="alert-title">Berhasil</h3>
+        <p class="alert-message" id="alert-message">Pesan berhasil disalin.</p>
+        <button class="btn-next" style="width: 100%; margin: 0; font-size: 0.9rem; padding: 12px;" onclick="tutupAlert()">Oke, Mengerti!</button>
+    </div>
+</div>
+
+<div id="step-name" class="container hidden">
+    <h1 class="title-main">SIAPA NAMA ANDA?</h1>
+    <p class="subtitle">Masukkan nama agar lebih berkah.</p>
+    <input type="text" id="input-nama" class="input-modern" placeholder="Ketik nama Anda di sini..." autocomplete="off">
+    <button class="btn-next" onclick="simpanNama()">Lanjutkan</button>
+</div>
+
+<div id="step-1" class="container hidden">
+    <h1 class="title-main">PILIH HEWAN QURBAN</h1>
+    <p class="subtitle">Silakan pilih hewan terbaik untuk menyempurnakan ibadah tahun ini.</p>
+    <div class="animal-grid">
+        <div class="card" onclick="pilih('sapi.png', 'sapi')">
+            <img src="sapi.png" alt="Sapi">
+            <h3>Sapi</h3>
+        </div>
+        <div class="card" onclick="pilih('kambing.png', 'kambing')">
+            <img src="kambing.png" alt="Kambing">
+            <h3>Kambing</h3>
+        </div>
+        <div class="card" onclick="pilih('domba.png', 'domba')">
+            <img src="domba.png" alt="Domba">
+            <h3>Domba</h3>
+        </div>
+    </div>
+</div>
+
+<div id="step-2" class="container hidden">
+    <div class="teks-header">
+        <h2 class="teks-bismillah">Bismillah...</h2>
+        <div class="teks-subtitle">Waktunya menunaikan ibadah qurban</div>
+    </div>
+    
+    <div class="qurban-wrapper">
+        <div id="slash" class="slash"></div>
+        <img id="img-display" class="animal-img" src="" alt="Hewan Qurban">
+        <div class="pedestal"></div>
+    </div>
+
+    <button class="btn-action" id="btn-potong" onclick="eksekusi()">Tunaikan Qurban</button>
+</div>
+
+<div id="step-decision" class="container hidden">
+    <h1 class="title-main" style="color: #fbbf24;">ALHAMDULILLAH</h1>
+    <p class="subtitle" style="margin-bottom: 40px;">Hewan qurban berhasil disembelih. Dagingnya mau diapakan?</p>
+    
+    <button class="btn-next" style="margin-bottom: 15px;" onclick="keFormBagikan()">Bagikan</button>
+    <button class="btn-next btn-outline" onclick="kePosterAkhir()">Dimakan Sendiri</button>
+</div>
+
+<div id="step-4" class="container hidden">
+    <h1 class="title-main" style="color: #fbbf24;">KIRIM DAGING</h1>
+    <p class="subtitle" style="margin-bottom: 20px;">Berikan bagian daging qurban ini kepada orang spesial.</p>
+    
+    <div class="part-selector">
+        <button id="btn-kepala" class="btn-part active" onclick="pilihBagian('Kepala')">Bagian Kepala</button>
+        <button id="btn-bokong" class="btn-part" onclick="pilihBagian('Bokong')">Bagian Bokong</button>
+    </div>
+    
+    <input type="text" id="input-nama-penerima" class="input-modern" placeholder="Nama Penerima" autocomplete="off" style="margin-bottom: 30px;">
+    
+    <button class="btn-next" onclick="buatKartuDaging()">Buat Kartu Pengiriman</button>
+    <button class="btn-next btn-outline" style="margin-top: 15px; font-size: 0.85rem; padding: 12px 20px;" onclick="batalKirim()">Kembali</button>
+</div>
+
+<div id="step-5" class="hidden">
+    
+    <div id="area-kartu" class="kartu-daging">
+        <div class="kd-header">KIRIMAN SPESIAL</div>
+        
+        <img id="img-kartu-daging" src="" class="kd-hewan-img">
+        <br>
+        
+        <div class="kd-badge" id="kd-jenis-hewan">1/2 BAGIAN KEPALA SAPI</div>
+        
+        <div class="kd-info-label">Diberikan Khusus Kepada:</div>
+        <div class="kd-nama" id="kd-nama-penerima">Penerima</div>
+        
+        <div class="kd-garis"></div>
+        
+        <div class="kd-info-label">Salam Hangat Dari:</div>
+        <div class="kd-sender" id="kd-nama-pengirim">Pengirim</div>
+    </div>
+
+    <p style="font-size: 0.85rem; color: #5a6b5e; margin-top: 5px; text-align: center; max-width: 90%; font-weight: 500;">
+        Klik tombol di bawah, Lalu Kirim Via WA ke orang spesial yang berhak mendapatkan bagian.
+    </p>
+    
+    <button id="btn-download-wa" class="btn-next" style="background: linear-gradient(135deg, #25D366, #128C7E); box-shadow: 0 8px 0 #075E54; margin-top: 10px; font-weight: 800;" onclick="downloadDanSalinPesan()">Download & Salin Pesan</button>
+    <button class="btn-next btn-outline" style="color: #5a6b5e; border-color: #5a6b5e; padding: 12px 20px; font-size: 0.85rem; margin-top: 15px;" onclick="kembaliKeForm()">Edit Nama</button>
+</div>
+
+<div id="step-3" class="hidden">
+    
+    <div class="poster-top">
+        <p class="poster-selamat">Selamat Hari Raya</p>
+        <h1 class="poster-title">IDUL<br>ADHA</h1>
+        <div class="poster-date">10 Dzulhijjah</div>
+        <p id="teks-quote-poster" class="poster-quote">Semoga keikhlasan qurban kita diterima oleh Allah SWT.</p>
+    </div>
+
+    <div class="qurban-wrapper">
+        <img id="final-animal" class="animal-img" style="filter: drop-shadow(0 20px 15px rgba(0,0,0,0.3));" src="" alt="Hewan Terpilih">
+        <div class="pedestal pedestal-light"></div>
+    </div>
+
+    <div class="poster-badge">
+        <div class="badge-icon">🌙</div>
+        <h2 id="teks-nama-poster">Hewan Qurban</h2>
+        <p>Mohon Maaf Lahir & Batin</p>
+    </div>
+    
+    <div class="poster-footer">
+        Powered by <strong>ARM</strong>
+    </div>
+</div>
+
+<script>
+    let namaUser = "Hamba Allah"; 
+    let jenisHewanAktif = ""; 
+    let namaPenerima = "";
+    let bagianPilihan = "Kepala"; 
+
+    // FUNGSI UNTUK CUSTOM ALERT
+    function tampilkanAlert(judul, pesan, icon = "✅") {
+        document.getElementById('alert-title').innerText = judul;
+        document.getElementById('alert-message').innerHTML = pesan;
+        document.getElementById('alert-icon').innerText = icon;
+        document.getElementById('custom-alert').classList.add('show-alert');
+    }
+
+    function tutupAlert() {
+        document.getElementById('custom-alert').classList.remove('show-alert');
+    }
+
+    // LOGIKA SPLASH SCREEN
+    let splashTimer = setTimeout(tutupSplash, 2500);
+
+    function tutupSplash() {
+        const splash = document.getElementById('splash-intro');
+        if (splash) {
+            splash.style.opacity = '0';
+            splash.style.visibility = 'hidden';
+            clearTimeout(splashTimer);
+            document.getElementById('step-name').classList.remove('hidden');
+        }
+    }
+
+    // LOGIKA SIMPAN NAMA
+    function simpanNama() {
+        const inputField = document.getElementById('input-nama').value.trim();
+        if(inputField !== "") {
+            namaUser = inputField;
+        }
+        
+        document.getElementById('teks-nama-poster').innerHTML = "Hewan Qurban dari " + namaUser;
+        document.getElementById('teks-quote-poster').innerHTML = "Semoga keikhlasan qurban " + namaUser + " diterima oleh Allah SWT.";
+        document.getElementById('kd-nama-pengirim').innerHTML = namaUser;
+
+        document.getElementById('step-name').classList.add('hidden');
+        document.getElementById('step-1').classList.remove('hidden');
+    }
+
+    // LOGIKA QURBAN 
+    function pilih(img, jenis) {
+        jenisHewanAktif = jenis; 
+        document.getElementById('img-display').src = img;
+        document.getElementById('final-animal').src = img; 
+
+        document.getElementById('step-1').classList.add('hidden');
+        document.getElementById('step-2').classList.remove('hidden');
+    }
+
+    function eksekusi() {
+        const btn = document.getElementById('btn-potong');
+        const imgDisplay = document.getElementById('img-display');
+        const flash = document.getElementById('flash-screen');
+        const slash = document.getElementById('slash');
+        
+        btn.disabled = true;
+        btn.style.filter = "grayscale(50%)";
+        btn.style.transform = "translateY(8px)";
+        btn.style.boxShadow = "0 2px 0 #7f1d1d, 0 10px 15px rgba(0,0,0,0.7)";
+        
+        slash.classList.add('active-slash');
+        setTimeout(() => { flash.classList.add('active-flash'); }, 150);
+        
+        setTimeout(() => {
+            imgDisplay.style.transform = 'translateY(120px) rotate(15deg)';
+            imgDisplay.style.opacity = '0';
+        }, 200);
+        
+        setTimeout(() => {
+            document.getElementById('step-2').classList.add('hidden');
+            document.getElementById('step-decision').classList.remove('hidden');
+        }, 600); 
+    }
+
+    // LOGIKA NASIB DAGING
+    function kePosterAkhir() {
+        const mainGlow = document.getElementById('main-glow');
+        if(mainGlow) mainGlow.style.display = 'none';
+
+        document.body.classList.add('poster-theme');
+        document.getElementById('step-decision').classList.add('hidden');
+        document.getElementById('step-3').classList.remove('hidden');
+    }
+
+    function keFormBagikan() {
+        document.getElementById('step-decision').classList.add('hidden');
+        document.getElementById('step-4').classList.remove('hidden');
+    }
+
+    function batalKirim() {
+        document.getElementById('step-4').classList.add('hidden');
+        document.getElementById('step-decision').classList.remove('hidden');
+    }
+
+    // LOGIKA PILIH BAGIAN (KEPALA / BOKONG)
+    function pilihBagian(bagian) {
+        bagianPilihan = bagian;
+        document.getElementById('btn-kepala').classList.remove('active');
+        document.getElementById('btn-bokong').classList.remove('active');
+        document.getElementById('btn-' + bagian.toLowerCase()).classList.add('active');
+    }
+
+    // LOGIKA MEMBUAT KARTU
+    function buatKartuDaging() {
+        namaPenerima = document.getElementById('input-nama-penerima').value.trim();
+        
+        if (namaPenerima === "") {
+            tampilkanAlert("Peringatan", "Harap ketik Nama Penerima terlebih dahulu ya!", "⚠️");
+            return;
+        }
+
+        document.getElementById('kd-nama-penerima').innerText = namaPenerima;
+        document.getElementById('kd-jenis-hewan').innerText = `1/2 BAGIAN ${bagianPilihan.toUpperCase()} ${jenisHewanAktif.toUpperCase()}`;
+
+        // Menentukan gambar berdasarkan bagian yang dipilih
+        let imgSuffix = bagianPilihan === "Kepala" ? "3" : "2"; 
+        document.getElementById('img-kartu-daging').src = jenisHewanAktif + imgSuffix + '.png';
+
+        const mainGlow = document.getElementById('main-glow');
+        if(mainGlow) mainGlow.style.display = 'none';
+
+        document.body.classList.add('poster-theme'); 
+        document.getElementById('step-4').classList.add('hidden');
+        document.getElementById('step-5').classList.remove('hidden');
+    }
+
+    function kembaliKeForm() {
+        document.body.classList.remove('poster-theme'); 
+        document.getElementById('step-5').classList.add('hidden');
+        document.getElementById('step-4').classList.remove('hidden');
+    }
+
+    // LOGIKA DOWNLOAD DAN COPY CLIPBOARD (DENGAN CUSTOM MODAL ALERT)
+    function downloadDanSalinPesan() {
+        const btn = document.getElementById('btn-download-wa');
+        const textLama = btn.innerText;
+        btn.innerText = "⏳ Sedang Memproses...";
+        
+        html2canvas(document.querySelector("#area-kartu"), {
+            scale: 3, 
+            backgroundColor: "#fdfaf0" 
+        }).then(canvas => {
+            btn.innerText = textLama;
+            
+            // 1. Download Gambar
+            let link = document.createElement('a');
+            link.download = `Kiriman-Daging-${namaPenerima}.png`;
+            link.href = canvas.toDataURL("image/png");
+            link.click();
+
+            // 2. Siapkan Teks Pesan
+            let namaHewanKapital = jenisHewanAktif.charAt(0).toUpperCase() + jenisHewanAktif.slice(1);
+            let pesanWA = `Bismillah... 🌙\n\nHalo *${namaPenerima}*!\nDi hari Raya Idul Adha ini, *${namaUser}* mengirimkan Bagian ${bagianPilihan} daging ${namaHewanKapital} untukmu.\n\n*HAPUS BAGIAN INI*\n(Jangan lupa kirimkan juga gambar kartu daging yang baru saja di-download)\n\nMohon maaf lahir & batin ✨🥩`;
+            
+            // 3. Salin ke Clipboard menggunakan API modern & Panggil Custom Alert
+            navigator.clipboard.writeText(pesanWA).then(() => {
+                tampilkanAlert(
+                    "Berhasil Disalin!", 
+                    "Gambar berhasil terunduh dan pesan otomatis disalin.<br><br>Silakan buka aplikasi WhatsApp secara manual, <strong>tempel (paste)</strong> pesannya, dan lampirkan gambarnya.", 
+                    "📥"
+                );
+            }).catch(err => {
+                tampilkanAlert(
+                    "Gambar Terunduh!", 
+                    "Gambar berhasil terunduh!<br><br><em>(Catatan: Browser Anda tidak mendukung fitur copy otomatis. Silakan salin pesan secara manual dari web)</em>", 
+                    "📥"
+                );
+            });
+        });
+    }
+</script>
+
+</body>
+</html>
